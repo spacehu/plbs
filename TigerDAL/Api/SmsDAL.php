@@ -34,20 +34,20 @@ class SmsDAL {
      */
     public static function getAcsClient() {
         //产品名称:云通信流量服务API产品,开发者无需替换
-        $product = "Dysmsapi";
+        $product = \mod\init::$config['env']['lib']['aliyun']['sms']['product'];
 
         //产品域名,开发者无需替换
-        $domain = "dysmsapi.aliyuncs.com";
+        $domain = \mod\init::$config['env']['lib']['aliyun']['sms']['domain'];
 
         // TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
-        $accessKeyId = "LTAItvqWOCfp8oD3"; // AccessKeyId
+        $accessKeyId = \mod\init::$config['env']['lib']['aliyun']['sms']['accessKeyId']; // AccessKeyId
 
-        $accessKeySecret = "DWLwwx0v29DlxS6Wt1rzAPJplP0sAE"; // AccessKeySecret
+        $accessKeySecret = \mod\init::$config['env']['lib']['aliyun']['sms']['accessKeySecret']; // AccessKeySecret
         // 暂时不支持多Region
-        $region = "cn-hangzhou";
+        $region = \mod\init::$config['env']['lib']['aliyun']['sms']['region'];
 
         // 服务结点
-        $endPointName = "cn-hangzhou";
+        $endPointName = \mod\init::$config['env']['lib']['aliyun']['sms']['endPointName'];
 
 
         if (static::$acsClient == null) {
