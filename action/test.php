@@ -62,14 +62,14 @@ class test {
         try {
             if ($id != null) {
                 $data = [
-                    'lesson_id' => $_POST['course_id'],
+                    'lesson_id' => $_POST['lesson_id'],
                     'name' => $_POST['name'],
                     'overview' => $_POST['overview'],
                     'detail' => $_POST['detail'],
                     'serialization' => $_POST['serialization'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
-                ];
+                ];                
                 self::$data = TestDAL::update($id, $data);
             } else {
                 if (TestDAL::getByName($_POST['name'])) {
