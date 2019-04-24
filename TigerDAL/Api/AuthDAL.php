@@ -33,7 +33,7 @@ class AuthDAL {
                 . "limit 1";
         $user = $base->getFetchAll($sql);
         if (!empty($user)) {
-            return "errorUser";
+            return "hadUser";
         }
         return true;
     }
@@ -42,7 +42,7 @@ class AuthDAL {
     public function checkUser($phone, $password) {
 
         if (!is_numeric($phone)) {
-            return ['error' => '1', 'code' => "errorUser"];
+            return ['error' => '1', 'code' => "errorPhone"];
         }
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("user_info") . "  "
@@ -128,7 +128,7 @@ class AuthDAL {
         if (!empty($user)) {
             return $user;
         }
-        return "noUser";
+        return "emptyUser";
     }
 
     /** 检查用户是否存在 */

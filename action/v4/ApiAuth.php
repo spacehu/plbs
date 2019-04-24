@@ -33,6 +33,7 @@ class ApiAuth extends \action\RestfulApi {
             if ($check !== true) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $check;
+                self::$data['msg'] = code::$code[$check];
                 return self::$data;
             }
             self::$data['data'] = $check;
@@ -53,11 +54,13 @@ class ApiAuth extends \action\RestfulApi {
             if (strlen($password) < 6) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = 'errorPasswordLength';
+                self::$data['msg'] = code::$code['errorPasswordLength'];
                 return self::$data;
             }
             if ($password != $cfn_password) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = 'errorPasswordDifferent';
+                self::$data['msg'] = code::$code['errorPasswordDifferent'];
                 return self::$data;
             }
             $AuthDAL = new AuthDAL();
@@ -65,6 +68,7 @@ class ApiAuth extends \action\RestfulApi {
             if ($check !== true) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $check;
+                self::$data['msg'] = code::$code[$check];
                 return self::$data;
             }
             $data = [
@@ -89,6 +93,7 @@ class ApiAuth extends \action\RestfulApi {
             } else {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorSql";
+                self::$data['msg'] = code::$code['errorSql'];
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
@@ -108,6 +113,7 @@ class ApiAuth extends \action\RestfulApi {
             if ($check['error'] == 1) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $check['code'];
+                self::$data['msg'] = code::$code[$check['code']];
             } else {
                 self::$data['data']['code'] = $check['code'];
                 self::$data['data']['token'] = $TokenDAL->saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['customer']);
@@ -139,11 +145,13 @@ class ApiAuth extends \action\RestfulApi {
             if (strlen($password) < 6) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = 'errorPasswordLength';
+                self::$data['msg'] = code::$code['errorPasswordLength'];
                 return self::$data;
             }
             if ($password != $cfn_password) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = 'errorPasswordDifferent';
+                self::$data['msg'] = code::$code['errorPasswordDifferent'];
                 return self::$data;
             }
             $AuthDAL = new AuthDAL();
@@ -151,6 +159,7 @@ class ApiAuth extends \action\RestfulApi {
             if (is_string($user)) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $user;
+                self::$data['msg'] = code::$code[$user];
                 return self::$data;
             }
             $data = [
@@ -163,6 +172,7 @@ class ApiAuth extends \action\RestfulApi {
             } else {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorSql";
+                self::$data['msg'] = code::$code['errorSql'];
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
@@ -182,6 +192,7 @@ class ApiAuth extends \action\RestfulApi {
             if ($check['error'] == 1) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $check['code'];
+                self::$data['msg'] = code::$code[$check['code']];
             } else {
                 self::$data['data']['code'] = $check['code'];
                 self::$data['data']['token'] = $TokenDAL->saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['business']);

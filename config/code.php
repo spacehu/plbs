@@ -52,6 +52,20 @@ class code {
         '10002' => "空数据",
         
         '100001' => "字典报错",
+        
+        
+        'urlerror'=>'路由错误',
+        'systemerror'=>'系统错误',
+        'phoneerror'=>'手机号无法使用',
+        'errorSms'=>'验证码无法使用',
+        'hadUser'=>'手机号码已被使用',
+        'errorPasswordLength'=>'密码长度不足',
+        'errorPasswordDifferent'=>'确认密码不正确',
+        'errorSql'=>'执行失败',
+        'errorPhone'=>'错误的号码',
+        'emptyUser'=>'用户不存在',
+        'errorPassword'=>'密码有误',
+        'tokenerror'=>'令牌错误',
     ];
 
 }

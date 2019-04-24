@@ -47,11 +47,13 @@ class RestfulApi {
                 } else {
                     self::$data['success'] = false;
                     self::$data['data']['code'] = "url is wrong.";
+                    self::$data['msg'] = code::$code['urlerror'];
                     exit(json_encode(self::$data));
                 }
             } catch (Exception $ex) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = json_encode($ex);
+                self::$data['msg'] = code::$code['systemerror'];
                 exit(json_encode(self::$data));
             }
         } else {
@@ -100,7 +102,10 @@ class RestfulApi {
             return $_SERVER['REQUEST_METHOD'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
-            echo json_encode(['success' => false, 'data' => ['code' => '999']]);
+            self::$data['success'] = false;
+            self::$data['data']['code'] = json_encode($ex);
+            self::$data['msg'] = code::$code['systemerror'];
+            echo json_encode(self::$data);
         }
     }
 
@@ -120,7 +125,10 @@ class RestfulApi {
             return $_path[0];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
-            echo json_encode(['success' => false, 'data' => ['code' => '999']]);
+            self::$data['success'] = false;
+            self::$data['data']['code'] = json_encode($ex);
+            self::$data['msg'] = code::$code['systemerror'];
+            echo json_encode(self::$data);
         }
     }
 

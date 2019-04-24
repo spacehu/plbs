@@ -27,9 +27,9 @@ class ApiAccount extends \action\RestfulApi {
         //Common::pr($_token);die;
         if ($_token['code'] != 90001) {
             self::$data['success'] = false;
-            self::$data['data']['error_msg'] = 'token error';
+            self::$data['data']['error_msg'] = 'tokenerror';
             self::$data['data']['code'] = $_token['code'];
-            //self::$data['token'] = $_token['token'];
+            self::$data['msg'] = code::$code['tokenerror'];
             exit(json_encode(self::$data));
         }
         $this->user_id = $_token['data']['user_id'];
