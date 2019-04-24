@@ -66,6 +66,7 @@ class code {
         'emptyUser'=>'用户不存在',
         'errorPassword'=>'密码有误',
         'tokenerror'=>'令牌错误',
+        'daily10'=>'每日只能使用十次',
     ];
 
 }
