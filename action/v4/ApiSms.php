@@ -61,11 +61,11 @@ class ApiSms extends \action\RestfulApi {
             }
             $orderid = TencentSmsDAL::insert($data);
             //发送信息
-            $response = (array) TencentSmsDAL::sendSms($phone, $code, $orderid);
+            $response = (array)json_decode(TencentSmsDAL::sendSms($phone, $code, $orderid));
             //记录成功
-            Common::pr($response);die;
+            //Common::pr($response);die;
             $_data = [
-                'bizid' => $response['BizId'],
+                'bizid' => $response['sid'],
                 'success' => 1,
             ];
             self::$data['data'] = TencentSmsDAL::update($orderid, $_data);
