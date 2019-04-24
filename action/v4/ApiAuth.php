@@ -32,6 +32,8 @@ class ApiAuth extends \action\RestfulApi {
             $check = $AuthDAL->checkPhone($phone, $code);
             if ($check !== true) {
                 self::$data['success'] = false;
+                self::$data['data']['code'] = $check;
+                return self::$data;
             }
             self::$data['data'] = $check;
             return self::$data;
@@ -49,10 +51,14 @@ class ApiAuth extends \action\RestfulApi {
             $password = Common::specifyChar($this->post['password']);
             $cfn_password = Common::specifyChar($this->post['cfn_password']);
             if (strlen($password) < 6) {
-                exit(json_encode("errorPasswordLength"));
+                self::$data['success'] = false;
+                self::$data['data']['code'] = 'errorPasswordLength';
+                return self::$data;
             }
             if ($password != $cfn_password) {
-                exit(json_encode("errorPasswordDifferent"));
+                self::$data['success'] = false;
+                self::$data['data']['code'] = 'errorPasswordDifferent';
+                return self::$data;
             }
             $AuthDAL = new AuthDAL();
             $check = $AuthDAL->checkPhone($phone, $code);
@@ -131,10 +137,14 @@ class ApiAuth extends \action\RestfulApi {
             $password = Common::specifyChar($this->post['password']);
             $cfn_password = Common::specifyChar($this->post['cfn_password']);
             if (strlen($password) < 6) {
-                exit(json_encode("errorPasswordLength"));
+                self::$data['success'] = false;
+                self::$data['data']['code'] = 'errorPasswordLength';
+                return self::$data;
             }
             if ($password != $cfn_password) {
-                exit(json_encode("errorPasswordDifferent"));
+                self::$data['success'] = false;
+                self::$data['data']['code'] = 'errorPasswordDifferent';
+                return self::$data;
             }
             $AuthDAL = new AuthDAL();
             $user = $AuthDAL->getUserInfoByCode($phone, $code);

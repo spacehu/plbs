@@ -1,6 +1,7 @@
 <?php
 $data = \action\category::$data['data'];
 $list = \action\category::$data['list'];
+$image = \action\category::$data['image'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -41,6 +42,19 @@ $list = \action\category::$data['list'];
                         </div>
                         <div class="leftAlist" >
                             <textarea id="TextArea" name="overview"><?php echo isset($data['overview']) ? $data['overview'] : ""; ?></textarea>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>IMAGE 封面</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="media_id">
+                                <option value="0">无图片</option>
+                                <?php if (is_array($image)) { ?>
+                                    <?php foreach ($image as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['media_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                 </div>

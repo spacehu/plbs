@@ -5,6 +5,7 @@ namespace action;
 use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\CategoryDAL;
+use TigerDAL\Cms\ImageDAL;
 use config\code;
 
 class category {
@@ -39,6 +40,7 @@ class category {
                 self::$data['data'] = null;
             }
             self::$data['list'] = CategoryDAL::tree();
+            self::$data['image'] = ImageDAL::getAll(1, 999, "");
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -55,6 +57,7 @@ class category {
                     'parent_id' => $_POST['parent_id'],
                     'name' => $_POST['name'],
                     'overview' => $_POST['overview'],
+                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
                     'edit_by' => Common::getSession("id"),
                 ];
                 self::$data = CategoryDAL::update($id, $data);
@@ -76,6 +79,7 @@ class category {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
+                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
                 ];
                 self::$data = CategoryDAL::insert($data);
             }
