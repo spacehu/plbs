@@ -2,6 +2,7 @@
 
 namespace TigerDAL;
 
+use TigerDAL\Api\LogDAL;
 /*
  * 基本数据类包
  * 类
