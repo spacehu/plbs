@@ -42,6 +42,7 @@ class RestfulApi {
             try {
                 LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . $this->_path . "", "DEBUG");
                 LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . Common::getIP() . "", "DEBUG");
+                LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($this->post) . "", "DEBUG");
                 if (!empty(\mod\init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path])) {
                     return \mod\init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path];
                 } else {

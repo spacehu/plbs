@@ -15,12 +15,17 @@ class BaseDAL {
     public $tab_name;
     //创建连接
     public $conn;
+    private $sql;
 
     //默认方法
     function __construct() {
         $this->tab_name = \mod\init::$config['mysql']['table_pre'];
         $this->conn = \mod\init::$config['mysql']['conn'];
         //var_dump($this->conn);
+    }
+
+    function __destruct() {
+        LogDAL::save(date("Y-m-d H:i:s") . "-sql---" . json_encode($this->sql) . "", "DEBUG");
     }
 
     /** 获取列表 */
@@ -55,6 +60,7 @@ class BaseDAL {
 
     /** 执行sql */
     public function query($sql) {
+        $this->sql=$sql;
         $result = mysqli_query($this->conn, $sql);
         return $result;
     }
