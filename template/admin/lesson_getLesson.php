@@ -2,6 +2,7 @@
 $data = \action\lesson::$data['data'];
 $class = \action\lesson::$data['class'];
 $list = \action\lesson::$data['list'];
+$image = \action\lesson::$data['image'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -60,6 +61,19 @@ $list = \action\lesson::$data['list'];
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
+                        </div>
+                        <div class="leftAlist" >
+                            <span>IMAGE 封面</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="media_id">
+                                <option value="0">无图片</option>
+                                <?php if (is_array($image)) { ?>
+                                    <?php foreach ($image as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['media_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                 </div>

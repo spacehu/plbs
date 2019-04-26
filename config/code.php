@@ -67,6 +67,7 @@ class code {
         'errorPassword'=>'密码有误',
         'tokenerror'=>'令牌错误',
         'daily10'=>'每日只能使用十次',
+        'emptyparameter'=>'请检查参数',
     ];
 
 }

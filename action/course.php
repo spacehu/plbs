@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\CourseDAL;
+use TigerDAL\Cms\ImageDAL;
 use config\code;
 
 class course {
@@ -51,6 +52,7 @@ class course {
                 self::$data['data'] = null;
             }
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
+            self::$data['image'] = ImageDAL::getAll(1, 99, '');
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
@@ -71,6 +73,7 @@ class course {
                     'detail' => $_POST['detail'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
+                    'media_id' => $_POST['media_id'],
                 ];
                 self::$data = CourseDAL::update($id, $data);
             } else {
@@ -91,6 +94,7 @@ class course {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
+                    'media_id' => $_POST['media_id'],
                 ];
                 self::$data = CourseDAL::insert($data);
             }
