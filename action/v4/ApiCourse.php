@@ -67,7 +67,7 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课程 信息 */
     function course() {
-        if (empty($this->get['id'])) {
+        if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
             self::$data['msg'] = code::$code['emptyparameter'];
@@ -76,7 +76,7 @@ class ApiCourse extends \action\RestfulApi {
         try {
             //轮播列表
             $CourseDAL = new CourseDAL();
-            $res = $CourseDAL->getOne($this->get['id']);
+            $res = $CourseDAL->getOne($this->get['course_id']);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
@@ -87,7 +87,7 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课时 信息 */
     function lessons() {
-        if (empty($this->get['id'])) {
+        if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
             self::$data['msg'] = code::$code['emptyparameter'];
@@ -96,7 +96,7 @@ class ApiCourse extends \action\RestfulApi {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
-        $cat_id = $this->get['id'];
+        $cat_id = $this->get['course_id'];
         try {
             //轮播列表
             $LessonDAL = new LessonDAL();
@@ -115,7 +115,7 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课时 信息 */
     function lesson() {
-        if (empty($this->get['id'])) {
+        if (empty($this->get['lesson_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
             self::$data['msg'] = code::$code['emptyparameter'];
@@ -124,7 +124,7 @@ class ApiCourse extends \action\RestfulApi {
         try {
             //轮播列表
             $LessonDAL = new LessonDAL();
-            $res = $LessonDAL->getOne($this->get['id']);
+            $res = $LessonDAL->getOne($this->get['lesson_id']);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
@@ -135,7 +135,7 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 试题 信息 */
     function tests() {
-        if (empty($this->get['id'])) {
+        if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
             self::$data['msg'] = code::$code['emptyparameter'];
@@ -145,8 +145,8 @@ class ApiCourse extends \action\RestfulApi {
             //轮播列表
             $TestDAL = new TestDAL();
             $CourseDAL = new CourseDAL();
-            $_obj = $CourseDAL->getOne($this->get['id']);
-            $res = $TestDAL->getRand($this->get['id'], $_obj['text_max']);
+            $_obj = $CourseDAL->getOne($this->get['course_id']);
+            $res = $TestDAL->getRand($this->get['course_id'], $_obj['text_max']);
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $_obj['text_max'];
