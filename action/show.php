@@ -34,33 +34,20 @@ class show {
         Common::isset_cookie();
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
         try {
-            $type = $_GET['type'];
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
-            self::$data['type'] = $type;
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             self::$data['class'] = $this->class;
 
-            if (in_array($type, $this->showList)) {
-                self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $type);
-                self::$data['total'] = ArticleDAL::getTotal($keywords, $type);
-            } else if ($type == 'music') {
-                self::$data['data'] = ArtMusicDAL::getAll($currentPage, $pagesize, $keywords);
-                self::$data['total'] = ArtMusicDAL::getTotal($keywords);
-            } else if ($type == 'video') {
-                self::$data['data'] = ArtVideoDAL::getAll($currentPage, $pagesize, $keywords);
-                self::$data['total'] = ArtVideoDAL::getTotal($keywords);
-            } else if ($type == 'image') {
-                self::$data['data'] = ArtImageDAL::getAll($currentPage, $pagesize, $keywords);
-                self::$data['total'] = ArtImageDAL::getTotal($keywords);
-            } else {
-                TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($_GET));
-            }
-            \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__ . '_' . $type);
+
+            self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords);
+            self::$data['total'] = ArticleDAL::getTotal($keywords);
+
+            \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
         }

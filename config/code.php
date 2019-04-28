@@ -68,6 +68,7 @@ class code {
         'tokenerror'=>'令牌错误',
         'daily10'=>'每日只能使用十次',
         'emptyparameter'=>'请检查参数',
+        'emptydata'=>'数据丢失',
     ];
 
 }

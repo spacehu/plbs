@@ -6,6 +6,8 @@ use mod\common as Common;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Api\CourseDAL;
+use TigerDAL\Api\TestDAL;
 use config\code;
 
 class ApiAccount extends \action\RestfulApi {
@@ -47,14 +49,13 @@ class ApiAccount extends \action\RestfulApi {
         try {
             //轮播列表
             $AuthDAL = new AuthDAL();
-            $EnterpriseDAL = new EnterpriseDAL();
             $res;
             switch ($this->server_id) {
                 case \mod\init::$config['token']['server_id']['customer']:
                     $res = $AuthDAL->getUserInfo($this->user_id);
                     break;
                 case \mod\init::$config['token']['server_id']['business']:
-                    $res = $EnterpriseDAL->getByUserId($this->user_id);
+                    $res = EnterpriseDAL::getByUserId($this->user_id);
                     break;
                 case \mod\init::$config['token']['server_id']['management']:
                     break;
@@ -64,6 +65,48 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['userType'] = $this->server_id;
             //print_r($res);die;
             self::$data['data']['userInfo'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 参与课程 */
+    function course() {
+        try {
+            //轮播列表
+            $_data = [
+                'user_id' => $this->user_id,
+                'course_id' => $this->post['course_id'],
+                'status' => 1,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+            ];
+            $res = CourseDAL::joinCourse($_data);
+
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 参与考试 */
+    function testing() {
+        try {
+            //轮播列表
+            $_data = [
+                'user_id' => $this->user_id,
+                'course_id' => $this->post['course_id'],
+                'aws' => (array)$this->post['aws'],
+                'time' => date("Y-m-d H:i:s"),
+            ];
+            $res = TestDAL::joinTest($_data);
+
+            //print_r($res);die;
+            self::$data['data'] = $res;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

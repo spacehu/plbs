@@ -81,16 +81,33 @@ class CategoryDAL {
         return $base->query($sql);
     }
 
+    /**  api   * ********************************************************************************************** */
+    public static function getCategorys($currentPage, $pagesize, $keywords = '', $cat_id = 0) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $where = "";
+        if (!empty($keywords)) {
+            $where .= " and name like '%" . $keywords . "%' ";
+        }
+        if (!empty($cat_id)) {
+            $where .= " and parent_id = " . $cat_id . " ";
+        }
+        $sql = "select * from " . $base->table_name("category") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        return $base->getFetchAll($sql);
+    }
+
     /**  tree   * ********************************************************************************************** */
 
     /** 分类树 */
     public static function tree($cat_id = 0, $level = 0, $is_show_all = true) {
         $base = new BaseDAL();
-        $sql = "select c.*,c.name, COUNT(s.id) AS has_children " .
-                " from " . $base->table_name('category') . " as c " .
-                "left join " . $base->table_name('category') . " as s on s.parent_id=c.id " .
-                " GROUP BY c.id " .
-                " order by c.parent_id asc,c.order_by asc,c.id asc";
+        $sql = "select c.*,c.name, COUNT(s.id) AS has_children "
+                . " from " . $base->table_name('category') . " as c "
+                . "left join " . $base->table_name('category') . " as s on s.parent_id=c.id "
+                . " GROUP BY c.id "
+                . " order by c.parent_id asc,c.order_by asc,c.id asc";
+        //echo $sql;die;
         $cate = $base->getFetchAll($sql);
 
         $options = self::cat_options($cat_id, $cate);

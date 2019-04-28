@@ -10,7 +10,7 @@ class TokenDAL {
     public static function saveToken($user_id, $_server_id) {
         $base = new BaseDAL();
         $token = self::settoken();
-        $time_out = time() + 28800;
+        $time_out = self::getTimeOut();
         $sql = "select * from " . $base->table_name("user_token") . " "
                 . "where user_id=" . $user_id . " and server_id=" . $_server_id . "; ";
         $_tokenData = $base->getFetchRow($sql);
@@ -80,6 +80,11 @@ class TokenDAL {
             }
         }
         return ['code' => 90002, 'data' => $res, 'token' => $token];  //token错误验证失败
+    }
+
+    /** 获取超时时间 */
+    public static function getTimeOut() {
+        return time() + 28800;
     }
 
 }

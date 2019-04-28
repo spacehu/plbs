@@ -7,7 +7,7 @@ use TigerDAL\BaseDAL;
 class CourseDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords = '', $cat_id = '') {
+    public static function getAll($currentPage, $pagesize, $keywords = '', $cat_id = '', $enterprise_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -18,12 +18,15 @@ class CourseDAL {
         if ($cat_id !== '') {
             $where .= " and category_id = '" . $cat_id . "' ";
         }
+        if ($enterprise_id !== '') {
+            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+        }
         $sql = "select * from " . $base->table_name("course") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords = '', $cat_id = '') {
+    public static function getTotal($keywords = '', $cat_id = '', $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
@@ -31,6 +34,9 @@ class CourseDAL {
         }
         if ($cat_id !== '') {
             $where .= " and category_id = '" . $cat_id . "' ";
+        }
+        if ($enterprise_id !== '') {
+            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("course") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

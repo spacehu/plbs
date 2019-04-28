@@ -108,7 +108,6 @@ class ApiAuth extends \action\RestfulApi {
             $password = Common::specifyChar($this->post['password']);
 
             $AuthDAL = new AuthDAL();
-            $TokenDAL = new TokenDAL();
             $check = $AuthDAL->checkUser($phone, $password);
             if ($check['error'] == 1) {
                 self::$data['success'] = false;
@@ -116,7 +115,8 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['msg'] = code::$code[$check['code']];
             } else {
                 self::$data['data']['code'] = $check['code'];
-                self::$data['data']['token'] = $TokenDAL->saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['customer']);
+                self::$data['data']['token'] = TokenDAL::saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['customer']);
+                self::$data['data']['deathline'] = TokenDAL::getTimeOut();
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
@@ -187,7 +187,6 @@ class ApiAuth extends \action\RestfulApi {
             $password = Common::specifyChar($this->post['password']);
 
             $AuthDAL = new AuthDAL();
-            $TokenDAL = new TokenDAL();
             $check = $AuthDAL->checkEnterPrise($phone, $password);
             if ($check['error'] == 1) {
                 self::$data['success'] = false;
@@ -195,7 +194,8 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['msg'] = code::$code[$check['code']];
             } else {
                 self::$data['data']['code'] = $check['code'];
-                self::$data['data']['token'] = $TokenDAL->saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['business']);
+                self::$data['data']['token'] = TokenDAL::saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['business']);
+                self::$data['data']['deathline'] = TokenDAL::getTimeOut();
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));

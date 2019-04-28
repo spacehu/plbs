@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\LessonDAL;
+use TigerDAL\Api\TestDAL;
 use config\code;
 
 class ApiCourse extends \action\RestfulApi {
@@ -52,8 +53,8 @@ class ApiCourse extends \action\RestfulApi {
             //轮播列表
             $CourseDAL = new CourseDAL();
 
-            $res = $CourseDAL->getAll($currentPage, $pagesize, $keywords, $cat_id);
-            $total = $CourseDAL->getTotal($keywords, $cat_id);
+            $res = $CourseDAL->getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
+            $total = $CourseDAL->getTotal($keywords, $cat_id, 0);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
@@ -126,6 +127,29 @@ class ApiCourse extends \action\RestfulApi {
             $res = $LessonDAL->getOne($this->get['id']);
             //print_r($res);die;
             self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 试题 信息 */
+    function tests() {
+        if (empty($this->get['id'])) {
+            self::$data['success'] = false;
+            self::$data['data']['error_msg'] = 'emptyparameter';
+            self::$data['msg'] = code::$code['emptyparameter'];
+            return self::$data;
+        }
+        try {
+            //轮播列表
+            $TestDAL = new TestDAL();
+            $CourseDAL = new CourseDAL();
+            $_obj = $CourseDAL->getOne($this->get['id']);
+            $res = $TestDAL->getRand($this->get['id'], $_obj['text_max']);
+            //print_r($res);die;
+            self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $_obj['text_max'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

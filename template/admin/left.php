@@ -38,6 +38,14 @@
             </div>
         </div>
         <div class="title">
+            <a class="first mainRed" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=staticPage'" href="javascript:void(0);" >SHOW 展示</a>
+            <div class="sub_title">
+                <div class="title">
+                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index'" href="javascript:void(0);" >SHOW LIST 展示列表</a>
+                </div>
+            </div>
+        </div>
+        <div class="title">
             <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>
             <div class="sub_title">
                 <div class="title">

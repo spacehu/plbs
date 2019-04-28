@@ -1,7 +1,6 @@
 <?php
 $data = \action\show::$data['data'];
 $Total = \action\show::$data['total'];
-$type = \action\show::$data['type'];
 $currentPage = \action\show::$data['currentPage'];
 $pagesize = \action\show::$data['pagesize'];
 $keywords = \action\show::$data['keywords'];
@@ -27,7 +26,7 @@ $class = \action\show::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow&type=<?php echo $type; ?>'">添加新活动</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow'">添加新活动</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
@@ -59,7 +58,7 @@ $class = \action\show::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords . '&type=' . $type;
+            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>

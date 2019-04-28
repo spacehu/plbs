@@ -3,6 +3,7 @@ $data = \action\course::$data['data'];
 $class = \action\course::$data['class'];
 $list = \action\course::$data['list'];
 $image = \action\course::$data['image'];
+$enterprise = \action\course::$data['enterprise'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -71,6 +72,25 @@ $image = \action\course::$data['image'];
                                 <?php if (is_array($image)) { ?>
                                     <?php foreach ($image as $k => $v) { ?>
                                         <option value="<?php echo $v['id']; ?>"  <?php echo $data['media_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>TESTMAX 考题上限</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <input class="text" name="text_max" type="text" value="<?php echo isset($data['text_max']) ? $data['text_max'] : 5; ?>" />
+                        </div>
+                        <div class="leftAlist" >
+                            <span>IS ENTERPRISE 隶属企业</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="enterprise_id">
+                                <option value="0">请选择</option>
+                                <?php if (is_array($enterprise)) { ?>
+                                    <?php foreach ($enterprise as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>
