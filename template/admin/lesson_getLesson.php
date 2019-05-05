@@ -3,6 +3,7 @@ $data = \action\lesson::$data['data'];
 $class = \action\lesson::$data['class'];
 $list = \action\lesson::$data['list'];
 $image = \action\lesson::$data['image'];
+$lesson_image = \action\lesson::$data['lesson_image'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -75,6 +76,24 @@ $image = \action\lesson::$data['image'];
                                 <?php } ?>
                             </select>
                         </div>
+                        
+                        <div class="leftAlist" >
+                            <span>IMAGES 详细多图</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
+                        </div>
+                        <div class="leftAlist list_image" >
+                            <?php if (!empty($lesson_image)) { ?>
+                                <?php foreach ($lesson_image as $lk => $lv) { ?>
+                                    <select name="article_image[]">
+                                        <option value="0">请选择</option>
+                                        <?php if (is_array($image)) { ?>
+                                            <?php foreach ($image as $k => $v) { ?>
+                                                <option value="<?php echo $v['id']; ?>"  <?php echo $lv['image_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </select>
+                                <?php } ?>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
                 <div class="pathB">
@@ -84,7 +103,22 @@ $image = \action\lesson::$data['image'];
                 </div>
             </form>	
         </div>
+        <div class="leftAlist hide mod_image">
+            <select name="lesson_image[]">
+                <option value="0">请选择</option>
+                <?php if (is_array($image)) { ?>
+                    <?php foreach ($image as $k => $v) { ?>
+                        <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        </div>
         <script type="text/javascript">
+            $(function () {
+                $(".add_image").click(function () {
+                    $(".mod_image").children().clone().appendTo('.list_image');
+                });
+            });
             var ue = UE.getEditor('container');
         </script>
     </body>

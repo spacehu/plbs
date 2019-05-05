@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\LessonDAL;
+use TigerDAL\Cms\LessonImageDAL;
 use TigerDAL\Api\TestDAL;
 use config\code;
 
@@ -51,10 +52,9 @@ class ApiCourse extends \action\RestfulApi {
         $cat_id = isset($this->get['cat_id']) ? $this->get['cat_id'] : '';
         try {
             //轮播列表
-            $CourseDAL = new CourseDAL();
 
-            $res = $CourseDAL->getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
-            $total = $CourseDAL->getTotal($keywords, $cat_id, 0);
+            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
+            $total = CourseDAL::getTotal($keywords, $cat_id, 0);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
@@ -75,8 +75,7 @@ class ApiCourse extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $CourseDAL = new CourseDAL();
-            $res = $CourseDAL->getOne($this->get['course_id']);
+            $res = CourseDAL::getOne($this->get['course_id']);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
@@ -99,10 +98,9 @@ class ApiCourse extends \action\RestfulApi {
         $cat_id = $this->get['course_id'];
         try {
             //轮播列表
-            $LessonDAL = new LessonDAL();
 
-            $res = $LessonDAL->getAll($currentPage, $pagesize, $keywords, $cat_id);
-            $total = $LessonDAL->getTotal($keywords, $cat_id);
+            $res = LessonDAL::getAll($currentPage, $pagesize, $keywords, $cat_id);
+            $total = LessonDAL::getTotal($keywords, $cat_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
@@ -122,11 +120,12 @@ class ApiCourse extends \action\RestfulApi {
             return self::$data;
         }
         try {
+            $res = LessonDAL::getOne($this->get['lesson_id']);
             //轮播列表
-            $LessonDAL = new LessonDAL();
-            $res = $LessonDAL->getOne($this->get['lesson_id']);
+            $images = LessonImageDAL::getImageList($this->get['lesson_id']);
             //print_r($res);die;
             self::$data['data'] = $res;
+            self::$data['data']['images'] = $images;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

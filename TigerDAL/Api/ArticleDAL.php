@@ -1,30 +1,40 @@
 <?php
 
-namespace TigerDAL\Cms;
+namespace TigerDAL\Api;
 
 use TigerDAL\BaseDAL;
 
 class ArticleDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords) {
+    public static function getAll($currentPage, $pagesize, $keywords, $cat_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and c.name like '%" . $keywords . "%' ";
         }
-        $sql = "select * from " . $base->table_name("article") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        if ($cat_id !== '') {
+            $where .= " and c.category_id = '" . $cat_id . "' ";
+        }
+        $sql = "select c.*,i.original_src from " . $base->table_name("article") . " as c "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "where c.`delete`=0 " . $where . " "
+                . "order by c.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords) {
+    public static function getTotal($keywords, $cat_id = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and c.name like '%" . $keywords . "%' ";
+        }
+        if ($cat_id !== '') {
+            $where .= " and c.category_id = '" . $cat_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("article") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
@@ -33,7 +43,9 @@ class ArticleDAL {
     /** 获取用户信息 */
     public static function getOne($id) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("article") . " where `delete`=0 and id=" . $id . "  limit 1 ;";
+        $sql = "select c.*,i.original_src from " . $base->table_name("article") . " as c "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "where c.`delete`=0 and c.id=" . $id . "  limit 1 ;";
         return $base->getFetchRow($sql);
     }
 

@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\LessonDAL;
+use TigerDAL\Cms\LessonImageDAL;
 use TigerDAL\Cms\ImageDAL;
 use config\code;
 
@@ -45,6 +46,7 @@ class lesson {
         try {
             if ($id != null) {
                 self::$data['data'] = LessonDAL::getOne($id);
+                self::$data['lesson_image'] = LessonImageDAL::getAll($id);
             } else {
                 self::$data['data'] = null;
             }
@@ -96,6 +98,16 @@ class lesson {
                 self::$data = LessonDAL::insert($data);
             }
             if (self::$data) {
+                $_data = [
+                    'add_by' => Common::getSession("id"),
+                    'add_time' => date("Y-m-d H:i:s"),
+                    'edit_by' => Common::getSession("id"),
+                    'edit_time' => date("Y-m-d H:i:s"),
+                    'delete' => 0,
+                ];
+                if (!empty($_POST['lesson_image'])) {
+                    LessonImageDAL::save(array_unique($_POST['lesson_image']), $id, $_data);
+                }
                 //Common::pr(Common::getSession($this->class));die;
                 Common::js_redir(Common::getSession($this->class));
             } else {

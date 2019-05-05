@@ -26,7 +26,7 @@ $class = \action\show::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow'">添加新活动</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow'">添加新展示</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
@@ -45,7 +45,7 @@ $class = \action\show::$data['class'];
                             <td class="td1"><?php echo $v['add_by']; ?></td>
                             <td class="td1">
                                 <a href="index.php?a=<?php echo $class; ?>&m=getShow&id=<?php echo $v['id']; ?>">编辑</a>
-                                <a href="index.php?a=<?php echo $class; ?>&m=deleteShow&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此活动删除?')">删除</a>
+                                <a href="index.php?a=<?php echo $class; ?>&m=deleteShow&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此展示删除?')">删除</a>
                             </td>
                         </tr>
                         <?php
