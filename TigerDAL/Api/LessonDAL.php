@@ -36,8 +36,8 @@ class LessonDAL {
     /** 获取用户信息 */
     public static function getOne($id) {
         $base = new BaseDAL();
-        $sql = "select c.*,i.original_src from " . $base->table_name("lesson") . " as c "
-                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+        $sql = "select c.*,i.src from " . $base->table_name("lesson") . " as c "
+                . "left join " . $base->table_name("media") . " as i on i.id=c.media_id "
                 . "where c.`delete`=0 and c.id=" . $id . "  limit 1 ;";
         return $base->getFetchRow($sql);
     }
