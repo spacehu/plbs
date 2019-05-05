@@ -50,10 +50,11 @@ class lesson {
                 self::$data['lesson_image'] = LessonImageDAL::getAll($id);
             } else {
                 self::$data['data'] = null;
+                self::$data['lesson_image'] = null;
             }
             self::$data['list'] = CourseDAL::getAll(1, 999, '');
             self::$data['image'] = ImageDAL::getAll(1, 99, '');
-            self::$data['media'] = MediaDAL::getAll(1, 99, '');
+            self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {

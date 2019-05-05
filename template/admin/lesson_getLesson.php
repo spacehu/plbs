@@ -3,6 +3,7 @@ $data = \action\lesson::$data['data'];
 $class = \action\lesson::$data['class'];
 $list = \action\lesson::$data['list'];
 $image = \action\lesson::$data['image'];
+$media = \action\lesson::$data['media'];
 $lesson_image = \action\lesson::$data['lesson_image'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -68,7 +69,7 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                         </div>
                         <div class="leftAlist" >
                             <select name="type">
-                                <option value="audio" <?php echo $data['type'] == "audio" ? 'selected' : ''; ?>>音频</option>
+                                <option value="music" <?php echo $data['type'] == "music" ? 'selected' : ''; ?>>音频</option>
                                 <option value="video" <?php echo $data['type'] == "video" ? 'selected' : ''; ?>>视频</option>
                             </select>
                         </div>
@@ -77,9 +78,9 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                         </div>
                         <div class="leftAlist" >
                             <select name="media_id">
-                                <option value="0">无图片</option>
-                                <?php if (is_array($image)) { ?>
-                                    <?php foreach ($image as $k => $v) { ?>
+                                <option value="0">请添加媒体资料</option>
+                                <?php if (is_array($media)) { ?>
+                                    <?php foreach ($media as $k => $v) { ?>
                                         <option value="<?php echo $v['id']; ?>"  <?php echo $data['media_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
                                     <?php } ?>
                                 <?php } ?>
