@@ -64,7 +64,16 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>IMAGE 封面</span>
+                            <span>TYPE 课类型</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="type">
+                                <option value="audio" <?php echo $data['type'] == "audio" ? 'selected' : ''; ?>>音频</option>
+                                <option value="video" <?php echo $data['type'] == "video" ? 'selected' : ''; ?>>视频</option>
+                            </select>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>MEDIA 媒体资料</span>
                         </div>
                         <div class="leftAlist" >
                             <select name="media_id">
@@ -76,7 +85,6 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                                 <?php } ?>
                             </select>
                         </div>
-                        
                         <div class="leftAlist" >
                             <span>IMAGES 详细多图</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
                         </div>

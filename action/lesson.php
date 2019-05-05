@@ -7,6 +7,7 @@ use TigerDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\LessonDAL;
 use TigerDAL\Cms\LessonImageDAL;
+use TigerDAL\Cms\MediaDAL;
 use TigerDAL\Cms\ImageDAL;
 use config\code;
 
@@ -52,6 +53,7 @@ class lesson {
             }
             self::$data['list'] = CourseDAL::getAll(1, 999, '');
             self::$data['image'] = ImageDAL::getAll(1, 99, '');
+            self::$data['media'] = MediaDAL::getAll(1, 99, '');
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
@@ -73,6 +75,7 @@ class lesson {
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
                     'media_id' => $_POST['media_id'],
+                    'type' => $_POST['type'],
                 ];
                 self::$data = LessonDAL::update($id, $data);
             } else {
@@ -94,6 +97,7 @@ class lesson {
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
                     'media_id' => $_POST['media_id'],
+                    'type' => $_POST['type'],
                 ];
                 self::$data = LessonDAL::insert($data);
             }
