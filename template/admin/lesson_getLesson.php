@@ -83,7 +83,7 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                         <div class="leftAlist list_image" >
                             <?php if (!empty($lesson_image)) { ?>
                                 <?php foreach ($lesson_image as $lk => $lv) { ?>
-                                    <select name="article_image[]">
+                                    <select name="lesson_image[]">
                                         <option value="0">请选择</option>
                                         <?php if (is_array($image)) { ?>
                                             <?php foreach ($image as $k => $v) { ?>
