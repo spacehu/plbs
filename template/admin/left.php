@@ -35,6 +35,12 @@
                 <div class="title">
                     <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >IMAGE 图片素材</a>
                 </div>
+                <div class="title">
+                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=music'" href="javascript:void(0);" >AUDIO 音频素材</a>
+                </div>
+                <div class="title">
+                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=video'" href="javascript:void(0);" >VIDEO 视频素材</a>
+                </div>
             </div>
         </div>
         <div class="title">

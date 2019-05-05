@@ -161,6 +161,7 @@ class material {
         try {
             if ($id != null) {
                 self::$data['data'] = MediaDAL::getOne($id);
+                self::$data['type'] = self::$data['data']['type'];
             } else {
                 self::$data['data'] = null;
             }
@@ -174,36 +175,65 @@ class material {
     function updateMedia() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $type = $_POST['type'];
+        $path = "/data/media_doc";
+        $upload = new Upload();
         try {
             if ($id != null) {
                 /** 更新操作 */
                 $data = [
                     'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
-                    'src' => $_POST['src'],
-                    'minstrel' => $_POST['minstrel'],
-                    'duration' => $_POST['duration'],
+                    'overview' => isset($_POST['overview']) ? $_POST['overview'] : "",
+                    'minstrel' => isset($_POST['minstrel']) ? $_POST['minstrel'] : "",
+                    'duration' => isset($_POST['duration']) ? $_POST['duration'] : "",
                     'edit_by' => Common::getSession("id"),
                 ];
-
+                if ($_POST['edit_doc'] == 1) {
+                    $_backData = $upload->uploaded_file("media", "unique", "file_url", $path, $id);
+                    if (!$_backData['success']) {
+                        Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
+                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        Common::js_redir(Common::getSession($this->class));
+                    } else {
+                        $data['src'] = $_backData['path'];
+                        $data['unique'] = $_backData['md5'];
+                    }
+                }
                 self::$data = MediaDAL::update($id, $data);
             } else {
-                /** 新增操作 */
-                $data = [
-                    'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
-                    'src' => $_POST['src'],
-                    'type' => $_POST['type'],
-                    'order_by' => 50,
-                    'add_by' => Common::getSession("id"),
-                    'add_time' => date("Y-m-d H:i:s"),
-                    'edit_by' => Common::getSession("id"),
-                    'edit_time' => date("Y-m-d H:i:s"),
-                    'delete' => 0,
-                    'minstrel' => $_POST['minstrel'],
-                    'duration' => $_POST['duration'],
-                ];
-                self::$data = MediaDAL::insert($data);
+                if ($_POST['edit_doc'] == 1) {
+                    $_backData = $upload->uploaded_file("media", "unique", "file_url", $path, "");
+                    //Common::pr($filePath);die;
+                    if (!$_backData['success']) {
+                        Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
+                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        Common::js_redir(Common::getSession($this->class));
+                    } else {
+                        $filePath = $_backData['path'];
+                        $unique = $_backData['md5'];
+                        /** 新增操作 */
+                        $data = [
+                            'name' => $_POST['name'],
+                            'overview' => isset($_POST['overview']) ? $_POST['overview'] : "",
+                            'src' => $filePath,
+                            'type' => $type,
+                            'order_by' => 50,
+                            'add_by' => Common::getSession("id"),
+                            'add_time' => date("Y-m-d H:i:s"),
+                            'edit_by' => Common::getSession("id"),
+                            'edit_time' => date("Y-m-d H:i:s"),
+                            'delete' => 0,
+                            'minstrel' => isset($_POST['minstrel']) ? $_POST['minstrel'] : "",
+                            'duration' => isset($_POST['duration']) ? $_POST['duration'] : "",
+                            'unique' => $unique,
+                        ];
+                        self::$data = MediaDAL::insert($data);
+                    }
+                } else {
+                    Common::js_alert(code::NULL_DATA . " 文件不能为空。");
+                    TigerDAL\CatchDAL::markError(code::$code[code::NULL_DATA], code::NULL_DATA, json_encode($_POST));
+                    Common::js_redir(Common::getSession($this->class));
+                }
             }
             if (self::$data) {
                 //Common::pr(Common::getSession($this->class));die;

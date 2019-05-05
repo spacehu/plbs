@@ -27,25 +27,22 @@ $type = \action\material::$data['type'];
                             </div>
                         </div>
                         <div class="leftAlist" >
-                            <span>OVERVIEW 简述</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <textarea id="TextArea" name="overview"><?php echo isset($data['overview']) ? $data['overview'] : ""; ?></textarea>
-                        </div>
-                        <div class="leftAlist" >
                             <span>SRC 路径</span>
                         </div>
                         <div class="leftAlist" >
                             <div class="r_row">
-                                <input class="text" name="src" type="text" value="<?php echo isset($data['src']) ? $data['src'] : ''; ?>" />
+                                <INPUT TYPE="file" NAME="file_url" id="f1" onchange="document.getElementById('edit_doc').value = 1" />
+                                <input type="hidden" name="edit_doc" id="edit_doc" value="0" />
                             </div>
-                        </div>
-                        <div class="leftAlist" >
-                            <span>MINSTREL 歌手</span>
-                        </div>
-                        <div class="leftAlist" >
                             <div class="r_row">
-                                <input class="text" name="minstrel" type="text" value="<?php echo isset($data['minstrel']) ? $data['minstrel'] : '胡彦斌'; ?>" />
+                                <div class="r_title">&nbsp;</div>
+                                <?php if ($type == "music") { ?>
+                                    <audio class="r_row_img" src=".<?php echo isset($data['src']) ? $data['src'] : ''; ?>" controls >
+                                    </audio>
+                                <?php } else if ($type == "video") { ?>
+                                    <video class="r_row_img" src=".<?php echo isset($data['src']) ? $data['src'] : ''; ?>" controls >
+                                    </video>
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="leftAlist" >

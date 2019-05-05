@@ -23,7 +23,7 @@ class upload {
         $ext = substr($_FILES[$filename]['name'], $pos); //取得后缀名，包括点号
         $name = $_md5 . $ext;
         $full_path = $path . '/' . $name;
-        $full_path_move = \mod\init::$config['env']['path'] . '/' . $name;
+        $full_path_move = \mod\init::$config['env']['path'][$table] . '/' . $name;
         //echo __FILE__;
         move_uploaded_file($_FILES[$filename]['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $full_path_move);
         return ['success' => true, 'path' => $full_path, 'md5' => $_md5];
