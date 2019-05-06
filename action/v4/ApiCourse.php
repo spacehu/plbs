@@ -148,7 +148,8 @@ class ApiCourse extends \action\RestfulApi {
             $res = $TestDAL->getRand($this->get['course_id'], $_obj['text_max']);
             //print_r($res);die;
             self::$data['data']['list'] = $res;
-            self::$data['data']['total'] = $_obj['text_max'];
+            self::$data['data']['total'] = count($res);
+            self::$data['data']['max'] = $_obj['text_max'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

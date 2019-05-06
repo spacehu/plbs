@@ -29,7 +29,7 @@ $list = \action\test::$data['list'];
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>COURSE 课时</span>
+                            <span>LESSON 课时</span>
                         </div>
                         <div class="leftAlist" >
                             <select name="lesson_id">
