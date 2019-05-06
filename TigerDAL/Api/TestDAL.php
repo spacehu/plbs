@@ -70,7 +70,7 @@ class TestDAL {
         foreach ($_tests as $k => $v) {
             foreach ($_data['aws'] as $key => $val) {
                 if ($key == $v['id']) {
-                    if ($v['serialization'] == $val) {
+                    if (trim($v['serialization']) == trim($val)) {
                         $_num++;
                         $_tests[$k]['scores'] = 1;
                     } else {

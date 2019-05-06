@@ -69,6 +69,7 @@ class test {
                     'serialization' => $_POST['serialization'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
+                    'type' => $_POST['type'],
                 ];                
                 self::$data = TestDAL::update($id, $data);
             } else {
@@ -90,6 +91,7 @@ class test {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
+                    'type' => $_POST['type'],
                 ];
                 self::$data = TestDAL::insert($data);
             }

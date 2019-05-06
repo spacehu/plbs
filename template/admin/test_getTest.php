@@ -67,6 +67,16 @@ $list = \action\test::$data['list'];
                         <div class="leftAlist" >
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
                         </div>
+                        <div class="leftAlist" >
+                            <span>TYPE 类型</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="type">
+                                <option value="text" <?php echo $data['type'] == "text" ? 'selected' : ''; ?>>文字</option>
+                                <option value="select" <?php echo $data['type'] == "select" ? 'selected' : ''; ?>>单选</option>
+                                <option value="selects" <?php echo $data['type'] == "selects" ? 'selected' : ''; ?>>多选</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="pathB">
