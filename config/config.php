@@ -82,6 +82,7 @@ return $config = [
             'POST /v1/ApiApplets-saveWeChatInfo.htm' => 'v1-ApiApplets-saveWeChatInfo',
             /** v4 for plbs */
             'GET /v4/ApiSms-sendRegistSms.htm' => 'v4-ApiSms-sendRegistSms', //发验证码
+            'GET /v4/ApiSms-sendSms.htm' => 'v4-ApiSms-sendSms', //发验证码
             'POST /v4/ApiAuth-checkPhone.htm' => 'v4-ApiAuth-checkPhone', //检查手机号是否已用
             'POST /v4/ApiAuth-register.htm' => 'v4-ApiAuth-register', //注册
             'POST /v4/ApiAuth-login.htm' => 'v4-ApiAuth-login', //登录
