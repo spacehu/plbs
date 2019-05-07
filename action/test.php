@@ -12,6 +12,7 @@ class test {
 
     private $class;
     public static $data;
+    private $select = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
@@ -24,7 +25,7 @@ class test {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
-            
+
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
@@ -49,6 +50,8 @@ class test {
             }
             self::$data['list'] = LessonDAL::getAll(1, 999, '');
             self::$data['class'] = $this->class;
+            self::$data['select'] = $this->select;
+            self::$data['option'] = json_decode(self::$data['data']['overview']);
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -60,17 +63,24 @@ class test {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $overview = '';
+            if (!empty($_POST['overview'])) {
+                foreach ($_POST['overview'] as $k => $v) {
+                    $_overview[$this->select[$k]] = $v;
+                }
+                $overview = json_encode($_overview);
+            }
             if ($id != null) {
                 $data = [
                     'lesson_id' => $_POST['lesson_id'],
                     'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
+                    'overview' => $overview,
                     'detail' => $_POST['detail'],
                     'serialization' => $_POST['serialization'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
                     'type' => $_POST['type'],
-                ];                
+                ];
                 self::$data = TestDAL::update($id, $data);
             } else {
                 if (TestDAL::getByName($_POST['name'])) {
@@ -82,7 +92,7 @@ class test {
                 $data = [
                     'lesson_id' => $_POST['lesson_id'],
                     'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
+                    'overview' => $overview,
                     'detail' => $_POST['detail'],
                     'serialization' => $_POST['serialization'],
                     'order_by' => $_POST['order_by'],

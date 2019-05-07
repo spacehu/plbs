@@ -1,6 +1,7 @@
 <?php
 $data = \action\show::$data['data'];
 $image = \action\show::$data['image'];
+$list = \action\show::$data['list'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -55,6 +56,19 @@ $image = \action\show::$data['image'];
                             <script id="container" name="detail" type="text/plain">
 <?php echo isset($data['detail']) ? $data['detail'] : ""; ?>
                             </script>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>CATEGORY 分类</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="cat_id">
+                                <option value="0">请选择</option>
+                                <?php if (is_array($list)) { ?>
+                                    <?php foreach ($list as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                 </div>

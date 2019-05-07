@@ -2,6 +2,8 @@
 $data = \action\test::$data['data'];
 $class = \action\test::$data['class'];
 $list = \action\test::$data['list'];
+$select = \action\test::$data['select'];
+$option = \action\test::$data['option'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -42,18 +44,33 @@ $list = \action\test::$data['list'];
                             </select>
                         </div>
                         <div class="leftAlist" >
-                            <span>OVERVIEW 试题简述</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <input class="text" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
-                        </div>
-                        <div class="leftAlist" >
                             <span>DETAIL 试题内容</span>
                         </div>
                         <div class="leftAlist" >
                             <script id="container" name="detail" type="text/plain">
 <?php echo isset($data['detail']) ? $data['detail'] : ""; ?>
                             </script>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>TYPE 类型</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="type" class="select_type">
+                                <option value="text" <?php echo $data['type'] == "text" ? 'selected' : ''; ?>>文字</option>
+                                <option value="select" <?php echo $data['type'] == "select" ? 'selected' : ''; ?>>单选</option>
+                                <option value="selects" <?php echo $data['type'] == "selects" ? 'selected' : ''; ?>>多选</option>
+                            </select>
+                        </div>
+                        <div class="leftAlist <?php echo $data['type'] == "text" ? 'hide' : ''; ?> list_type" >
+                            <span>OPTION 选项</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
+                        </div>
+                        <div class="leftAlist <?php echo $data['type'] == "text" ? 'hide' : ''; ?> list_type list_image" >
+                            <?php if (!empty($option)) { ?>
+                                <?php foreach ($option as $k => $v) { ?>
+                                    <?php if ($k != "A") { ?><br /><?php } ?>
+                                    <span><?php echo $k; ?>: </span><input class="text" name="overview[]" type="text" value="<?php echo $v; ?>" />
+                                <?php } ?>
+                            <?php } ?>
                         </div>
                         <div class="leftAlist" >
                             <span>SERIALIZATION 答案（序列化）</span>
@@ -67,16 +84,6 @@ $list = \action\test::$data['list'];
                         <div class="leftAlist" >
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
                         </div>
-                        <div class="leftAlist" >
-                            <span>TYPE 类型</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <select name="type">
-                                <option value="text" <?php echo $data['type'] == "text" ? 'selected' : ''; ?>>文字</option>
-                                <option value="select" <?php echo $data['type'] == "select" ? 'selected' : ''; ?>>单选</option>
-                                <option value="selects" <?php echo $data['type'] == "selects" ? 'selected' : ''; ?>>多选</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="pathB">
@@ -86,7 +93,26 @@ $list = \action\test::$data['list'];
                 </div>
             </form>	
         </div>
+        <div class="leftAlist hide mod_image">
+            <br />
+            <span></span><input class="text" name="overview[]" type="text" value="" />
+        </div>
         <script type="text/javascript">
+            $(function () {
+                var key = <?php echo json_encode($select); ?>;
+                $(".add_image").on("click", function () {
+                    console.log(key[$(".list_image > input").size()]);
+                    $(".mod_image > span").html(key[$(".list_image > input").size()]+": ");
+                    $(".mod_image").children().clone().appendTo('.list_image');
+                });
+                $(".select_type").change(function () {
+                    if ($(this).val() === "text") {
+                        $(".list_type").addClass("hide");
+                    } else {
+                        $(".list_type").removeClass("hide");
+                    }
+                });
+            });
             var ue = UE.getEditor('container');
         </script>
     </body>

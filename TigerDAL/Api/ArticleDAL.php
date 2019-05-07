@@ -16,7 +16,7 @@ class ArticleDAL {
             $where .= " and c.name like '%" . $keywords . "%' ";
         }
         if ($cat_id !== '') {
-            $where .= " and c.category_id = '" . $cat_id . "' ";
+            $where .= " and c.cat_id = '" . $cat_id . "' ";
         }
         $sql = "select c.*,i.original_src from " . $base->table_name("article") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
@@ -31,10 +31,10 @@ class ArticleDAL {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and c.name like '%" . $keywords . "%' ";
+            $where .= " and name like '%" . $keywords . "%' ";
         }
         if ($cat_id !== '') {
-            $where .= " and c.category_id = '" . $cat_id . "' ";
+            $where .= " and cat_id = '" . $cat_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("article") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

@@ -3,13 +3,9 @@
 namespace action;
 
 use mod\common as Common;
-use mod\upload as Upload;
 use TigerDAL;
 use TigerDAL\Cms\ImageDAL;
-use TigerDAL\Cms\MediaDAL;
-use TigerDAL\Cms\ArtMusicDAL;
-use TigerDAL\Cms\ArtVideoDAL;
-use TigerDAL\Cms\ArtImageDAL;
+use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ArticleDAL;
 use config\code;
 
@@ -19,9 +15,12 @@ class show {
     private $showList = ['article', 'notice', 'share'];
     private $mediaList = ['music', 'video'];
     public static $data;
+    private $cat_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        //课程类
+        $this->cat_id = 14;
     }
 
     function staticPage() {
@@ -68,6 +67,7 @@ class show {
             }
             //Common::pr(self::$data['data']);die;
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
+            self::$data['list'] = CategoryDAL::tree($this->cat_id);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
         }
@@ -84,6 +84,7 @@ class show {
                     'name' => $_POST['name'],
                     'overview' => isset($_POST['overview']) ? $_POST['overview'] : '',
                     'detail' => isset($_POST['detail']) ? $_POST['detail'] : '',
+                    'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
                     'access' => isset($_POST['access']) ? $_POST['access'] : 0,
                     'source' => isset($_POST['source']) ? $_POST['source'] : '',
                     'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
@@ -96,7 +97,7 @@ class show {
                     'name' => $_POST['name'],
                     'overview' => isset($_POST['overview']) ? $_POST['overview'] : '',
                     'detail' => isset($_POST['detail']) ? $_POST['detail'] : '',
-                    'cat_id' => 0,
+                    'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
                     'order_by' => 50,
                     'add_by' => Common::getSession("id"),
                     'add_time' => date("Y-m-d H:i:s"),
