@@ -38,7 +38,18 @@ class TestDAL {
             }
             $_ids = implode(",", $_rows);
             $_sql = "select * from " . $base->table_name("test") . " where lesson_id in (" . $_ids . ") order by RAND() LIMIT " . $limit . " ;";
-            return $base->getFetchAll($_sql);
+            $_res = $base->getFetchAll($_sql);
+            if (!empty($_res)) {
+                foreach ($_res as $k => $v) {
+                    $res[$k] = $v;
+                    if ($v['type'] == 'select' || $v['type'] == "selects") {
+                        $res[$k]['select'] = json_decode($v['overview']);
+                    }
+                }
+            } else {
+                $res = $_res;
+            }
+            return $res;
         }
         return null;
     }
