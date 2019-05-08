@@ -15,6 +15,9 @@ class UserDAL {
         if (!empty($keywords)) {
             $where .= " and u.name like '%" . $keywords . "%' ";
         }
+        if (\mod\common::getSession("id") != 1) {
+            $where .= " and u.id <> 1 ";
+        }
         $sql = "select u.*,r.name as rname from " . $base->table_name("user") . " as u "
                 . "left join " . $base->table_name('role') . " as r on u.role_id=r.id "
                 . "where u.`delete`=0 " . $where . " "
@@ -29,6 +32,9 @@ class UserDAL {
         $where = "";
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
+        }
+        if (\mod\common::getSession("id") != 1) {
+            $where .= " and id <> 1 ";
         }
         $sql = "select count(1) as total from " . $base->table_name("user") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

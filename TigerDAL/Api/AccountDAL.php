@@ -37,4 +37,9 @@ class AccountDAL {
         }
     }
 
+    /** 获取已读课程信息列表 */
+    public static function getCourses($currentPage, $pagesize, $user_id) {
+        
+    }
+
 }

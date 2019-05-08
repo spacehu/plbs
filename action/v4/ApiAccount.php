@@ -101,7 +101,7 @@ class ApiAccount extends \action\RestfulApi {
             $_data = [
                 'user_id' => $this->user_id,
                 'course_id' => $this->post['course_id'],
-                'aws' => (array)$this->post['aws'],
+                'aws' => (array) $this->post['aws'],
                 'time' => date("Y-m-d H:i:s"),
             ];
             $res = TestDAL::joinTest($_data);
@@ -134,4 +134,28 @@ class ApiAccount extends \action\RestfulApi {
         }
         return self::$data;
     }
+
+    /** 参与过的课程列表 */
+    function courses() {
+        try {
+            //轮播列表
+            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+                self::$data['success'] = false;
+                self::$data['data']['code'] = "errorType";
+                self::$data['msg'] = code::$code["errorType"];
+                return self::$data;
+            }
+            $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
+            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id);
+
+            self::$data['data']['userType'] = $this->server_id;
+            //print_r($res);die;
+            self::$data['data']['userInfo'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
 }

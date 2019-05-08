@@ -15,6 +15,9 @@ class RoleDAL {
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
+        if (\mod\common::getSession("id") != 1) {
+            $where .= " and id <> 1 ";
+        }
         $sql = "select * from " . $base->table_name("role") . " where 1=1 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
@@ -25,6 +28,9 @@ class RoleDAL {
         $where = "";
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
+        }
+        if (\mod\common::getSession("id") != 1) {
+            $where .= " and id <> 1 ";
         }
         $sql = "select count(1) as total from " . $base->table_name("role") . " where 1=1 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

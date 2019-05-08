@@ -69,6 +69,7 @@ class code {
         'daily10'=>'每日只能使用十次',
         'emptyparameter'=>'请检查参数',
         'emptydata'=>'数据丢失',
+        'errorType'=>'错误类型',
     ];
 
 }
