@@ -108,7 +108,7 @@ return $config = [
             'POST /v4/ApiAccount-test.htm' => 'v4-ApiAccount-testing', //提交测试
             'GET /v4/ApiArticle-supports.htm' => 'v4-ApiArticle-supports', //文章列表
             'GET /v4/ApiArticle-support.htm' => 'v4-ApiArticle-support', //文章详细
-            'POST /v4/ApiArticle-favorite.htm' => 'v4-ApiArticle-favorite', //收藏文章
+            'POST /v4/ApiAccount-favorite.htm' => 'v4-ApiArticle-favorite', //收藏文章
             'POST /v4/ApiArticle-resume.htm' => 'v4-ApiArticle-resume', //投递简历
         ]
     ],

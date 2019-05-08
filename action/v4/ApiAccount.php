@@ -8,6 +8,7 @@ use TigerDAL\Api\TokenDAL;
 use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\TestDAL;
+use TigerDAL\Api\AccountDAL;
 use config\code;
 
 class ApiAccount extends \action\RestfulApi {
@@ -113,4 +114,24 @@ class ApiAccount extends \action\RestfulApi {
         return self::$data;
     }
 
+    /** 收藏 */
+    function favorite() {
+        try {
+            //轮播列表
+            $_data = [
+                'user_id' => $this->user_id,
+                'article_id' => $this->post['article_id'],
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+            ];
+            $res = AccountDAL::addFavorites($_data);
+
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
 }
