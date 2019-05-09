@@ -118,14 +118,7 @@ class ApiAccount extends \action\RestfulApi {
     function favorite() {
         try {
             //轮播列表
-            $_data = [
-                'user_id' => $this->user_id,
-                'article_id' => $this->post['article_id'],
-                'add_time' => date("Y-m-d H:i:s"),
-                'edit_time' => date("Y-m-d H:i:s"),
-                'delete' => 0,
-            ];
-            $res = AccountDAL::addFavorites($_data);
+            $res = AccountDAL::doFavorites($this->user_id,$this->post['article_id']);
 
             //print_r($res);die;
             self::$data['data'] = $res;

@@ -73,10 +73,9 @@ class ApiArticle extends \action\RestfulApi {
         try {
             //轮播列表
             $res = ArticleDAL::getOne($this->get['article_id']);
-            $resF = AccountDAL::getFavorite($this->get['article_id'], $this->user_id);
-            //print_r($res);die;
+            $resF = AccountDAL::getFavorite($this->user_id, $this->get['article_id']);
             self::$data['data'] = $res;
-            self::$data['data']['favorites'] = $resF;
+            self::$data['data']['favorites'] = (!empty($resF)) ? $resF['delete'] : 0;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

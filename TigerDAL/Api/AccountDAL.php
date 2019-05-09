@@ -18,8 +18,8 @@ class AccountDAL {
         
     }
 
-    /** 收藏 */
-    public static function addFavorites($data) {
+    /** 新建收藏 */
+    public static function insertUserFavorites($data) {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $v) {
@@ -35,6 +35,50 @@ class AccountDAL {
         } else {
             return true;
         }
+    }
+
+    /** 更新收藏 */
+    public static function updateUserFavorites($id, $data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "update " . $base->table_name('user_favorites') . " set " . $set . "  where id=" . $id . " ;";
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
+    /** 收藏的反复方法 */
+    public static function doFavorites($user_id, $article_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name('user_favorites') . " where user_id=" . $user_id . " and article_id=" . $article_id . " ;";
+        $row = $base->getFetchRow($sql);
+        if (empty($row)) {
+            $_data = [
+                'user_id' => $user_id,
+                'article_id' => $article_id,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+            ];
+            self::insertUserFavorites($_data);
+        } else {
+            if ($row['delete'] == 0) {
+                $_data = ['delete' => '1'];
+            } else {
+                $_data = ['delete' => '0'];
+            }
+            self::updateUserFavorites($row['id'], $_data);
+        }
+        return true;
     }
 
     /** 获取已读课程信息列表 */
@@ -84,10 +128,10 @@ class AccountDAL {
     }
 
     /** 收藏的文章列表 */
-    public static function getFavorite($article_id, $user_id) {
+    public static function getFavorite($user_id, $article_id) {
         $base = new BaseDAL();
         $sql = "select uf.* from " . $base->table_name("user_favorites") . " as uf "
-                . "where uf.`delete`=0 and uf.user_id=" . $user_id . " and uf.article_id=" . $article_id . " ;";
+                . "where uf.user_id=" . $user_id . " and uf.article_id=" . $article_id . " ;";
         return $base->getFetchRow($sql);
     }
 
