@@ -48,4 +48,23 @@ class LessonDAL {
         return $cms->getByName($name);
     }
 
+    /** 参与课程 */
+    public static function joinLesson($data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "insert into " . $base->table_name('user_lesson') . " values (null," . $set . ");";
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
 }

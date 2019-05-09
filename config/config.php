@@ -96,6 +96,7 @@ return $config = [
             'GET /v4/ApiAccount-enterpriseCourses.htm' => 'v4-ApiAccount-enterpriseCourses', //员工：企业专用课程列表
             'GET /v4/ApiAccount-courses.htm' => 'v4-ApiAccount-courses', //用户：参与过的课程列表
             'POST /v4/ApiAccount-course.htm' => 'v4-ApiAccount-course', //用户：参与课程
+            'POST /v4/ApiAccount-lesson.htm' => 'v4-ApiAccount-lesson', //用户：参与课程
             'GET /v4/ApiAccount-favorites.htm' => 'v4-ApiAccount-favorites', //用户：收藏夹
             'GET /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-resume', //用户：简历
             'PUT /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-resume', //用户：更新简历

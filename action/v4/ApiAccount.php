@@ -9,6 +9,7 @@ use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\AccountDAL;
+use TigerDAL\Api\LessonDAL;
 use config\code;
 
 class ApiAccount extends \action\RestfulApi {
@@ -85,6 +86,27 @@ class ApiAccount extends \action\RestfulApi {
                 'delete' => 0,
             ];
             $res = CourseDAL::joinCourse($_data);
+
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+    /** 参与课程 */
+    function lesson() {
+        try {
+            //轮播列表
+            $_data = [
+                'user_id' => $this->user_id,
+                'lesson_id' => $this->post['lesson_id'],
+                'status' => 1,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+            ];
+            $res = LessonDAL::joinLesson($_data);
 
             //print_r($res);die;
             self::$data['data'] = $res;
