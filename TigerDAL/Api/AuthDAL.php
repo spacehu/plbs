@@ -68,8 +68,11 @@ class AuthDAL {
     /** 获取用户信息 */
     public function getUserInfo($userid) {
         $base = new BaseDAL();
-        $sql = "select id,name,phone,nickname,photo,brithday,province,city,district,email,sex,user_id "
-                . "from " . $base->table_name("user_info") . " where `id`=" . $userid . " limit 1; ";
+        $sql = "select ui.id,ui.name,ui.phone,ui.nickname,ui.photo,ui.brithday,ui.province,ui.city,ui.district,ui.email,ui.sex,ui.user_id,eu.enterprise_id,e.name as eName "
+                . "from " . $base->table_name("user_info") . " as ui "
+                . "left join  " . $base->table_name("enterprise_user") . " as eu on eu.user_id=ui.id and eu.status=1 "
+                . "left join  " . $base->table_name("enterprise") . " as e on e.id=eu.enterprise_id "
+                . "where ui.`id`=" . $userid . " limit 1; ";
         return $base->getFetchRow($sql);
     }
 

@@ -226,12 +226,12 @@ class ApiAccount extends \action\RestfulApi {
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         $cat_id = isset($this->get['cat_id']) ? $this->get['cat_id'] : '';
-
+        $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
         try {
             //轮播列表
 
-            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
-            $total = CourseDAL::getTotal($keywords, $cat_id, 0);
+            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, $enterprise_id);
+            $total = CourseDAL::getTotal($keywords, $cat_id, $enterprise_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
