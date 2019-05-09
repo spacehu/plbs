@@ -54,6 +54,16 @@ class CourseDAL {
     /** 参与课程 */
     public static function joinCourse($data) {
         $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name('user_course') . " where user_id=" . $data['user_id'] . " and course_id=" . $data['course_id'] . " ";
+        if (!empty($base->getFetchRow($sql))) {
+            return false;
+        }
+        return self::insertUserCourse($data);
+    }
+
+    /** 新建参与课程 */
+    public static function insertUserCourse($data) {
+        $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $v) {
                 if (is_numeric($v)) {

@@ -94,7 +94,8 @@ class ApiAccount extends \action\RestfulApi {
         }
         return self::$data;
     }
-    /** 参与课程 */
+
+    /** 参与课时 */
     function lesson() {
         try {
             //轮播列表
@@ -140,7 +141,7 @@ class ApiAccount extends \action\RestfulApi {
     function favorite() {
         try {
             //轮播列表
-            $res = AccountDAL::doFavorites($this->user_id,$this->post['article_id']);
+            $res = AccountDAL::doFavorites($this->user_id, $this->post['article_id']);
 
             //print_r($res);die;
             self::$data['data'] = $res;

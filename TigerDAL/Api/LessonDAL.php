@@ -48,8 +48,18 @@ class LessonDAL {
         return $cms->getByName($name);
     }
 
-    /** 参与课程 */
+    /** 参与课时 */
     public static function joinLesson($data) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name('user_lesson') . " where user_id=" . $data['user_id'] . " and lesson_id=" . $data['lesson_id'] . " ";
+        if (!empty($base->getFetchRow($sql))) {
+            return false;
+        }
+        return self::insertUserLesson($data);
+    }
+
+    /** 新建参与课时 */
+    public static function insertUserLesson($data) {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $v) {

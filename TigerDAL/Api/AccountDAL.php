@@ -86,12 +86,17 @@ class AccountDAL {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
-        $sql = "select c.*,uc.status as ucStatus,i.original_src from " . $base->table_name("user_course") . " as uc "
+        $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls "
+                . "from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
+                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id AND ul.`delete` = 0 "
                 . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
+                . "GROUP BY c.id "
                 . "order by uc.id desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
         return $base->getFetchAll($sql);
     }
 
