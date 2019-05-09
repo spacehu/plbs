@@ -75,7 +75,7 @@ class ApiArticle extends \action\RestfulApi {
             $res = ArticleDAL::getOne($this->get['article_id']);
             $resF = AccountDAL::getFavorite($this->user_id, $this->get['article_id']);
             self::$data['data'] = $res;
-            self::$data['data']['favorites'] = (!empty($resF)) ? $resF['delete'] : 0;
+            self::$data['data']['favorites'] = (!empty($resF)) ? ($resF['delete'] == 0) ? 1 : 0 : 0;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
