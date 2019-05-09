@@ -148,10 +148,36 @@ class ApiAccount extends \action\RestfulApi {
             $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
             $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
             $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id);
+            $resT = AccountDAL::getCoursesTotal($this->user_id);
+            self::$data['data']['userType'] = $this->server_id;
+            //print_r($res);die;
+            self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $resT;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 收藏的文章列表 */
+    function favorites() {
+        try {
+            //轮播列表
+            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+                self::$data['success'] = false;
+                self::$data['data']['code'] = "errorType";
+                self::$data['msg'] = code::$code["errorType"];
+                return self::$data;
+            }
+            $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
+            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+            $res = AccountDAL::getFavorites($currentPage, $pagesize, $this->user_id);
+            $resT = AccountDAL::getFavoritesTotal($this->user_id);
 
             self::$data['data']['userType'] = $this->server_id;
             //print_r($res);die;
-            self::$data['data']['userInfo'] = $res;
+            self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

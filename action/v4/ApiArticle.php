@@ -5,6 +5,7 @@ namespace action\v4;
 use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\ArticleDAL;
+use TigerDAL\Api\AccountDAL;
 use config\code;
 
 class ApiArticle extends \action\RestfulApi {
@@ -71,10 +72,11 @@ class ApiArticle extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $ArticleDAL = new ArticleDAL();
-            $res = $ArticleDAL->getOne($this->get['article_id']);
+            $res = ArticleDAL::getOne($this->get['article_id']);
+            $resF = AccountDAL::getFavorite($this->get['article_id'], $this->user_id);
             //print_r($res);die;
             self::$data['data'] = $res;
+            self::$data['data']['favorites'] = $resF;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
