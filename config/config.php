@@ -90,6 +90,7 @@ return $config = [
             'DELETE /v4/ApiAuth-logout.htm' => 'v4-ApiAuth-logout', //登出
             'PUT /v4/ApiAuth-reset.htm' => 'v4-ApiAuth-reset', //重置密码
             'GET /v4/ApiAccount-info.htm' => 'v4-ApiAccount-info', //获取用户信息&员工信息&获取企业主信息
+            'POST /v4/ApiAccount-enterprise.htm' => 'v4-ApiAccount-enterprise', //用户：绑定企业 成为员工
             'GET /v4/ApiAccount-personalProgresses.htm' => 'v4-ApiAccount-personalProgresses', //企业主：员工学习进度
             'GET /v4/ApiAccount-courseProgresses.htm' => 'v4-ApiAccount-courseProgresses', //企业主：课程参与度
             'GET /v4/ApiAccount-testProgresses.htm' => 'v4-ApiAccount-testProgresses', //企业主：考试合格率

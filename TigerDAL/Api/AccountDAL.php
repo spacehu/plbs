@@ -81,6 +81,37 @@ class AccountDAL {
         return true;
     }
 
+    /** 收藏文章的状态 */
+    public static function getFavorite($user_id, $article_id) {
+        $base = new BaseDAL();
+        $sql = "select uf.* from " . $base->table_name("user_favorites") . " as uf "
+                . "where uf.user_id=" . $user_id . " and uf.article_id=" . $article_id . " ;";
+        return $base->getFetchRow($sql);
+    }
+
+    /** 收藏的文章列表 */
+    public static function getFavorites($currentPage, $pagesize, $user_id) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $sql = "select c.*,i.original_src from " . $base->table_name("user_favorites") . " as uf "
+                . "left join " . $base->table_name("article") . " as c on c.id=uf.article_id "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "where uf.`delete`=0 and c.`delete`=0 and uf.user_id=" . $user_id . " "
+                . "order by uf.id desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        return $base->getFetchAll($sql);
+    }
+
+    /** 收藏的文章列表 total */
+    public static function getFavoritesTotal($user_id) {
+        $base = new BaseDAL();
+        $sql = "select count(uf.id) as num from " . $base->table_name("user_favorites") . " as uf "
+                . "left join " . $base->table_name("article") . " as c on c.id=uf.article_id "
+                . "where uf.`delete`=0 and c.`delete`=0 and uf.user_id=" . $user_id . " ;";
+        return $base->getFetchRow($sql)['num'];
+    }
+
     /** 获取已读课程信息列表 */
     public static function getCourses($currentPage, $pagesize, $user_id) {
         $base = new BaseDAL();
@@ -109,35 +140,94 @@ class AccountDAL {
         return $base->getFetchRow($sql)['num'];
     }
 
-    /** 收藏的文章列表 */
-    public static function getFavorites($currentPage, $pagesize, $user_id) {
+    /** 获取完成课程信息列表 total */
+    public static function getCoursesPass($user_id) {
         $base = new BaseDAL();
-        $limit_start = ($currentPage - 1) * $pagesize;
-        $limit_end = $pagesize;
-        $sql = "select c.*,i.original_src from " . $base->table_name("user_favorites") . " as uf "
-                . "left join " . $base->table_name("article") . " as c on c.id=uf.article_id "
-                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
-                . "where uf.`delete`=0 and c.`delete`=0 and uf.user_id=" . $user_id . " "
-                . "order by uf.id desc "
-                . "limit " . $limit_start . "," . $limit_end . " ;";
-        return $base->getFetchAll($sql);
-    }
-
-    /** 收藏的文章列表 total */
-    public static function getFavoritesTotal($user_id) {
-        $base = new BaseDAL();
-        $sql = "select count(uf.id) as num from " . $base->table_name("user_favorites") . " as uf "
-                . "left join " . $base->table_name("article") . " as c on c.id=uf.article_id "
-                . "where uf.`delete`=0 and c.`delete`=0 and uf.user_id=" . $user_id . " ;";
+        $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
+                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . "where uc.`delete`=0 and c.`delete`=0 and uc.status=2 and uc.user_id=" . $user_id . " ;";
         return $base->getFetchRow($sql)['num'];
     }
 
-    /** 收藏的文章列表 */
-    public static function getFavorite($user_id, $article_id) {
+    /** 获取失败课程信息列表 total */
+    public static function getCoursesFailed($user_id) {
         $base = new BaseDAL();
-        $sql = "select uf.* from " . $base->table_name("user_favorites") . " as uf "
-                . "where uf.user_id=" . $user_id . " and uf.article_id=" . $article_id . " ;";
-        return $base->getFetchRow($sql);
+        $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
+                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . "left join " . $base->table_name("exam") . " as e on uc.course_id=e.course_id "
+                . "where uc.`delete`=0 and c.`delete`=0 and e.point<60 and uc.user_id=" . $user_id . " ;";
+        return $base->getFetchRow($sql)['num'];
+    }
+
+    /** 简历企业员工关系 */
+    public static function doEnterpriseRelation($user_id, $code) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("enterprise") . " where code='" . $code . "' ;";
+        $row = $base->getFetchRow($sql);
+        if (empty($row)) {
+            return "errorCode";
+        }
+        $sql = "select * from " . $base->table_name("enterprise_user") . " where user_id=" . $user_id . " and enterprise_id=" . $row['id'] . " ;";
+        $rowEU = $base->getFetchRow($sql);
+        if (!empty($rowEU)) {
+            if ($rowEU['status'] == 2) {
+
+                $data = [
+                    'status' => 0,
+                ];
+                return self::updateEnterpriseUser($rowEU['id'], $data);
+            }
+            return true;
+        }
+        $data = [
+            'enterprise_id' => $row['id'],
+            'user_id' => $user_id,
+            'status' => 0,
+            'add_by' => 0,
+            'add_time' => date("Y-m-d H:i:s"),
+            'edit_by' => 0,
+            'edit_time' => date("Y-m-d H:i:s"),
+            'delete' => 0,
+        ];
+        return self::insertEnterpriseUser($data);
+    }
+
+    /** 新建企业员工关系 */
+    public static function insertEnterpriseUser($data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "insert into " . $base->table_name('enterprise_user') . " values (null," . $set . ");";
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
+    /** 更新企业员工关系 */
+    public static function updateEnterpriseUser($id, $data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where id=" . $id . " ;";
+            return $base->query($sql);
+        } else {
+            return true;
+        }
     }
 
 }

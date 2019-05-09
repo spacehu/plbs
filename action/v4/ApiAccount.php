@@ -46,32 +46,7 @@ class ApiAccount extends \action\RestfulApi {
         }
     }
 
-    /** 企业||用户 信息 */
-    function info() {
-        try {
-            //轮播列表
-            $AuthDAL = new AuthDAL();
-            $res;
-            switch ($this->server_id) {
-                case \mod\init::$config['token']['server_id']['customer']:
-                    $res = $AuthDAL->getUserInfo($this->user_id);
-                    break;
-                case \mod\init::$config['token']['server_id']['business']:
-                    $res = EnterpriseDAL::getByUserId($this->user_id);
-                    break;
-                case \mod\init::$config['token']['server_id']['management']:
-                    break;
-                default:
-                    break;
-            }
-            self::$data['data']['userType'] = $this->server_id;
-            //print_r($res);die;
-            self::$data['data']['userInfo'] = $res;
-        } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
-        }
-        return self::$data;
-    }
+    /*  post   * ****************************************************************************** */
 
     /** 参与课程 */
     function course() {
@@ -151,6 +126,51 @@ class ApiAccount extends \action\RestfulApi {
         return self::$data;
     }
 
+    /** 绑定企业 */
+    function enterprise() {
+        try {
+            //轮播列表
+            $res = AccountDAL::doEnterpriseRelation($this->user_id, $this->post['code']);
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /*  get   * ******************************************************************************* */
+
+    /** 企业||用户 信息 */
+    function info() {
+        try {
+            //轮播列表
+            $AuthDAL = new AuthDAL();
+            $res;
+            switch ($this->server_id) {
+                case \mod\init::$config['token']['server_id']['customer']:
+                    $res = $AuthDAL->getUserInfo($this->user_id);
+                    $res['subInfo']['joinCourse'] = AccountDAL::getCoursesTotal($this->user_id);
+                    $res['subInfo']['passCourse'] = AccountDAL::getCoursesPass($this->user_id);
+                    $res['subInfo']['failCourse'] = AccountDAL::getCoursesFailed($this->user_id);
+                    break;
+                case \mod\init::$config['token']['server_id']['business']:
+                    $res = EnterpriseDAL::getByUserId($this->user_id);
+                    break;
+                case \mod\init::$config['token']['server_id']['management']:
+                    break;
+                default:
+                    break;
+            }
+            self::$data['data']['userType'] = $this->server_id;
+            //print_r($res);die;
+            self::$data['data']['userInfo'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
     /** 参与过的课程列表 */
     function courses() {
         try {
@@ -194,6 +214,28 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 员工：企业专用课程列表 */
+    function enterpriseCourses() {
+        $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
+        $cat_id = isset($this->get['cat_id']) ? $this->get['cat_id'] : '';
+
+        try {
+            //轮播列表
+
+            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
+            $total = CourseDAL::getTotal($keywords, $cat_id, 0);
+
+            //print_r($res);die;
+            self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $total;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
