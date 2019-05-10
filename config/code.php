@@ -70,6 +70,7 @@ class code {
         'emptyparameter'=>'请检查参数',
         'emptydata'=>'数据丢失',
         'errorType'=>'错误类型',
+        'errorCode'=>'错误代码',
     ];
 
 }

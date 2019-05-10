@@ -27,8 +27,25 @@ class EnterpriseDAL {
         $sql = "select count(eu.id) as num "
                 . "from " . $base->table_name("enterprise_user") . " as eu "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id "
-                . "inner join " . $base->table_name("course") . " as c on uc.course_id = c.id and c.enterprise_id = ".$id." "
+                . "inner join " . $base->table_name("course") . " as c on uc.course_id = c.id and c.enterprise_id = " . $id . " "
                 . "where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql)['num'];
     }
+
+    /** 获取企业员工的学习进度 */
+    public static function getEnterpriseUserCourseExam($currentPage, $pagesize, $id) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $sql = "select eu.id,u.name,u.photo,count(ec.id) as joinCourseCount,count(e.id) as passExamCount,count(c.id) as courseTotal,count(uc.id) as userCourseCount "
+                . "from " . $base->table_name("enterprise_user") . " as eu "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id "
+                . "inner join " . $base->table_name("course") . " as c on uc.course_id = c.id and c.enterprise_id = " . $id . " "
+                . "left join " . $base->table_name("exam") . " as e on e.course_id = c.id "
+                . "where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "' "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        echo $sql;
+        return $base->getFetchAll($sql);
+    }
+
 }

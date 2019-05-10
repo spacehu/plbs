@@ -99,8 +99,8 @@ return $config = [
             'POST /v4/ApiAccount-course.htm' => 'v4-ApiAccount-course', //用户：参与课程
             'POST /v4/ApiAccount-lesson.htm' => 'v4-ApiAccount-lesson', //用户：参与课程
             'GET /v4/ApiAccount-favorites.htm' => 'v4-ApiAccount-favorites', //用户：收藏夹
-            'GET /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-resume', //用户：简历
-            'PUT /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-resume', //用户：更新简历
+            'GET /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-getResume', //用户：简历
+            'PUT /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-updateResume', //用户：更新简历
             'GET /v4/ApiBase-categorys.htm' => 'v4-ApiBase-categorys', //获取分类列表
             'GET /v4/ApiCourse-courses.htm' => 'v4-ApiCourse-courses', //获取课程列表
             'GET /v4/ApiCourse-course.htm' => 'v4-ApiCourse-course', //获取课程详情
@@ -110,8 +110,8 @@ return $config = [
             'POST /v4/ApiAccount-test.htm' => 'v4-ApiAccount-testing', //提交测试
             'GET /v4/ApiArticle-supports.htm' => 'v4-ApiArticle-supports', //文章列表
             'GET /v4/ApiArticle-support.htm' => 'v4-ApiArticle-support', //文章详细
-            'POST /v4/ApiAccount-favorite.htm' => 'v4-ApiArticle-favorite', //收藏文章
-            'POST /v4/ApiArticle-resume.htm' => 'v4-ApiArticle-resume', //投递简历
+            'POST /v4/ApiAccount-favorite.htm' => 'v4-ApiAccount-favorite', //收藏文章
+            'POST /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-sendResume', //投递简历
         ]
     ],
     'debug' => false, //调试器

@@ -54,7 +54,8 @@ class lesson {
             }
             self::$data['list'] = CourseDAL::getAll(1, 999, '');
             self::$data['image'] = ImageDAL::getAll(1, 99, '');
-            self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
+            self::$data['media'] = MediaDAL::getAll(1, 99, '', '');
+            //self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
@@ -100,7 +101,7 @@ class lesson {
                     'media_id' => $_POST['media_id'],
                     'type' => $_POST['type'],
                 ];
-                self::$data = LessonDAL::insert($data);
+                self::$data = $id = LessonDAL::insertLesson($data);
             }
             if (self::$data) {
                 $_data = [
