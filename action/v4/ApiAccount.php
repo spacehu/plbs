@@ -288,7 +288,22 @@ class ApiAccount extends \action\RestfulApi {
 
     /** 企业主：课程参与度 */
     function courseProgresses() {
-        
+        $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
+        try {
+            //轮播列表
+
+            $res = EnterpriseDAL::getEnterpriseUserCourseProgresses($currentPage, $pagesize, $enterprise_id);
+            $resT = CourseDAL::getTotal("", "", $enterprise_id);
+
+            //print_r($res);die;
+            self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $resT;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
     }
 
     /** 企业主：考试合格率 */
