@@ -183,7 +183,11 @@ class AccountDAL {
                     ];
                 }
             }
-            return true;
+            return [
+                'eName' => $row['name'],
+                'ePhone' => $row['phone'],
+                'eStatus' => $data['status'],
+            ];
         }
         $data = [
             'enterprise_id' => $row['id'],
