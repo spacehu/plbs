@@ -179,6 +179,7 @@ class AccountDAL {
                     return [
                         'eName' => $row['name'],
                         'ePhone' => $row['phone'],
+                        'eStatus' => $data['status'],
                     ];
                 }
             }
@@ -198,6 +199,7 @@ class AccountDAL {
             return [
                 'eName' => $row['name'],
                 'ePhone' => $row['phone'],
+                'eStatus' => $data['status'],
             ];
         }
     }

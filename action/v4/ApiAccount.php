@@ -275,9 +275,11 @@ class ApiAccount extends \action\RestfulApi {
             //轮播列表
 
             $res = EnterpriseDAL::getEnterpriseUserCourseExam($currentPage, $pagesize, $enterprise_id);
+            $resT = EnterpriseDAL::getEnterpriseUserCount($enterprise_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
+            self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
