@@ -136,6 +136,7 @@ class ApiAccount extends \action\RestfulApi {
                 self::$data['data']['error_msg'] = 'errorCode';
                 self::$data['data']['code'] = $res;
                 self::$data['msg'] = code::$code[$res];
+                return self::$data;
             }
             //print_r($res);die;
             self::$data['data'] = $res;
@@ -147,6 +148,77 @@ class ApiAccount extends \action\RestfulApi {
 
     /** 投递简历 */
     function sendResume() {
+        
+    }
+
+    /** 编辑用户信息 头像路径，手机号，验证码，姓名，（原密码），密码，确认密码 
+     * name
+     * 
+     * photo
+     * 
+     * password
+     * new_password
+     * new_password_cfn
+     * 
+     * phone
+     * code
+     */
+    function updateInfo() {
+        $AuthDAL = new AuthDAL();
+        try {
+            //密码
+            if (!empty($this->post['new_password'])) {
+                $_check = $AuthDAL->checkPassword($this->user_id, $this->post['password']);
+                if ($_check['error'] == 1) {
+                    self::$data['success'] = false;
+                    self::$data['data']['error_msg'] = $_check['code'];
+                    self::$data['data']['code'] = $_check['code'];
+                    self::$data['msg'] = code::$code[$_check['code']];
+                    return self::$data;
+                }
+                if ($this->post['new_password'] !== $this->post['new_password_cfn']) {
+                    self::$data['success'] = false;
+                    self::$data['data']['error_msg'] = "errorPasswordDifferent";
+                    self::$data['data']['code'] = "errorPasswordDifferent";
+                    self::$data['msg'] = code::$code["errorPasswordDifferent"];
+                    return self::$data;
+                }
+                $_data['password'] = md5($this->post['new_password']);
+            }
+            //姓名
+            if (!empty($this->post['name'])) {
+                $_data['name'] = $this->post['name'];
+            }
+            //头像
+            if (!empty($this->post['photo'])) {
+                $_data['photo'] = $this->post['photo'];
+            }
+            //手机号
+            if (!empty($this->post['phone'])) {
+                $check = $AuthDAL->checkPhone($this->post['phone'], $this->post['code']);
+                if ($check !== true) {
+                    self::$data['success'] = false;
+                    self::$data['data']['code'] = $check;
+                    self::$data['msg'] = code::$code[$check];
+                    return self::$data;
+                }
+                $_data['phone'] = $this->post['phone'];
+            }
+            if (!empty($_data)) {
+                $res = $AuthDAL->updateUserInfo($this->user_id, $_data);
+                self::$data['data'] = $res;
+            } else {
+                self::$data['data'] = "noobj";
+            }
+            //print_r($res);die;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 提交用户图片 */
+    function uploadPhoto() {
         
     }
 

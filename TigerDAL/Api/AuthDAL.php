@@ -38,6 +38,22 @@ class AuthDAL {
         return true;
     }
 
+    public function checkPassword($id, $password) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("user_info") . "  "
+                . "where `id`='" . $id . "' "
+                . "limit 1";
+        //echo $sql;
+        $data = $base->getFetchRow($sql);
+        if (empty($data)) {
+            return ['error' => '1', 'code' => "emptyUser"];
+        }
+        if ($data['password'] !== md5($password)) {
+            return ['error' => '1', 'code' => "errorPassword"];
+        }
+        return ['error' => '0', 'code' => "", 'data' => $data];
+    }
+
     /** 检查用户是否存在 */
     public function checkUser($phone, $password) {
 
