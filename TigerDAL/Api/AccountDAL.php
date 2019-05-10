@@ -186,7 +186,7 @@ class AccountDAL {
             return [
                 'eName' => $row['name'],
                 'ePhone' => $row['phone'],
-                'eStatus' => $data['status'],
+                'eStatus' => $rowEU['status'],
             ];
         }
         $data = [
