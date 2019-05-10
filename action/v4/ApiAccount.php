@@ -131,7 +131,7 @@ class ApiAccount extends \action\RestfulApi {
         try {
             //轮播列表
             $res = AccountDAL::doEnterpriseRelation($this->user_id, $this->post['code']);
-            if ($res == "errorCode") {
+            if ($res === "errorCode") {
                 self::$data['success'] = false;
                 self::$data['data']['error_msg'] = 'errorCode';
                 self::$data['data']['code'] = $res;
