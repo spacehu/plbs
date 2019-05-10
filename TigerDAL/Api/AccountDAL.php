@@ -175,7 +175,12 @@ class AccountDAL {
                 $data = [
                     'status' => 0,
                 ];
-                return self::updateEnterpriseUser($rowEU['id'], $data);
+                if (self::updateEnterpriseUser($rowEU['id'], $data)) {
+                    return [
+                        'eName' => $row['name'],
+                        'ePhone' => $row['phone'],
+                    ];
+                }
             }
             return true;
         }
@@ -189,7 +194,12 @@ class AccountDAL {
             'edit_time' => date("Y-m-d H:i:s"),
             'delete' => 0,
         ];
-        return self::insertEnterpriseUser($data);
+        if (self::insertEnterpriseUser($data)) {
+            return [
+                'eName' => $row['name'],
+                'ePhone' => $row['phone'],
+            ];
+        }
     }
 
     /** 新建企业员工关系 */
