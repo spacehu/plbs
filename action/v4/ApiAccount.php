@@ -5,7 +5,7 @@ namespace action\v4;
 use mod\common as Common;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
-use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Api\EnterpriseDAL;
 use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\AccountDAL;
@@ -156,6 +156,9 @@ class ApiAccount extends \action\RestfulApi {
                     break;
                 case \mod\init::$config['token']['server_id']['business']:
                     $res = EnterpriseDAL::getByUserId($this->user_id);
+                    $res['subInfo']['enterpriseUserCount'] = EnterpriseDAL::getEnterpriseUserCount($res['id']);
+                    $res['subInfo']['joinCourseUserCount'] = EnterpriseDAL::getJoinCourseUserCount($res['id']);
+                    $res['subInfo']['courseCount'] = CourseDAL::getTotal("", "", $res['id']);
                     break;
                 case \mod\init::$config['token']['server_id']['management']:
                     break;
