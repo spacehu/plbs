@@ -59,18 +59,30 @@ class EnterpriseDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $sql = "SELECT "
-                . "u.id, u.`NAME`, u.photo, count(DISTINCT(uc.id)) AS joinCourseCount, count(DISTINCT(e.course_id)) AS passExamCount, count(ul.id) AS courseTotal, count(l.id) AS userCourseCount "
-                . "FROM " . $base->table_name("user_info") . " AS u  "
-                . "LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id AND eu.enterprise_id ='" . $id . "' "
-                . "LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = eu.user_id "
-                . "inner JOIN " . $base->table_name("course") . " AS c ON c.enterprise_id = eu.enterprise_id and uc.course_id=c.id "
-                . "LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.point>60 "
-                . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id  "
-                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id "
-                . "WHERE eu.`delete` = 0 "
-                . "AND eu. STATUS = 1 "
+                . "c.*,i.original_src,count(DISTINCT(uc.user_id)) as joinPerson "
+                . "from " . $base->table_name("course") . "  as c  "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
+                . "where c.enterprise_id=" . $id . "  "
+                . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
+    /** 获取企业员工的考试合格率 */
+    public static function getEnterpriseUserExamPass($currentPage, $pagesize, $id) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $sql = "SELECT "
+                . "c.*,i.original_src,count(DISTINCT(e.user_id)) as passExam "
+                . "from " . $base->table_name("course") . "  as c  "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
+                . "left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>60 "
+                . "where c.enterprise_id=" . $id . "  "
+                . "group by c.id "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        return $base->getFetchAll($sql);
+    }
 }
