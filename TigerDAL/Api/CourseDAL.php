@@ -37,12 +37,14 @@ class CourseDAL {
     }
 
     /** 获取用户信息 */
-    public static function getOne($id) {
+    public static function getOne($id, $user_id) {
         $base = new BaseDAL();
-        $sql = "select c.*,i.original_src,count(l.id) as lessonCount,sum(ul.status) as lessonStartCount from " . $base->table_name("course") . " as c "
+        $sql = "select c.*,i.original_src,count(l.id) as lessonCount,sum(ul.status) as lessonStartCount,uc.status as ucStatus "
+                . "from " . $base->table_name("course") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("lesson") . " as l on l.course_id=c.id "
-                . "left join " . $base->table_name("user_lesson") . " as ul on l.id=ul.lesson_id "
+                . "left join " . $base->table_name("user_lesson") . " as ul on l.id=ul.lesson_id and ul.user_id=".$user_id." "
+                . "left join " . $base->table_name("user_course") . " as uc on c.id=uc.course_id and uc.user_id=".$user_id." "
                 . "where c.`delete`=0 and c.id=" . $id . "  limit 1 ;";
         return $base->getFetchRow($sql);
     }

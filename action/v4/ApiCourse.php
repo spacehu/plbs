@@ -75,7 +75,7 @@ class ApiCourse extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $res = CourseDAL::getOne($this->get['course_id']);
+            $res = CourseDAL::getOne($this->get['course_id'],$this->user_id);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {

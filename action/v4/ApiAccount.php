@@ -215,7 +215,20 @@ class ApiAccount extends \action\RestfulApi {
                     self::$data['msg'] = code::$code[$check];
                     return self::$data;
                 }
-                $_data['phone'] = $this->post['phone'];
+                $photo = $_data['phone'] = $this->post['phone'];
+                //用户文件夹
+                $md5Uid = md5($this->user_id);
+                //制作绝对路径
+                $path = $_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'] . "/" . $md5Uid;
+                //遍历删除 不是.和..的文件
+                foreach (scandir($path) as $filename) {
+                    if ($filename == '.' || $filename == '..') {
+                        continue;
+                    }
+                    if ($_SERVER['DOCUMENT_ROOT'] . $photo != $path . '/' . $filename) {
+                        unlink($path . '/' . $filename);
+                    }
+                }
             }
             if (!empty($_data)) {
                 $res = $AuthDAL->updateUserInfo($this->user_id, $_data);
@@ -232,7 +245,20 @@ class ApiAccount extends \action\RestfulApi {
 
     /** 提交用户图片 */
     function uploadPhoto() {
-        
+        try {
+            $photo = $_FILES['photo'];
+            $path = \mod\init::$config['env']['user_path'] . '/' . md5($this->user_id);
+            $name = date("YmdHis") . ".jpg";
+            if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path)) {
+                mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777);
+            }
+            move_uploaded_file($photo['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $path . '/' . $name);
+
+            self::$data['data'] = $path . '/' . $name;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
     }
 
     /*  get   * ******************************************************************************* */
