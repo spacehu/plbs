@@ -8,7 +8,7 @@ use TigerDAL\Cms\LessonDAL as cmsLessonDAL;
 class LessonDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords = '', $cat_id = '') {
+    public static function getAll($currentPage, $pagesize, $keywords = '', $course_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -16,8 +16,8 @@ class LessonDAL {
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
-        if ($cat_id !== '') {
-            $where .= " and c.course_id = '" . $cat_id . "' ";
+        if ($course_id !== '') {
+            $where .= " and c.course_id = '" . $course_id . "' ";
         }
         $sql = "select c.*,i.original_src from " . $base->table_name("lesson") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
@@ -28,9 +28,9 @@ class LessonDAL {
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords = '', $cat_id = '') {
+    public static function getTotal($keywords = '', $course_id = '') {
         $cms = new cmsLessonDAL();
-        return $cms->getTotal($keywords, $cat_id);
+        return $cms->getTotal($keywords, $course_id);
     }
 
     /** 获取用户信息 */

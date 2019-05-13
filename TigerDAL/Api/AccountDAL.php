@@ -208,6 +208,25 @@ class AccountDAL {
         }
     }
 
+    /** 绑定企业员工关系 */
+    public static function unEnterpriseRelation($user_id, $enterprise_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("enterprise_user") . " where user_id=" . $user_id . " and enterprise_id=" . $enterprise_id . " ;";
+        $rowEU = $base->getFetchRow($sql);
+        if (!empty($rowEU)) {
+            $data = [
+                'delete' => 1,
+            ];
+            if (self::updateEnterpriseUser($rowEU['id'], $data)) {
+                return [
+                    'eName' => $row['name'],
+                    'ePhone' => $row['phone'],
+                    'eStatus' => $data['status'],
+                ];
+            }
+        }
+    }
+
     /** 新建企业员工关系 */
     public static function insertEnterpriseUser($data) {
         $base = new BaseDAL();

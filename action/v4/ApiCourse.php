@@ -95,12 +95,12 @@ class ApiCourse extends \action\RestfulApi {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
-        $cat_id = $this->get['course_id'];
+        $course_id = $this->get['course_id'];
         try {
             //轮播列表
 
-            $res = LessonDAL::getAll($currentPage, $pagesize, $keywords, $cat_id);
-            $total = LessonDAL::getTotal($keywords, $cat_id);
+            $res = LessonDAL::getAll($currentPage, $pagesize, $keywords, $course_id);
+            $total = LessonDAL::getTotal($keywords, $course_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;

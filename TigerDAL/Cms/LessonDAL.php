@@ -20,11 +20,14 @@ class LessonDAL {
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords = '') {
+    public static function getTotal($keywords = '', $course_id = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
+        }
+        if ($course_id !== '') {
+            $where .= " and course_id = '" . $course_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("lesson") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

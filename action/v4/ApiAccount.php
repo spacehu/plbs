@@ -146,6 +146,26 @@ class ApiAccount extends \action\RestfulApi {
         return self::$data;
     }
 
+    /** 解绑企业 */
+    function unEnterprise() {
+        try {
+            //轮播列表
+            $res = AccountDAL::unEnterpriseRelation($this->user_id, $this->post['code']);
+            if ($res === "errorCode") {
+                self::$data['success'] = false;
+                self::$data['data']['error_msg'] = 'errorCode';
+                self::$data['data']['code'] = $res;
+                self::$data['msg'] = code::$code[$res];
+                return self::$data;
+            }
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
     /** 投递简历 */
     function sendResume() {
         
