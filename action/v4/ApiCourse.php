@@ -142,10 +142,8 @@ class ApiCourse extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $TestDAL = new TestDAL();
-            $CourseDAL = new CourseDAL();
-            $_obj = $CourseDAL->getOne($this->get['course_id']);
-            $res = $TestDAL->getRand($this->get['course_id'], $_obj['text_max']);
+            $_obj = CourseDAL::getOne($this->get['course_id'],$this->user_id);
+            $res = TestDAL::getRand($this->get['course_id'], $_obj['text_max']);
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = count($res);
