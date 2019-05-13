@@ -62,7 +62,7 @@ class TestDAL {
         $_status = 1;
         $base = new BaseDAL();
         //获取课程信息
-        $_course = CourseDAL::getOne($_data['course_id']);
+        $_course = CourseDAL::getOne($_data['course_id'],$_data['user_id']);
         if (empty($_data['aws'])) {
             return 'emptyparameter';
         }
