@@ -170,11 +170,18 @@ class AccountDAL {
         $sql = "select * from " . $base->table_name("enterprise_user") . " where user_id=" . $user_id . " and enterprise_id=" . $row['id'] . " ;";
         $rowEU = $base->getFetchRow($sql);
         if (!empty($rowEU)) {
+            if ($rowEU['delete'] == 1) {
+                $data = [
+                    'status' => 0,
+                    'delete' => 0,
+                ];
+            }
             if ($rowEU['status'] == 2) {
-
                 $data = [
                     'status' => 0,
                 ];
+            }
+            if (!empty($data)) {
                 if (self::updateEnterpriseUser($rowEU['id'], $data)) {
                     return [
                         'eName' => $row['name'],
@@ -218,11 +225,7 @@ class AccountDAL {
                 'delete' => 1,
             ];
             if (self::updateEnterpriseUser($rowEU['id'], $data)) {
-                return [
-                    'eName' => $row['name'],
-                    'ePhone' => $row['phone'],
-                    'eStatus' => $data['status'],
-                ];
+                return true;
             }
         }
     }

@@ -150,14 +150,7 @@ class ApiAccount extends \action\RestfulApi {
     function unEnterprise() {
         try {
             //轮播列表
-            $res = AccountDAL::unEnterpriseRelation($this->user_id, $this->post['code']);
-            if ($res === "errorCode") {
-                self::$data['success'] = false;
-                self::$data['data']['error_msg'] = 'errorCode';
-                self::$data['data']['code'] = $res;
-                self::$data['msg'] = code::$code[$res];
-                return self::$data;
-            }
+            $res = AccountDAL::unEnterpriseRelation($this->user_id, $this->post['enterprise_id']);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
