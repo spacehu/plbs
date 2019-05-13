@@ -154,7 +154,7 @@ class AuthDAL {
     public function checkEnterPrise($phone, $password) {
 
         if (!is_numeric($phone)) {
-            return ['error' => '1', 'code' => "errorUser"];
+            return ['error' => '1', 'code' => "errorPhone"];
         }
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("user") . "  "

@@ -250,7 +250,7 @@ class AccountDAL {
     public static function getEnterpriseUser($user_id) {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("enterprise_user") . " where `delete`=0 and user_id='" . $user_id . "' ;";
-        echo $sql;
+        //echo $sql;
         return $base->getFetchRow($sql);
     }
 
