@@ -38,7 +38,14 @@ class EnterpriseDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $sql = "SELECT "
-                . "u.id, u.`NAME`, u.photo, count(DISTINCT(uc.id)) AS joinCourseCount, count(DISTINCT(e.course_id)) AS passExamCount, count(ul.id) AS courseTotal, count(l.id) AS userCourseCount "
+                . "u.id, "
+                . "u.`NAME`, "
+                . "u.photo, "
+                . "count(DISTINCT(uc.id)) AS joinCourseCount, "
+                . "count(DISTINCT(e.course_id)) AS passExamCount, "
+                . "count(ul.id) AS userLessonTotal, "
+                . "count(l.id) AS lessonCount, "
+                . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
                 . "FROM " . $base->table_name("user_info") . " AS u  "
                 . "LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id AND eu.enterprise_id ='" . $id . "' "
                 . "LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = eu.user_id and uc.`delete`=0 "
@@ -50,6 +57,7 @@ class EnterpriseDAL {
                 . "AND eu. STATUS = 1 "
                 . ""
                 . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;die;
         return $base->getFetchAll($sql);
     }
 
