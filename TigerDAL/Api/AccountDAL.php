@@ -121,7 +121,8 @@ class AccountDAL {
         if ($enterprise_id !== '') {
             $where .= " and c.enterprise_id=" . $enterprise_id . " ";
         }
-        $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls "
+        $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
+                . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
                 . "from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "

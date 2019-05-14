@@ -40,7 +40,7 @@ $class = \action\customer::$data['class'];
                     foreach ($data as $v) {
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
-                            <td class="td1"><?php echo $v['nickname']; ?></td>
+                            <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['add_time']; ?></td>
                             <td class="td1">
                                 <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
