@@ -28,8 +28,10 @@ class CourseDAL {
                 $where .= " and (c.enterprise_id=0 or c.id in (" . $ids . ") ) ";
             }
         }
-        $sql = "select c.*,i.original_src from " . $base->table_name("course") . " as c "
+        $sql = "select c.*,i.original_src,uc.status as ucStatus "
+                . "from " . $base->table_name("course") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.user_id=" . $user_id . " "
                 . "where c.`delete`=0 " . $where . " "
                 . "order by c.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
