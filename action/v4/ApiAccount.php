@@ -10,6 +10,7 @@ use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\AccountDAL;
 use TigerDAL\Api\LessonDAL;
+use TigerDAL\Api\LogDAL;
 use config\code;
 
 class ApiAccount extends \action\RestfulApi {
