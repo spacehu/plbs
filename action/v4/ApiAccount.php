@@ -257,8 +257,8 @@ class ApiAccount extends \action\RestfulApi {
             if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777);
             }
-            move_uploaded_file($photo['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $path . '/' . $name);
-
+            $os = move_uploaded_file($photo['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $path . '/' . $name);
+            LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($os) . "", "DEBUG");
             self::$data['data'] = $path . '/' . $name;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
