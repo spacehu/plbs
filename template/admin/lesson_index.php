@@ -5,6 +5,7 @@ $currentPage = \action\lesson::$data['currentPage'];
 $pagesize = \action\lesson::$data['pagesize'];
 $keywords = \action\lesson::$data['keywords'];
 $class = \action\lesson::$data['class'];
+$course_id = \action\lesson::$data['course_id'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,7 +18,7 @@ $class = \action\lesson::$data['class'];
     <body>
 
         <div class="menu">
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getLesson'">添加新课时</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getLesson&course_id=<?php echo $course_id; ?>'">添加新课时</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
@@ -41,7 +42,8 @@ $class = \action\lesson::$data['class'];
                                 }
                                 ?></td>
                             <td class="td1">
-                                <a href="index.php?a=<?php echo $class; ?>&m=getLesson&id=<?php echo $v['id']; ?>">编辑</a>
+                                <a href="index.php?a=test&m=index&lesson_id=<?php echo $v['id']; ?>">试题</a>
+                                | <a href="index.php?a=<?php echo $class; ?>&m=getLesson&course_id=<?php echo $course_id; ?>&id=<?php echo $v['id']; ?>">编辑</a>
                                 | <a href="index.php?a=<?php echo $class; ?>&m=deleteLesson&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此课时删除?')">删除</a></td>
                         </tr>
                         <?php
@@ -54,7 +56,7 @@ $class = \action\lesson::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
+            $url = 'index.php?a=' . $class . '&m=index&course_id=' . $course_id . '&keywords=' . $keywords;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>

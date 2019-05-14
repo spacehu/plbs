@@ -44,43 +44,40 @@
             </div>
         </div>
         <div class="title">
-            <a class="first mainRed" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=staticPage'" href="javascript:void(0);" >SHOW 展示</a>
-            <div class="sub_title">
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index'" href="javascript:void(0);" >SHOW LIST 展示列表</a>
-                </div>
-            </div>
-        </div>
-        <div class="title">
             <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>
-            <div class="sub_title">
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
-                </div>
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
-                </div>
-            </div>
-        </div>
-        <div class="title">
-            <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=staticPage'" href="javascript:void(0);" >STATISTICS 统计</a>
-            <div class="sub_title">
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
-                </div>
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=action'" href="javascript:void(0);" >ACTION 模块统计</a>
-                </div>
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=page'" href="javascript:void(0);" >PAGE 单页统计</a>
-                </div>
-                <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
-                </div>
-            </div>
+            <!--            <div class="sub_title">
+                            <div class="title">
+                                <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
+                            </div>
+                            <div class="title">
+                                <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
+                            </div>
+                        </div>-->
         </div>
         <?php //\mod\common::pr($_COOKIE); ?>
         <?php if (\mod\common::getSession('level') <= 1) { ?>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  客户</a>
+            </div>
+        <?php } ?>
+        <?php if (\mod\common::getSession('level') == 0) { ?>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=user&m=index'" href="javascript:void(0);" >USER  用户</a>
+            </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=role&m=index'" href="javascript:void(0);" >ROLE  角色</a>
+            </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=purv&m=index'" href="javascript:void(0);" >PURV  权限</a>
+            </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=staticPage'" href="javascript:void(0);" >SHOW 展示</a>
+                <div class="sub_title">
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index'" href="javascript:void(0);" >SHOW LIST 展示列表</a>
+                    </div>
+                </div>
+            </div>
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=staticPage'" href="javascript:void(0);" >SYSTEM  系统</a>
                 <div class="sub_title">
@@ -95,21 +92,24 @@
                     </div>
                 </div>
             </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=staticPage'" href="javascript:void(0);" >STATISTICS 统计</a>
+                <div class="sub_title">
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=action'" href="javascript:void(0);" >ACTION 模块统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=page'" href="javascript:void(0);" >PAGE 单页统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
+                    </div>
+                </div>
+            </div>
         <?php } ?>
-        <?php if (\mod\common::getSession('level') == 0) { ?>
-            <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=user&m=index'" href="javascript:void(0);" >USER  用户</a>
-            </div>
-            <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=role&m=index'" href="javascript:void(0);" >ROLE  角色</a>
-            </div>
-            <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=purv&m=index'" href="javascript:void(0);" >PURV  权限</a>
-            </div>
-        <?php } ?>
-        <div class="title">
-            <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  客户</a>
-        </div>
     </body>
 
 </html>

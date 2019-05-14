@@ -5,6 +5,7 @@ $currentPage = \action\test::$data['currentPage'];
 $pagesize = \action\test::$data['pagesize'];
 $keywords = \action\test::$data['keywords'];
 $class = \action\test::$data['class'];
+$lesson_id = \action\test::$data['lesson_id'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,7 +18,7 @@ $class = \action\test::$data['class'];
     <body>
 
         <div class="menu">
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getTest'">添加新试题</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getTest&lesson_id=<?php echo $lesson_id; ?>'">添加新试题</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
@@ -41,7 +42,7 @@ $class = \action\test::$data['class'];
                                 }
                                 ?></td>
                             <td class="td1">
-                                <a href="index.php?a=<?php echo $class; ?>&m=getTest&id=<?php echo $v['id']; ?>">编辑</a>
+                                <a href="index.php?a=<?php echo $class; ?>&m=getTest&lesson_id=<?php echo $lesson_id; ?>&id=<?php echo $v['id']; ?>">编辑</a>
                                 | <a href="index.php?a=<?php echo $class; ?>&m=deleteTest&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此试题删除?')">删除</a></td>
                         </tr>
                         <?php
@@ -54,7 +55,7 @@ $class = \action\test::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
+            $url = 'index.php?a=' . $class . '&m=index&lesson_id=' . $lesson_id . '&keywords=' . $keywords;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>

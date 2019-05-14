@@ -7,13 +7,16 @@ use TigerDAL\BaseDAL;
 class LessonDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords = '') {
+    public static function getAll($currentPage, $pagesize, $keywords = '', $course_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
+        }
+        if (!empty($course_id)) {
+            $where .= " and course_id = " . $course_id . " ";
         }
         $sql = "select * from " . $base->table_name("lesson") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);

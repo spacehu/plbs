@@ -13,9 +13,11 @@ class test {
     private $class;
     public static $data;
     private $select = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
+    private $lesson_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        $this->lesson_id = !empty($_GET['lesson_id']) ? $_GET['lesson_id'] : '';
     }
 
     function index() {
@@ -30,9 +32,10 @@ class test {
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = TestDAL::getTotal($keywords);
-            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords);
+            self::$data['total'] = TestDAL::getTotal($keywords, $this->lesson_id);
+            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id);
             self::$data['class'] = $this->class;
+            self::$data['lesson_id'] = $this->lesson_id;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -50,6 +53,7 @@ class test {
             }
             self::$data['list'] = LessonDAL::getAll(1, 999, '');
             self::$data['class'] = $this->class;
+            self::$data['lesson_id'] = $this->lesson_id;
             self::$data['select'] = $this->select;
             self::$data['option'] = json_decode(self::$data['data']['overview']);
             //Common::pr(self::$data['list']);die;

@@ -4,6 +4,7 @@ $class = \action\test::$data['class'];
 $list = \action\test::$data['list'];
 $select = \action\test::$data['select'];
 $option = \action\test::$data['option'];
+$lesson_id = \action\test::$data['lesson_id'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -29,20 +30,21 @@ $option = \action\test::$data['option'];
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
+                            <input type="hidden" name="lesson_id" value="<?php echo $lesson_id; ?>">
                         </div>
-                        <div class="leftAlist" >
-                            <span>LESSON 课时</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <select name="lesson_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($list)) { ?>
-                                    <?php foreach ($list as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['lesson_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
-                        </div>
+                        <!--                        <div class="leftAlist" >
+                                                    <span>LESSON 课时</span>
+                                                </div>
+                                                <div class="leftAlist" >
+                                                    <select name="lesson_id">
+                                                        <option value="0">请选择</option>
+                        <?php if (is_array($list)) { ?>
+                            <?php foreach ($list as $k => $v) { ?>
+                                                                                <option value="<?php echo $v['id']; ?>"  <?php echo $data['lesson_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                                                    </select>
+                                                </div>-->
                         <div class="leftAlist" >
                             <span>DETAIL 试题内容</span>
                         </div>
@@ -65,7 +67,7 @@ $option = \action\test::$data['option'];
                             <span>OPTION 选项</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
                         </div>
                         <div class="leftAlist <?php echo $data['type'] == "text" ? 'hide' : ''; ?> list_type list_image" >
-                            <?php if (!empty($option)) { ?>
+                            <?php if (is_array($option)) { ?>
                                 <?php foreach ($option as $k => $v) { ?>
                                     <?php if ($k != "A") { ?><br /><?php } ?>
                                     <span><?php echo $k; ?>: </span><input class="text" name="overview[]" type="text" value="<?php echo $v; ?>" />
@@ -102,7 +104,7 @@ $option = \action\test::$data['option'];
                 var key = <?php echo json_encode($select); ?>;
                 $(".add_image").on("click", function () {
                     console.log(key[$(".list_image > input").size()]);
-                    $(".mod_image > span").html(key[$(".list_image > input").size()]+": ");
+                    $(".mod_image > span").html(key[$(".list_image > input").size()] + ": ");
                     $(".mod_image").children().clone().appendTo('.list_image');
                 });
                 $(".select_type").change(function () {

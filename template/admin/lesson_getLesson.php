@@ -5,6 +5,7 @@ $list = \action\lesson::$data['list'];
 $image = \action\lesson::$data['image'];
 $media = \action\lesson::$data['media'];
 $lesson_image = \action\lesson::$data['lesson_image'];
+$course_id = \action\lesson::$data['course_id'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -30,8 +31,9 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
+                            <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
                         </div>
-                        <div class="leftAlist" >
+<!--                        <div class="leftAlist" >
                             <span>COURSE 课程</span>
                         </div>
                         <div class="leftAlist" >
@@ -43,7 +45,7 @@ $lesson_image = \action\lesson::$data['lesson_image'];
                                     <?php } ?>
                                 <?php } ?>
                             </select>
-                        </div>
+                        </div>-->
                         <div class="leftAlist" >
                             <span>OVERVIEW 课时简述</span>
                         </div>

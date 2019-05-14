@@ -15,9 +15,11 @@ class lesson {
 
     private $class;
     public static $data;
+    private $course_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        $this->course_id = !empty($_GET['course_id']) ? $_GET['course_id'] : '';
     }
 
     function index() {
@@ -32,9 +34,10 @@ class lesson {
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = LessonDAL::getTotal($keywords);
-            self::$data['data'] = LessonDAL::getAll($currentPage, $pagesize, $keywords);
+            self::$data['total'] = LessonDAL::getTotal($keywords, $this->course_id);
+            self::$data['data'] = LessonDAL::getAll($currentPage, $pagesize, $keywords, $this->course_id);
             self::$data['class'] = $this->class;
+            self::$data['course_id'] = $this->course_id;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -57,6 +60,7 @@ class lesson {
             self::$data['media'] = MediaDAL::getAll(1, 99, '', '');
             //self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
             self::$data['class'] = $this->class;
+            self::$data['course_id'] = $this->course_id;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));

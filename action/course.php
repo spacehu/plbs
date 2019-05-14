@@ -15,11 +15,22 @@ class course {
     private $class;
     public static $data;
     private $cat_id;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
         //课程类
         $this->cat_id = 1;
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                $this->enterprise_id = '';
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function index() {
@@ -34,8 +45,8 @@ class course {
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = CourseDAL::getTotal($keywords);
-            self::$data['data'] = CourseDAL::getAll($currentPage, $pagesize, $keywords);
+            self::$data['total'] = CourseDAL::getTotal($keywords, '', $this->enterprise_id);
+            self::$data['data'] = CourseDAL::getAll($currentPage, $pagesize, $keywords, '', $this->enterprise_id);
             self::$data['class'] = $this->class;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));

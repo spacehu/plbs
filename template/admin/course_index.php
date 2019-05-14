@@ -41,7 +41,8 @@ $class = \action\course::$data['class'];
                                 }
                                 ?></td>
                             <td class="td1">
-                                <a href="index.php?a=<?php echo $class; ?>&m=getCourse&id=<?php echo $v['id']; ?>">编辑</a>
+                                <a href="index.php?a=lesson&m=index&course_id=<?php echo $v['id']; ?>">课时</a>
+                                | <a href="index.php?a=<?php echo $class; ?>&m=getCourse&id=<?php echo $v['id']; ?>">编辑</a>
                                 | <a href="index.php?a=<?php echo $class; ?>&m=deleteCourse&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此企业删除?')">删除</a></td>
                         </tr>
                         <?php
