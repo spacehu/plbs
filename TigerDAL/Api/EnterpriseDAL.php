@@ -24,7 +24,7 @@ class EnterpriseDAL {
     /** 获取参与企业课程的企业员工数 */
     public static function getJoinCourseUserCount($id) {
         $base = new BaseDAL();
-        $sql = "select count(eu.id) as num "
+        $sql = "select count(distinct(eu.user_id)) as num "
                 . "from " . $base->table_name("enterprise_user") . " as eu "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id "
                 . "inner join " . $base->table_name("course") . " as c on uc.course_id = c.id and c.enterprise_id = " . $id . " "
