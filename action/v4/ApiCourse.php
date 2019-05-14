@@ -8,6 +8,7 @@ use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\LessonDAL;
 use TigerDAL\Cms\LessonImageDAL;
 use TigerDAL\Api\TestDAL;
+use TigerDAL\Api\AccountDAL;
 use config\code;
 
 class ApiCourse extends \action\RestfulApi {
@@ -51,10 +52,9 @@ class ApiCourse extends \action\RestfulApi {
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         $cat_id = isset($this->get['cat_id']) ? $this->get['cat_id'] : '';
         try {
-            //轮播列表
 
-            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
-            $total = CourseDAL::getTotal($keywords, $cat_id, 0);
+            $res = CourseDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, '', $this->user_id);
+            $total = CourseDAL::getTotal($keywords, $cat_id, '', $this->user_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
@@ -75,7 +75,7 @@ class ApiCourse extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $res = CourseDAL::getOne($this->get['course_id'],$this->user_id);
+            $res = CourseDAL::getOne($this->get['course_id'], $this->user_id);
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
@@ -142,7 +142,7 @@ class ApiCourse extends \action\RestfulApi {
         }
         try {
             //轮播列表
-            $_obj = CourseDAL::getOne($this->get['course_id'],$this->user_id);
+            $_obj = CourseDAL::getOne($this->get['course_id'], $this->user_id);
             $res = TestDAL::getRand($this->get['course_id'], $_obj['text_max']);
             //print_r($res);die;
             self::$data['data']['list'] = $res;
