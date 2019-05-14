@@ -247,6 +247,7 @@ class ApiAccount extends \action\RestfulApi {
     function uploadPhoto() {
         try {
             $photo = $_FILES['photo'];
+            LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($_FILES) . "", "DEBUG");
             $path = \mod\init::$config['env']['user_path'] . '/' . md5($this->user_id);
             $name = date("YmdHis") . ".jpg";
             if (!is_dir($_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'])) {
