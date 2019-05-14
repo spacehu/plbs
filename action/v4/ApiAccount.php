@@ -204,18 +204,7 @@ class ApiAccount extends \action\RestfulApi {
             }
             //头像
             if (!empty($this->post['photo'])) {
-                $_data['photo'] = $this->post['photo'];
-            }
-            //手机号
-            if (!empty($this->post['phone'])) {
-                $check = $AuthDAL->checkPhone($this->post['phone'], $this->post['code']);
-                if ($check !== true) {
-                    self::$data['success'] = false;
-                    self::$data['data']['code'] = $check;
-                    self::$data['msg'] = code::$code[$check];
-                    return self::$data;
-                }
-                $photo = $_data['phone'] = $this->post['phone'];
+                $photo = $_data['photo'] = $this->post['photo'];
                 //用户文件夹
                 $md5Uid = md5($this->user_id);
                 //制作绝对路径
@@ -229,6 +218,17 @@ class ApiAccount extends \action\RestfulApi {
                         unlink($path . '/' . $filename);
                     }
                 }
+            }
+            //手机号
+            if (!empty($this->post['phone'])) {
+                $check = $AuthDAL->checkPhone($this->post['phone'], $this->post['code']);
+                if ($check !== true) {
+                    self::$data['success'] = false;
+                    self::$data['data']['code'] = $check;
+                    self::$data['msg'] = code::$code[$check];
+                    return self::$data;
+                }
+                $_data['phone'] = $this->post['phone'];
             }
             if (!empty($_data)) {
                 $res = $AuthDAL->updateUserInfo($this->user_id, $_data);
@@ -249,6 +249,9 @@ class ApiAccount extends \action\RestfulApi {
             $photo = $_FILES['photo'];
             $path = \mod\init::$config['env']['user_path'] . '/' . md5($this->user_id);
             $name = date("YmdHis") . ".jpg";
+            if (!is_dir($_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'])) {
+                mkdir($_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'], 0777);
+            }
             if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777);
             }
