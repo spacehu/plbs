@@ -74,7 +74,20 @@ class EnterpriseDAL {
                 . "where c.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
-        return $base->getFetchAll($sql);
+        $res = $base->getFetchAll($sql);
+        $total = self::getEnterpriseUserCount($id);
+        if (!empty($res)) {
+            foreach ($res as $k => $v) {
+                $_res[$k] = $v;
+                if ($total > 0) {
+                    $_res[$k]['progress'] = $v['joinPerson'] / $total * 100;
+                } else {
+                    $_res[$k]['progress'] = 0;
+                }
+            }
+            return $_res;
+        }
+        return false;
     }
 
     /** 获取企业员工的考试合格率 */
@@ -91,6 +104,20 @@ class EnterpriseDAL {
                 . "where c.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
-        return $base->getFetchAll($sql);
+        $res = $base->getFetchAll($sql);
+        $total = self::getEnterpriseUserCount($id);
+        if (!empty($res)) {
+            foreach ($res as $k => $v) {
+                $_res[$k] = $v;
+                if ($total > 0) {
+                    $_res[$k]['progress'] = $v['passExam'] / $total * 100;
+                } else {
+                    $_res[$k]['progress'] = 0;
+                }
+            }
+            return $_res;
+        }
+        return false;
     }
+
 }
