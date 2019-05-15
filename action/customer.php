@@ -70,5 +70,9 @@ class customer {
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
+    
+    function updateCustomer(){
+        
+    }
 
 }

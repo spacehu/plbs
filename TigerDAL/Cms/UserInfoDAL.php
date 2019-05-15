@@ -105,11 +105,11 @@ class UserInfoDAL {
     /** 获取用户企业课程 */
     public static function getUserEnterpriseCourseList($user_id, $enterprise_id) {
         $base = new BaseDAL();
-        $sql = "select c.* "
+        $sql = "select uc.* "
                 . "from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on uc.course_id=c.id "
                 . "where uc.user_id=" . $user_id . " and c.enterprise_id=" . $enterprise_id . " "
-                . "order by ui.edit_time desc  ;";
+                . "order by uc.edit_time desc  ;";
         return $base->getFetchAll($sql);
     }
 

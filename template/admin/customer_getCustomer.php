@@ -108,6 +108,51 @@ $course = \action\customer::$data['course'];
                     </div>
                 </div>
             </div>
+            <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateLesson&id=<?php echo isset($data['id']) ? $data['id'] : ""; ?>" method="post" enctype='multipart/form-data'>
+                <div class="pathA ">
+                    <div class="leftA">
+                        <div class="leftAlist" >
+                            <span>COURSE 企业课程</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
+                        </div>
+                        <div class="leftAlist list_image" >
+                            <?php if (!empty($userCourse)) { ?>
+                                <?php foreach ($userCourse as $lk => $lv) { ?>
+                                    <select name="user_course_ids[]">
+                                        <option value="0">请选择</option>
+                                        <?php if (is_array($course)) { ?>
+                                            <?php foreach ($course as $k => $v) { ?>
+                                                <option value="<?php echo $v['id']; ?>"  <?php echo $lv['course_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </select>
+                                <?php } ?>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="pathB">
+                    <div class="leftA">
+                        <input name="" type="submit" id="submit" value="SUBMIT 提交" />
+                    </div>
+                </div>
+            </form>	
         </div>
+        <div class="leftAlist hide mod_image">
+            <select name="user_course_ids[]">
+                <option value="0">请选择</option>
+                <?php if (is_array($course)) { ?>
+                    <?php foreach ($course as $k => $v) { ?>
+                        <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $(".add_image").click(function () {
+                    $(".mod_image").children().clone().appendTo('.list_image');
+                });
+            });
+        </script>
     </body>
 </html>
