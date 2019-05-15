@@ -187,7 +187,7 @@ $class = \action\material::$data['class'];
                                 if(data){
                                     var num=data.length;
                                     for(var i=0;i<num;i++){
-                                        addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
+                                        //addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
                                         // if(i%3==0){
                                         //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
                                         // }
