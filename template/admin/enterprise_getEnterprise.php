@@ -54,19 +54,19 @@ $list = \action\enterprise::$data['list'];
                         <div class="leftAlist" >
                             <input class="text" name="address" type="text" value="<?php echo isset($data['address']) ? $data['address'] : ""; ?>" />
                         </div>
-                        <div class="leftAlist" >
-                            <span>USER 管理员账号</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <select name="user_id">
-                                <option value="0">无图片</option>
-                                <?php if (is_array($list)) { ?>
-                                    <?php foreach ($list as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['user_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
-                        </div>
+                        <!--                        <div class="leftAlist" >
+                                                    <span>USER 管理员账号</span>
+                                                </div>
+                                                <div class="leftAlist" >
+                                                    <select name="user_id">
+                                                        <option value="0">无图片</option>
+                        <?php if (is_array($list)) { ?>
+                            <?php foreach ($list as $k => $v) { ?>
+                                                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['user_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                                                    </select>
+                                                </div>-->
                     </div>
                 </div>
                 <div class="pathB">

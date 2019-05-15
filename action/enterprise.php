@@ -90,6 +90,7 @@ class enterprise {
                     'usercode' => $_POST['usercode'],
                     'phone' => $_POST['phone'],
                     'address' => $_POST['address'],
+                    'user_id' => 0,
                 ];
                 self::$data = EnterpriseDAL::insert($data);
             }

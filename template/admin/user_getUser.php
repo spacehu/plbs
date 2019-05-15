@@ -1,6 +1,7 @@
 <?php
 $data = \action\user::$data['data'];
 $list = \action\user::$data['list'];
+$enterprise = \action\user::$data['enterprise'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -43,6 +44,21 @@ $list = \action\user::$data['list'];
                                     <?php if (!empty($list) && is_array($list)) { ?>
                                         <?php foreach ($list as $k => $v) { ?>
                                             <option value="<?php echo $v['id']; ?>" <?php echo $data['role_id'] == $v['id'] ? "selected" : ""; ?> ><?php echo $v['name']; ?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>ENTERPRISE 所属企业</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="r_row">
+                                <select name="enterprise_id" >
+                                    <option value="0" >暂无</option>
+                                    <?php if (!empty($enterprise) && is_array($enterprise)) { ?>
+                                        <?php foreach ($enterprise as $k => $v) { ?>
+                                            <option value="<?php echo $v['id']; ?>" <?php echo $data['enterprise_id'] == $v['id'] ? "selected" : ""; ?> ><?php echo $v['name']; ?></option>
                                         <?php } ?>
                                     <?php } ?>
                                 </select>

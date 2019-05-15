@@ -47,7 +47,11 @@ class EnterpriseDAL {
     /** 获取用户信息 */
     public static function getByUserId($id) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("enterprise") . " where `delete`=0 and user_id='" . $id . "'  limit 1 ;";
+        //$sql = "select * from " . $base->table_name("enterprise") . " where `delete`=0 and user_id='" . $id . "'  limit 1 ;";
+        $sql = "select e.* "
+                . "from " . $base->table_name("enterprise") . " as e "
+                . "left join ".$base->table_name("user")." as u on e.id=u.enterprise_id "
+                . "where e.`delete`=0 and u.id='" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql);
     }
 

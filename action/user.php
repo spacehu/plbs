@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\UserDAL;
 use TigerDAL\Cms\RoleDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
 class user {
@@ -49,6 +50,7 @@ class user {
                 self::$data['data'] = null;
             }
             self::$data['list'] = RoleDAL::getAll(1, 99, "");
+            self::$data['enterprise'] = EnterpriseDAL::getAll(1, 999, "");
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::USER_INDEX], code::USER_INDEX, json_encode($ex));
         }
@@ -60,10 +62,18 @@ class user {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
             if ($id != null) {
-                $data = [
-                    'role_id' => $_POST['role_id'],
-                    'edit_by' => Common::getSession("id"),
-                ];
+                if (!empty($_POST['password'])) {
+                    $data = [
+                        'password' => md5($_POST['password']),
+                    ];
+                } else {
+                    $data = [
+                        'role_id' => $_POST['role_id'],
+                        'edit_by' => Common::getSession("id"),
+                        'enterprise_id' => $_POST['enterprise_id'],
+                    ];
+                }
+
                 self::$data = UserDAL::update($id, $data);
             } else {
                 if (UserDAL::getByName($_POST['name'])) {
@@ -81,6 +91,7 @@ class user {
                     'edit_time' => date("Y-m-d H:i:s"),
                     'role_id' => $_POST['role_id'],
                     'delete' => 0,
+                    'enterprise_id' => $_POST['enterprise_id'],
                 ];
                 self::$data = UserDAL::insert($data);
             }
