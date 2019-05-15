@@ -145,13 +145,11 @@ $class = \action\material::$data['class'];
                 foreach ($data as $k=>$v) {
                 ?>
                 <div id="<?php echo $v['id']?>" class="img-list">
-                    <!-- <img style="width: 100%;" class="" src=".<?php
-                    //echo $v['original_src'];
-                    ?>"/> -->
                     <div class="img">
-                        <img style="width: 100%;" class="" src="http://api_test.wsshanghai.com/data/image_doc/9c84faccb7f85cddfebd2ca072f879ba.jpg"/>
+                        <img style="width: 100%;" class="" src=".<?php
+                        echo $v['original_src'];
+                        ?>"/>
                     </div>
-
                     <div class="img-edit-box">
                         <div class="img-edit-main">
                             <div class="img-name"><?php echo $v['name']?></div>
