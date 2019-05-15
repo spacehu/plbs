@@ -9,7 +9,7 @@
 <body>
 <div class="top">
 	<div class="logo1" >
-		<a href="javascript:void(0);" onclick="javascript:parent.mainFrame.location.href='index.php?a=admin&m=main_right';parent.leftFrame.location.href='index.php?a=admin&m=main_left'" ><img src="img/logo.jpg" /></a>
+		<a href="javascript:void(0);" onclick="javascript:parent.mainFrame.location.href='index.php?a=admin&m=main_right';parent.leftFrame.location.href='index.php?a=admin&m=main_left'" ><img src="img/logo.png" /></a>
 	</div>
 	<div class="topMap">
     	<a onclick="javascript:parent.mainFrame.location.href='<?php echo \mod\common::url_rewrite("index.php?a=login&m=logOff"); ?>'">SIGN OFF 签出</a>

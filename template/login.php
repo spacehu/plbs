@@ -11,7 +11,7 @@
             <form action="<?php echo \mod\common::url_rewrite("index.php?a=login&m=loginPost"); ?>" method="post" >
                 <div class="login">
                     <div class="logincon">
-                        <div class="logo2"><img src="./img/logo.jpg" /></div>
+                        <div class="logo2"><img src="./img/logo.png" /></div>
                         <div class="logininput">
                             <p class="p8">Welcome to your</p>
                             <p class="p8">Content Management System</p>
