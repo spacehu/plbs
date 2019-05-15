@@ -173,7 +173,7 @@ $class = \action\material::$data['class'];
                 var currentpage=1;
                 $(document).ready(function () {
                     $(document).on('click', '#GetMore', function(event) {
-                        $(this).getMore()
+                        getMore()
                     });
                     if(window.innerHeight>=document.body.offsetHeight){
                         currentpage++;
@@ -215,6 +215,7 @@ $class = \action\material::$data['class'];
                     }
                 });
                 function getMore(){
+                    console.log(123123);
                     currentpage++;
                         $.ajax({
                             type:"get",
