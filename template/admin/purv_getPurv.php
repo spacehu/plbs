@@ -38,7 +38,7 @@ $list = \action\purv::$data['list'];
                             <span>NAME 权限名</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ''; ?>" />
                             </div>
                         </div>
@@ -46,7 +46,7 @@ $list = \action\purv::$data['list'];
                             <span>CODE 代码</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="code" type="text" value="<?php echo isset($data['code']) ? $data['code'] : ''; ?>" />
                             </div>
                         </div>

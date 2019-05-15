@@ -34,7 +34,7 @@ $list = \action\slideShow::$data['list'];
                             <span>LINK 链接</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="link" type="text" value="<?php echo isset($data['link']) ? $data['link'] : ''; ?>" />
                             </div>
                         </div>
@@ -42,7 +42,7 @@ $list = \action\slideShow::$data['list'];
                             <span>ORDER BY 当前排序</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
                             </div>
                         </div>
