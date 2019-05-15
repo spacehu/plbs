@@ -1,5 +1,6 @@
 <?php
 $data = \action\customer::$data['data'];
+$class = \action\customer::$data['class'];
 $userCourse = \action\customer::$data['userCourse'];
 $course = \action\customer::$data['course'];
 ?>
@@ -108,7 +109,7 @@ $course = \action\customer::$data['course'];
                     </div>
                 </div>
             </div>
-            <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateLesson&id=<?php echo isset($data['id']) ? $data['id'] : ""; ?>" method="post" enctype='multipart/form-data'>
+            <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateCustomer&id=<?php echo isset($data['id']) ? $data['id'] : ""; ?>" method="post" enctype='multipart/form-data'>
                 <div class="pathA ">
                     <div class="leftA">
                         <div class="leftAlist" >

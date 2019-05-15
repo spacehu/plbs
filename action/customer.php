@@ -57,35 +57,33 @@ class customer {
         try {
             if ($id != null) {
                 $res = UserInfoDAL::getOne($id);
-                $resCourse=UserInfoDAL::getUserEnterpriseCourseList($id, $this->enterprise_id);
-                $course= CourseDAL::getAll(1, 999, '','', $this->enterprise_id);
+                $resCourse = UserInfoDAL::getUserEnterpriseCourseList($id, $this->enterprise_id);
+                $course = CourseDAL::getAll(1, 999, '', '', $this->enterprise_id);
                 self::$data['data'] = $res;
                 self::$data['userCourse'] = $resCourse;
                 self::$data['course'] = $course;
             } else {
                 self::$data['data'] = null;
             }
+            self::$data['class'] = $this->class;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::USER_INDEX], code::USER_INDEX, json_encode($ex));
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
-    
-    function updateCustomer(){
+
+    function updateCustomer() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
-            if (self::$data) {
-                $_data = [
-                    'status' => 1,
-                    'add_time' => date("Y-m-d H:i:s"),
-                    'edit_time' => date("Y-m-d H:i:s"),
-                    'delete' => 0,
-                ];
-                if (!empty($_POST['lesson_image'])) {
-                    LessonImageDAL::save(array_unique($_POST['user_course_ids']), $id, $_data);
-                }
-                //Common::pr(Common::getSession($this->class));die;
+            $_data = [
+                'status' => 1,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+            ];
+            if (!empty($_POST['user_course_ids'])) {
+                UserInfoDAL::saveUserCourse(array_unique($_POST['user_course_ids']), $id, $_data, $this->enterprise_id);
                 Common::js_redir(Common::getSession($this->class));
             } else {
                 Common::js_alert('修改失败，请联系系统管理员');
