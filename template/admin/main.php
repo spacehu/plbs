@@ -9,7 +9,7 @@
         <frame src="index.php?a=admin&m=main_top" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" title="topFrame" />
         <frameset cols="240,*" name="btFrame" frameborder="NO" border="0" framespacing="0">
             <frame src="index.php?a=admin&m=main_left" name="leftFrame" scrolling="yes" noresize="noresize" id="leftFrame" title="leftFrame" />
-            <frame src="index.php?a=admin&m=main_right" name="mainFrame"  scrolling="yes"id="mainFrame" title="mainFrame" />
+            <frame src="index.php?a=admin&m=main_right" name="mainFrame"  scrolling="yes"id="mainFrame" title="mainFrame" style="padding:0 15px"/>
         </frameset>
     </frameset>
     <noframes>
