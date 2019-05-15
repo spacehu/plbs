@@ -96,7 +96,7 @@ $class = \action\material::$data['class'];
             .img-edit-box{float: right;width: 50%;}
             .img-edit-main{padding: 10px;}
             .img-name{font-size: 16px;line-height: 1.4;margin-bottom: 10px;height: 42px;overflow: hidden;}
-            .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px}
+            .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px;margin-right: 6px}
             .img-edit-btn a.img-edit{background: #2998E0;border-color: #4D9DE3;color: #fff}
             #GetMore{text-align: center;font-size: 16px;line-height: 2;padding: 15px;color: #999}
         </style>
@@ -184,7 +184,7 @@ $class = \action\material::$data['class'];
                                 if(data){
                                     var num=data.length;
                                     for(var i=0;i<num;i++){
-                                        addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
+                                        //addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
                                         // if(i%3==0){
                                         //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
                                         // }
