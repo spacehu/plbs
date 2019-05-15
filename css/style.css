@@ -148,10 +148,10 @@ select{border-radius: 4px;border:1px solid #ccc;padding: 2px 5px;outline:none;}
 tr{ height:50px;}
 .tr-level-one{background: #F2F2F2}
 .tr-level-one {font-size: 14px}
-.tr-level-two {font-size: 12px}
 .th{padding:15px;}
 .th a{text-decoration:none;}
-.td1{padding:0 0 0 15px;border-bottom:1px solid #e1e1e1;}
+.td1{padding:0 0 0 15px;border-bottom:1px solid #e1e1e1;font-size: 14px}
+.tr-level-two .td1{font-size: 12px}
 .td1 a{line-height:20px;text-decoration: none;}
 .showShow{background:url(../img/show.jpg) no-repeat;height:20px;width:20px;cursor:pointer;}
 .show_top{background:url(../img/show.jpg) no-repeat;height:20px;width:20px;cursor:pointer;margin: 0 0 0 16px;}
