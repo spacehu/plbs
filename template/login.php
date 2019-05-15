@@ -15,17 +15,20 @@
                         <div class="logininput">
                             <p class="p8">Welcome to your</p>
                             <p class="p8">Content Management System</p>
-                            <div class="loginlist first">
-                                <input name="t_username" type="text" id="text1" placeholder="USERNAME 用户名" />
-                            </div>
-                            <div class="loginlist">
-                                <input name="t_password" type="password" id="text1" placeholder="PASSWORD 密码" />
-                            </div>
-                            <div class="loginlist">
-                                <input name="get_c" type="checkbox" id="select1"/>
-                                <div class="selectTest">REMEMBER ME 记住用户</div>
-                                <!--<a href="javascript:void(0);" class="forgotPassword" onclick="alert('coming soon...')">FORGOT PASSWORD 忘记密码</a>-->
-                                <div class="clear"></div>
+                            <div style="padding:25px 0 5px">
+                                <div class="loginlist">
+                                    <input name="t_username" type="text" id="text1" placeholder="USERNAME 用户名" />
+                                </div>
+                                <div class="loginlist">
+                                    <input name="t_password" type="password" id="text1" placeholder="PASSWORD 密码" />
+                                </div>
+                                <div class="loginlist">
+                                    <label for="select1">
+                                        <input name="get_c" type="checkbox" id="select1"/>&nbsp;REMEMBER ME 记住用户
+                                    </label>
+                                    <!--<a href="javascript:void(0);" class="forgotPassword" onclick="alert('coming soon...')">FORGOT PASSWORD 忘记密码</a>-->
+                                    <div class="clear"></div>
+                                </div>
                             </div>
                             <div class="loginlist">
                                 <input name="" type="submit" id="button" value="ENTER 登录" />
