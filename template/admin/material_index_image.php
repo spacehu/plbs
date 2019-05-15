@@ -173,7 +173,7 @@ $class = \action\material::$data['class'];
                 var currentpage=1;
                 $(document).ready(function () {
                     $(document).on('click', '#GetMore', function(event) {
-                        getMore()
+                        $(this).getMore()
                     });
                     if(window.innerHeight>=document.body.offsetHeight){
                         currentpage++;
