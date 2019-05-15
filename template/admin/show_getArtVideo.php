@@ -29,7 +29,7 @@ $image = \action\show::$data['image'];
                             </div>
                         </div>
                         <div class="leftAlist" >
-                            <span>ORDER 排序</span>
+                            <span>ORDER 当前排序</span>
                         </div>
                         <div class="leftAlist" >
                             <div class="r_row">

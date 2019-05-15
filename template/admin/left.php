@@ -30,9 +30,6 @@
             <a class="first mainRed" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=staticPage'" href="javascript:void(0);" >MATERIAL 素材</a>
             <div class="sub_title">
                 <div class="title">
-                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=category&m=index'" href="javascript:void(0);" >CATEGORY 分类</a>
-                </div>
-                <div class="title">
                     <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >IMAGE 图片素材</a>
                 </div>
                 <div class="title">
@@ -57,18 +54,13 @@
         <?php //\mod\common::pr($_COOKIE); ?>
         <?php if (\mod\common::getSession('level') <= 1) { ?>
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  客户</a>
-            </div>
-        <?php } ?>
-        <?php if (\mod\common::getSession('level') == 0) { ?>
-            <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=user&m=index'" href="javascript:void(0);" >USER  用户</a>
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  学员</a>
             </div>
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=role&m=index'" href="javascript:void(0);" >ROLE  角色</a>
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=user&m=index'" href="javascript:void(0);" >USER  管理员授权</a>
             </div>
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=purv&m=index'" href="javascript:void(0);" >PURV  权限</a>
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=role&m=index'" href="javascript:void(0);" >ROLE  管理员设置</a>
             </div>
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=staticPage'" href="javascript:void(0);" >SHOW 展示</a>
@@ -82,10 +74,10 @@
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=staticPage'" href="javascript:void(0);" >SYSTEM  系统</a>
                 <div class="sub_title">
                     <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=slideShow&m=index'" href="javascript:void(0);" >SLIDE SHOW 轮播显示</a>
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=category&m=index'" href="javascript:void(0);" >MENU 菜单</a>
                     </div>
                     <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=index'" href="javascript:void(0);" >CONFIG 配置信息</a>
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=slideShow&m=index'" href="javascript:void(0);" >SLIDE SHOW 轮播显示</a>
                     </div>
                     <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=enterprise&m=index'" href="javascript:void(0);" >ENTERPRISE 企业信息</a>
@@ -108,6 +100,14 @@
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
                     </div>
                 </div>
+            </div>
+        <?php } ?>
+        <?php if (\mod\common::getSession('level') == 0) { ?>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=purv&m=index'" href="javascript:void(0);" >PURV  权限</a>
+            </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=index'" href="javascript:void(0);" >CONFIG 配置信息</a>
             </div>
         <?php } ?>
     </body>

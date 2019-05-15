@@ -81,7 +81,7 @@ $lesson_id = \action\test::$data['lesson_id'];
                             <input class="text" name="serialization" type="text" value="<?php echo isset($data['serialization']) ? $data['serialization'] : ""; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>ORDERBY 排序</span>
+                            <span>ORDERBY 当前排序</span>
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />

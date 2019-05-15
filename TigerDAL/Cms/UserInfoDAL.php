@@ -7,26 +7,39 @@ use TigerDAL\BaseDAL;
 class UserInfoDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords) {
+    public static function getAll($currentPage, $pagesize, $keywords, $enterprise_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " where name like '%" . $keywords . "%' ";
+            $where .= " where ui.name like '%" . $keywords . "%' ";
         }
-        $sql = "select * from " . $base->table_name("user_info") . " " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select ui.* from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        if ($enterprise_id !== '') {
+            $sql = "select ui.* "
+                    . "from " . $base->table_name("user_info") . " as ui "
+                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and eu.enterprise_id=" . $enterprise_id . " "
+                    . " " . $where . " "
+                    . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        }
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords) {
+    public static function getTotal($keywords, $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
             $where .= " where name like '%" . $keywords . "%' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("user_info") . " " . $where . " limit 1 ;";
+        if ($enterprise_id !== '') {
+            $sql = "select count(1) as total "
+                    . "from " . $base->table_name("user_info") . " as ui "
+                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and eu.enterprise_id=" . $enterprise_id . " "
+                    . " " . $where . " ;";
+        }
         return $base->getFetchRow($sql)['total'];
     }
 
@@ -87,6 +100,17 @@ class UserInfoDAL {
         } else {
             return true;
         }
+    }
+
+    /** 获取用户企业课程 */
+    public static function getUserEnterpriseCourseList($user_id, $enterprise_id) {
+        $base = new BaseDAL();
+        $sql = "select c.* "
+                . "from " . $base->table_name("user_course") . " as uc "
+                . "left join " . $base->table_name("course") . " as c on uc.course_id=c.id "
+                . "where uc.user_id=" . $user_id . " and c.enterprise_id=" . $enterprise_id . " "
+                . "order by ui.edit_time desc  ;";
+        return $base->getFetchAll($sql);
     }
 
 }
