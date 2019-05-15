@@ -92,12 +92,13 @@ $class = \action\material::$data['class'];
             }
             #Imgs-List-Box{overflow: hidden;}
             .img-list{width: 32%;height: 110px;margin:0 1% 15px 0;overflow: hidden;border: 1px solid #d1d1d1;border-radius: 5px;float: left;}
-            .img{width: 50%;height: 100%;float: left;display: flex;justify-content: center;align-items: center;align-content: center;background: #eee;background-size: cover;background-position: 50% 50%;background-repeat: no-repeat;}
+            .img{width: 50%;height: 100%;float: left;display: flex;justify-content: center;align-items: center;align-content: center;background: #eee;background-size: contain;background-position: 50% 50%;background-repeat: no-repeat;}
             .img-edit-box{float: right;width: 50%;}
             .img-edit-main{padding: 10px;}
             .img-name{font-size: 16px;line-height: 1.4;margin-bottom: 10px;height: 42px;overflow: hidden;}
             .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px}
             .img-edit-btn a.img-edit{background: #2998E0;border-color: #4D9DE3;color: #fff}
+            #GetMore{text-align: center;font-size: 18px;line-height: 2;padding: 15px }
         </style>
     </head>
 
@@ -165,6 +166,7 @@ $class = \action\material::$data['class'];
                 </div>
                 <?php }}?>
             </div>
+            <div id="GetMore" onclick="getMore()">查看更多>>></div>
             <div class="clear">
             </div>
             <script>
@@ -206,7 +208,11 @@ $class = \action\material::$data['class'];
                         winH = window.innerHeight,
                         documentH = $(this).height();
                     if(scrollT + winH == documentH||scrollT==documentH){
-                        currentpage++;
+                        getMore()
+                    }
+                });
+                function getMore(){
+                    currentpage++;
                         $.ajax({
                             type:"get",
                             url:'./index.php?a=<?php echo $class; ?>&m=getIndexList&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>&keywords=' + $('.keywords').val() +'&currentPage='+currentpage+'&pagesize=9',
@@ -234,8 +240,7 @@ $class = \action\material::$data['class'];
 
                             }
                         })
-                    }
-                });
+                }
                 function addhtml(id,src,name,cls) {
                     // html='<div id="'+id+'" class="border" style="margin: 0 10px 30px">' +
                     //     ' <img style="width: 100%;" src=".'+src+'"  />' +
