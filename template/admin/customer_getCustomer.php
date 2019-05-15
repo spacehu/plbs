@@ -1,5 +1,7 @@
 <?php
 $data = \action\customer::$data['data'];
+$userCourse = \action\customer::$data['userCourse'];
+$course = \action\customer::$data['course'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
