@@ -57,11 +57,16 @@ class customer {
         try {
             if ($id != null) {
                 $res = UserInfoDAL::getOne($id);
-                $resCourse = UserInfoDAL::getUserEnterpriseCourseList($id, $this->enterprise_id);
-                $course = CourseDAL::getAll(1, 999, '', '', $this->enterprise_id);
                 self::$data['data'] = $res;
-                self::$data['userCourse'] = $resCourse;
-                self::$data['course'] = $course;
+                if (!empty($this->enterprise_id)) {
+                    $resCourse = UserInfoDAL::getUserEnterpriseCourseList($id, $this->enterprise_id);
+                    $course = CourseDAL::getAll(1, 999, '', '', $this->enterprise_id);
+                    self::$data['userCourse'] = $resCourse;
+                    self::$data['course'] = $course;
+                } else {
+                    self::$data['userCourse'] = null;
+                    self::$data['course'] = null;
+                }
             } else {
                 self::$data['data'] = null;
             }

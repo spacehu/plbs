@@ -108,7 +108,7 @@
                     </div>
                 </div>
             <?php } ?>
-            <?php if (\mod\common::getSession('level') == 0) { ?>
+            <?php if (\mod\common::getSession('id') == 1) { ?>
                 <div class="title">
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=purv&m=index'" href="javascript:void(0);" >PURV  权限</a>
                 </div>
