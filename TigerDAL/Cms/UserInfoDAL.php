@@ -113,4 +113,24 @@ class UserInfoDAL {
         return $base->getFetchAll($sql);
     }
 
+    /** 保存最新值  */
+    public static function saveUserCourse($_data, $aid, $_sourseData) {
+        if (empty($_data)) {
+            return true;
+        }
+        $base = new BaseDAL();
+        $sql = "delete from " . $base->table_name('lesson_image') . " where `lesson_id`='" . $aid . "';";
+        $base->query($sql);
+
+        foreach ($_data as $v) {
+            if ($v != 0) {
+                $os = $_sourseData;
+                array_unshift($os, $v, $aid);
+                //print_r($os);
+                self::insert($os);
+            }
+        }
+        return true;
+    }
+
 }

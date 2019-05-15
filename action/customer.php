@@ -72,7 +72,27 @@ class customer {
     }
     
     function updateCustomer(){
-        
+        Common::isset_cookie();
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        try {
+            if (self::$data) {
+                $_data = [
+                    'status' => 1,
+                    'add_time' => date("Y-m-d H:i:s"),
+                    'edit_time' => date("Y-m-d H:i:s"),
+                    'delete' => 0,
+                ];
+                if (!empty($_POST['lesson_image'])) {
+                    LessonImageDAL::save(array_unique($_POST['user_course_ids']), $id, $_data);
+                }
+                //Common::pr(Common::getSession($this->class));die;
+                Common::js_redir(Common::getSession($this->class));
+            } else {
+                Common::js_alert('修改失败，请联系系统管理员');
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+        }
     }
 
 }
