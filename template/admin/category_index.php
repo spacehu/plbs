@@ -29,10 +29,10 @@ $class = \action\category::$data['class'];
                 if (!empty($data)) {
                     foreach ($data as $v) {
                         ?>
-                        <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
+                        <tr class="<?php if($sum_i % 2 != 1){echo 'tr2 ';} if($v['level']=='0'){echo 'tr-level-one ';}else{echo 'tr-level-two ';} ?>" >
                             <td class="td1"><?php
                                 for ($i = 1; $i <= $v['level']; $i++) {
-                                    echo '-';
+                                    echo '· ';
                                 } echo $v['name'];
                                 ?></td>
                             <td class="td1"><?php

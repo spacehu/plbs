@@ -27,18 +27,24 @@ a{ color:#000;}
 /* top end */
 
 /* left */
-.title{ margin:0 0 0 15px;}
-.title a{font-size:12px;line-height: 24px;}
+#Menu-left{padding:20px 10px}
+.title{ margin:0 0 10px 10px;border-radius: 5px;border:1px solid #d1d1d1;}
+.title .title{border-width: 0 0 1px 0;margin: 0;padding: 0;border-radius: 0;}
+.title .title:last-child{border-width:0}
+.title a{font-size:14px;line-height: 28px;text-decoration: none;}
+.title .title a{font-size: 12px;padding-left: 10px;display: block;}
 .title a:hover{color:#099ce0;}
 .title .mainRed{color:#099ce0;}
+.first{padding: 5px 10px;border-bottom:1px solid #d1d1d1;display: block;}
+.first:last-child{border-width:0}
 .second{color:#808080;}
-.sub_title{/*display:none;*/}
+.sub_title{padding: 5px 10px;}
 /* left end */
 
 /* main */
 .content{margin:0 20px 0 0;padding:0 0 45px 0;}
 /*deteail*/
-#submit{border:0;background:#099ce0;color:#fff;width:95px;height:25px;right:25px;position: absolute;cursor: pointer;}
+#submit{border:0;background:#099ce0;color:#fff;right:25px;position: absolute;cursor: pointer;border-radius: 5px;padding:8px 15px;display: inline-block;}
 
 .status{ background:#e1e1e1; height:35px;overflow:hidden;padding:0 0 0 6px;margin: 0 20px 0 0;}
 .status p{line-height:29px;height:29px;width:75px;margin:6px 0 0 0;float:left;text-align:center;cursor: pointer;}
@@ -69,16 +75,17 @@ a{ color:#000;}
 .r_detail .r_subTitle{width:90px;margin:0 10px 0 0;text-align:right;float:right;line-height:22px;}
 .r_detail .r_text{height:24px;width:77px;margin:0 10px 0 0;}
 .leftAlist p{line-height:30px;}
-.leftAlist .text{width:401px;height:29px;}
+.leftAlist .text{width:401px;height:29px;border-radius: 4px;border:1px solid #ccc;padding: 2px 5px;outline:none;}
 .leftAlist .year{width:209px;}
 .leftAlist .month{width:90px;}
 .leftAlist .day{width:90px;}
 .leftAlist .foodText{width:85%;height:29px;}
 .leftAlist .smallText{margin:0 30px 0 20px;width:160px;height:29px;}
-.leftAlist textarea{width:100%;height:136px;}
+.leftAlist textarea{width:100%;height:136px;border-radius: 4px;border:1px solid #ccc;padding: 2px 5px;outline:none;}
 .leftAlist .foodTextarea{width:85%;height:136px;margin: 0 0 30px;}
 .leftAlist .r_show{float:right;}
 .leftAlist .r_subTitle{width:90px;margin:0 10px 0 0;text-align:right;float:right;line-height:22px;}
+select{border-radius: 4px;border:1px solid #ccc;padding: 2px 5px;outline:none;}
 
 .p_info_table span{font-size:12px;width:200px;float:left;line-height:22px;height:22px;}
 .p_info_table .text{height:22px;border:solid 1px #c2c2c2;width:200px;margin:0 0 0 10px;}
@@ -134,15 +141,18 @@ a{ color:#000;}
 /*deteail end*/
 
 /*list*/
-.menu{margin: 0 20px 0 0;}
-.menu .updateButton{float: right;font-size: 12px;line-height: 24px;}
+.menu{margin: 0 20px 0 0;line-height: 2;padding-bottom: 15px;overflow: hidden;}
+.menu .updateButton{float: right;font-size: 14px;line-height: 24px;background: #F7F7F7;border-radius: 4px;border: 1px solid #D8D8D8;padding: 4px 8px;text-decoration: none;}
 .menu .updateButton:hover{color:#099ce0;}
 .mytable{ width:100%; }
 tr{ height:50px;}
+.tr-level-one{background: #F2F2F2}
+.tr-level-one {font-size: 14px}
 .th{padding:15px;}
 .th a{text-decoration:none;}
-.td1{padding:0 0 0 15px;border-bottom:1px solid #e1e1e1;}
-.td1 a{line-height:20px;}
+.td1{padding:0 0 0 15px;border-bottom:1px solid #e1e1e1;font-size: 14px}
+.tr-level-two .td1{font-size: 12px}
+.td1 a{line-height:20px;text-decoration: none;}
 .showShow{background:url(../img/show.jpg) no-repeat;height:20px;width:20px;cursor:pointer;}
 .show_top{background:url(../img/show.jpg) no-repeat;height:20px;width:20px;cursor:pointer;margin: 0 0 0 16px;}
 .showShow1{background:url(../img/show.jpg) no-repeat 0px -20px;}
