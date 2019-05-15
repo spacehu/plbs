@@ -90,13 +90,15 @@ $class = \action\material::$data['class'];
                 text-decoration: none;
                 font-size: 0.9rem;
             }
+            #Imgs-List-Box{overflow: hidden;}
             .img-list{width: 32%;height: 110px;margin:0 1% 15px 0;overflow: hidden;border: 1px solid #d1d1d1;border-radius: 5px;float: left;}
-            .img{width: 50%;height: 100%;float: left;display: flex;justify-content: center;align-items: center;align-content: center;background: #eee}
+            .img{width: 50%;height: 100%;float: left;display: flex;justify-content: center;align-items: center;align-content: center;background: #eee;background-size: contain;background-position: 50% 50%;background-repeat: no-repeat;}
             .img-edit-box{float: right;width: 50%;}
             .img-edit-main{padding: 10px;}
             .img-name{font-size: 16px;line-height: 1.4;margin-bottom: 10px;height: 42px;overflow: hidden;}
-            .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px}
+            .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px;margin-right: 6px}
             .img-edit-btn a.img-edit{background: #2998E0;border-color: #4D9DE3;color: #fff}
+            #GetMore{text-align: center;font-size: 16px;line-height: 2;padding: 15px;color: #999;cursor:pointer}
         </style>
     </head>
 
@@ -139,16 +141,18 @@ $class = \action\material::$data['class'];
 <!--            </table>-->
 
 <!--            拼图模式-->
-            <div >
+            <div id="Imgs-List-Box">
                 <?php
                 if(!empty($data)) {
                 foreach ($data as $k=>$v) {
                 ?>
                 <div id="<?php echo $v['id']?>" class="img-list">
-                    <div class="img">
-                        <img style="width: 100%;" class="" src=".<?php
+                    <div class="img" style="background-image:url(.<?php
                         echo $v['original_src'];
-                        ?>"/>
+                        ?>)">
+                        <!-- <img style="width: 100%;" class="" src=".<?php
+                        //echo $v['original_src'];
+                        ?>"/> -->
                     </div>
                     <div class="img-edit-box">
                         <div class="img-edit-main">
@@ -159,43 +163,20 @@ $class = \action\material::$data['class'];
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <?php }}?>
-                <div class="clear">
             </div>
+            <!-- <div id="GetMore" >查看更多>>></div> -->
+            <div class="clear">
             </div>
             <script>
                 var currentpage=1;
                 $(document).ready(function () {
+                    $(document).on('click', '#GetMore', function(event) {
+                        getMore()
+                    });
                     if(window.innerHeight>=document.body.offsetHeight){
-                        currentpage++;
-                        $.ajax({
-                            type:"get",
-                            url:'./index.php?a=<?php echo $class; ?>&m=getIndexList&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>&keywords=' + $('.keywords').val() +'&currentPage='+currentpage+'&pagesize=9',
-                            contentType:"application/json",
-                            dataType:'json',
-                            success:function(json) {
-                                var data=json.data;
-                                if(data){
-                                    var num=data.length
-                                    for(var i=0;i<num;i++){
-                                        if(i%3==0){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
-                                        }
-                                        if(i%3==1){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"middle"),0)
-                                        }
-                                        if(i%3==2){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"right"),0)
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-                        })
+                        getMore();
                     }
                 })
                 $(document).scroll(function(){
@@ -203,7 +184,11 @@ $class = \action\material::$data['class'];
                         winH = window.innerHeight,
                         documentH = $(this).height();
                     if(scrollT + winH == documentH||scrollT==documentH){
-                        currentpage++;
+                        getMore()
+                    }
+                });
+                function getMore(){
+                    currentpage++;
                         $.ajax({
                             type:"get",
                             url:'./index.php?a=<?php echo $class; ?>&m=getIndexList&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>&keywords=' + $('.keywords').val() +'&currentPage='+currentpage+'&pagesize=9',
@@ -214,33 +199,33 @@ $class = \action\material::$data['class'];
                                 if(data){
                                     var num=data.length
                                     for(var i=0;i<num;i++){
-                                        if(i%3==0){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
-                                        }
-                                        if(i%3==1){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"middle"),0)
-                                        }
-                                        if(i%3==2){
-                                            setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"right"),0)
-                                        }
-
+                                        addhtml(data[i].id,data[i].original_src,data[i].name,json.class)
                                     }
-
                                 }
-
                             }
                         })
-                    }
-                });
-                function addhtml(id,src,name,cls,div) {
-                    html='<div id="'+id+'" class="border" style="margin: 0 10px 30px">' +
-                        ' <img style="width: 100%;" src=".'+src+'"  />' +
-                        '<div class="hovershow">' +
-                        '<span class="name">'+name+'</span>' +
-                        '<a href="index.php?a='+cls+'&m=getImage&id='+id+'">编辑</a>' +
-                        '<a href="index.php?a='+cls+'&m=deleteImage&id='+id+'" onclick="return confirm(\'确定将此素材删除?\')">删除</a></div>' +
-                        '</div>'
-                    $("."+div).append(html)
+                }
+                function addhtml(id,src,name,cls) {
+                    // html='<div id="'+id+'" class="border" style="margin: 0 10px 30px">' +
+                    //     ' <img style="width: 100%;" src=".'+src+'"  />' +
+                    //     '<div class="hovershow">' +
+                    //     '<span class="name">'+name+'</span>' +
+                    //     '<a href="index.php?a='+cls+'&m=getImage&id='+id+'">编辑</a>' +
+                    //     '<a href="index.php?a='+cls+'&m=deleteImage&id='+id+'" onclick="return confirm(\'确定将此素材删除?\')">删除</a></div>' +
+                    //     '</div>'
+                    html='<div id="'+id+'" class="img-list">' +
+                            '<div class="img" style="background-image:url(.'+src+')"></div>' +
+                            '<div class="img-edit-box">' +
+                                '<div class="img-edit-main">' +
+                                    '<div class="img-name">'+name+'</div>' +
+                                    '<div class="img-edit-btn">' +
+                                        '<a href="index.php?a='+cls+'&m=getImage&id='+id+'" class="img-edit">编辑</a>' +
+                                        '<a href="index.php?a='+cls+'&m=deleteImage&id='+id+'" class="img-dlt" onclick="return confirm(\'确定将此素材删除?\')">删除</a>' +
+                                    '</div>' +
+                               '</div>' +
+                            '</div>' +
+                        '</div>';
+                    $("#Imgs-List-Box").append(html)
                 }
                 function addscript(id) {
                     script1=document.getElementById("hoverscript")

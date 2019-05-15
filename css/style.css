@@ -143,10 +143,15 @@ select{border-radius: 4px;border:1px solid #ccc;padding: 2px 5px;outline:none;}
 /*order detail end*/
 /*deteail end*/
 
+.add_image{text-decoration: none;font-size: 16px;border: 1px solid #d1d1d1;border-radius: 50%;display: inline-block;width: 16px;height: 16px;text-align: center;margin: 0;padding:0;line-height: 1;}
+.add_image:hover{background:#EDEDED;}
+
 /*list*/
 .menu{margin: 0 20px 0 0;line-height: 2;padding-bottom: 15px;overflow: hidden;}
-.menu .updateButton{float: right;font-size: 14px;line-height: 24px;background: #F7F7F7;border-radius: 4px;border: 1px solid #D8D8D8;padding: 4px 8px;text-decoration: none;}
-.menu .updateButton:hover{color:#099ce0;}
+.button_find{text-decoration: none;font-size: 14px;border-radius: 4px;border:1px solid #d1d1d1;padding: 2px 8px;height: 100%;display: inline-block;background: #F7F7F7;color: #333}
+.button_find:hover{background:#EDEDED;}
+.menu .updateButton{float: right;font-size: 14px;line-height: 24px;background: #4298DF;color: #fff;border-radius: 4px;border: 1px solid #2483E3;padding: 4px 8px;text-decoration: none;}
+.menu .updateButton:hover{background:#2483E3;}
 .mytable{ width:100%; }
 tr{ height:50px;}
 .tr-level-one{background: #F2F2F2}
