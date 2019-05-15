@@ -58,7 +58,7 @@ $enterprise = \action\course::$data['enterprise'];
                             </script>
                         </div>
                         <div class="leftAlist" >
-                            <span>ORDERBY 排序</span>
+                            <span>ORDERBY 当前排序</span>
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : 50; ?>" />
@@ -77,7 +77,7 @@ $enterprise = \action\course::$data['enterprise'];
                             </select>
                         </div>
                         <div class="leftAlist" >
-                            <span>TESTMAX 考题上限</span>
+                            <span>TESTMAX 题数</span>
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="text_max" type="text" value="<?php echo isset($data['text_max']) ? $data['text_max'] : 5; ?>" />

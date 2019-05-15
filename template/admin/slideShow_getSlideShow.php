@@ -39,7 +39,7 @@ $list = \action\slideShow::$data['list'];
                             </div>
                         </div>
                         <div class="leftAlist" >
-                            <span>ORDER BY 排序</span>
+                            <span>ORDER BY 当前排序</span>
                         </div>
                         <div class="leftAlist" >
                             <div class="r_row">

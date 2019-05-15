@@ -5,15 +5,28 @@ namespace action;
 use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\UserInfoDAL;
+use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Cms\CourseDAL;
 use config\code;
 
 class customer {
 
     private $class;
     public static $data;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                $this->enterprise_id = '';
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function index() {
@@ -25,8 +38,8 @@ class customer {
         $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
         try {
-            self::$data['data'] = UserInfoDAL::getAll($currentPage, $pagesize, $keywords);
-            self::$data['total'] = UserInfoDAL::getTotal($keywords);
+            self::$data['data'] = UserInfoDAL::getAll($currentPage, $pagesize, $keywords, $this->enterprise_id);
+            self::$data['total'] = UserInfoDAL::getTotal($keywords, $this->enterprise_id);
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
@@ -44,7 +57,11 @@ class customer {
         try {
             if ($id != null) {
                 $res = UserInfoDAL::getOne($id);
+                $resCourse=UserInfoDAL::getUserEnterpriseCourseList($id, $this->enterprise_id);
+                $course= CourseDAL::getAll(1, 999, '','', $this->enterprise_id);
                 self::$data['data'] = $res;
+                self::$data['userCourse'] = $resCourse;
+                self::$data['course'] = $course;
             } else {
                 self::$data['data'] = null;
             }
