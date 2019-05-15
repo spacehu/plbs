@@ -176,34 +176,35 @@ $class = \action\material::$data['class'];
                         getMore()
                     });
                     if(window.innerHeight>=document.body.offsetHeight){
-                        currentpage++;
-                        $.ajax({
-                            type:"get",
-                            url:'./index.php?a=<?php echo $class; ?>&m=getIndexList&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>&keywords=' + $('.keywords').val() +'&currentPage='+currentpage+'&pagesize=9',
-                            contentType:"application/json",
-                            dataType:'json',
-                            success:function(json) {
-                                var data=json.data;
-                                if(data){
-                                    var num=data.length;
-                                    for(var i=0;i<num;i++){
-                                        //addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
-                                        // if(i%3==0){
-                                        //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
-                                        // }
-                                        // if(i%3==1){
-                                        //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"middle"),0)
-                                        // }
-                                        // if(i%3==2){
-                                        //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"right"),0)
-                                        // }
+                        //getMore();
+                        // currentpage++;
+                        // $.ajax({
+                        //     type:"get",
+                        //     url:'./index.php?a=<?php echo $class; ?>&m=getIndexList&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>&keywords=' + $('.keywords').val() +'&currentPage='+currentpage+'&pagesize=9',
+                        //     contentType:"application/json",
+                        //     dataType:'json',
+                        //     success:function(json) {
+                        //         var data=json.data;
+                        //         if(data){
+                        //             var num=data.length;
+                        //             for(var i=0;i<num;i++){
+                        //                 //addhtml(data[i].id,data[i].original_src,data[i].name,json.class);
+                        //                 // if(i%3==0){
+                        //                 //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"left"),0)
+                        //                 // }
+                        //                 // if(i%3==1){
+                        //                 //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"middle"),0)
+                        //                 // }
+                        //                 // if(i%3==2){
+                        //                 //     setTimeout(addhtml(data[i].id,data[i].original_src,data[i].name,json.class,"right"),0)
+                        //                 // }
 
-                                    }
+                        //             }
 
-                                }
+                        //         }
 
-                            }
-                        })
+                        //     }
+                        // })
                     }
                 })
                 $(document).scroll(function(){
@@ -215,7 +216,6 @@ $class = \action\material::$data['class'];
                     }
                 });
                 function getMore(){
-                    console.log(123123);
                     currentpage++;
                         $.ajax({
                             type:"get",
