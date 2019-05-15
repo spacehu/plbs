@@ -90,7 +90,13 @@ $class = \action\material::$data['class'];
                 text-decoration: none;
                 font-size: 0.9rem;
             }
-
+            .img-list{width: 32%;height: 110px;margin:0 1% 15px 0;overflow: hidden;border: 1px solid #d1d1d1;border-radius: 5px;float: left;}
+            .img{width: 50%;height: 100%;float: left;display: flex;justify-content: center;align-items: center;align-content: center;background: #eee}
+            .img-edit-box{float: right;width: 50%;}
+            .img-edit-main{padding: 10px;}
+            .img-name{font-size: 16px;line-height: 1.4;margin-bottom: 10px;height: 42px;overflow: hidden;}
+            .img-edit-btn a{display: inline-block;text-decoration: none;border: 1px solid #ccc;background: #D8D8D8;padding: 1px 4px;border-radius: 2px;color: #333;font-size: 12px}
+            .img-edit-btn a.img-edit{background: #2998E0;border-color: #4D9DE3;color: #fff}
         </style>
     </head>
 
@@ -133,63 +139,33 @@ $class = \action\material::$data['class'];
 <!--            </table>-->
 
 <!--            拼图模式-->
-            <div class="left" style="float: left;width: 33%;">
+            <div >
                 <?php
                 if(!empty($data)) {
                 foreach ($data as $k=>$v) {
-                if($k%3==0){
                 ?>
-                <div id="<?php echo $v['id']?>" class="border" style="margin: 0 10px 30px">
-                    <img style="width: 100%;" class="" src=".<?php
-                    echo $v['original_src'];
-                    ?>"/>
+                <div id="<?php echo $v['id']?>" class="img-list">
+                    <!-- <img style="width: 100%;" class="" src=".<?php
+                    //echo $v['original_src'];
+                    ?>"/> -->
+                    <div class="img">
+                        <img style="width: 100%;" class="" src="http://api_test.wsshanghai.com/data/image_doc/9c84faccb7f85cddfebd2ca072f879ba.jpg"/>
+                    </div>
 
-                    <div class="hovershow">
-                        <span class="name"><?php echo $v['name']?></span>
-                        <a href="index.php?a=<?php echo $class; ?>&m=getImage&id=<?php echo $v['id']; ?>">编辑</a>
-                        <a href="index.php?a=<?php echo $class; ?>&m=deleteImage&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此素材删除?')">删除</a></div>
+                    <div class="img-edit-box">
+                        <div class="img-edit-main">
+                            <div class="img-name"><?php echo $v['name']?></div>
+                            <div class="img-edit-btn">
+                                <a href="index.php?a=<?php echo $class; ?>&m=getImage&id=<?php echo $v['id']; ?>" class="img-edit">编辑</a>
+                                <a href="index.php?a=<?php echo $class; ?>&m=deleteImage&id=<?php echo $v['id']; ?>" class="img-dlt" onclick="return confirm('确定将此素材删除?')">删除</a>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                <?php }}}?>
+                <?php }}?>
+                <div class="clear">
             </div>
-            <div class="middle" style="float: left;width: 33%;">
-                <?php
-                if(!empty($data)) {
-                    foreach ($data as $k=>$v) {
-                        if($k%3==1){
-                            ?>
-                            <div id="<?php echo $v['id']?>" class="border" style="margin: 0 10px 30px">
-                                <img style="width: 100%;" class="" src=".<?php
-                                echo $v['original_src'];
-                                ?>"/>
-
-                                <div class="hovershow">
-                                    <span class="name"><?php echo $v['name']?></span>
-                                    <a href="index.php?a=<?php echo $class; ?>&m=getImage&id=<?php echo $v['id']; ?>">编辑</a>
-                                    <a href="index.php?a=<?php echo $class; ?>&m=deleteImage&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此素材删除?')">删除</a></div>
-
-                            </div>
-                        <?php }}}?>
-            </div>
-            <div class="right" style="width: 33%;float: right;">
-                <?php
-                if(!empty($data)) {
-                    foreach ($data as $k=>$v) {
-                        if($k%3==2){
-                            ?>
-                            <div id="<?php echo $v['id']?>" class="border" style="margin: 0 10px 30px">
-                                <img style="width: 100%;" src=".<?php
-                                echo $v['original_src'];
-                                ?>"/>
-                                <div class="hovershow">
-                                    <span class="name"><?php echo $v['name']?></span>
-                                    <a href="index.php?a=<?php echo $class; ?>&m=getImage&id=<?php echo $v['id']; ?>">编辑</a>
-                                    <a href="index.php?a=<?php echo $class; ?>&m=deleteImage&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此素材删除?')">删除</a></div>
-
-                            </div>
-                        <?php }}}?>
-            </div>
-            <div class="clear">
             </div>
             <script>
                 var currentpage=1;
