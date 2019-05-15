@@ -26,7 +26,7 @@ $list = \action\show::$data['list'];
                             <span>NAME 标题</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ''; ?>" />
                             </div>
                         </div>

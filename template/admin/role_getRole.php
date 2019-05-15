@@ -21,7 +21,7 @@ $list = \action\role::$data['list'];
                             <span>NAME 角色名</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ''; ?>" />
                             </div>
                         </div>
@@ -45,7 +45,7 @@ $list = \action\role::$data['list'];
                             <span>LEVEL 等级</span>
                         </div>
                         <div class="leftAlist" >
-                            <div class="r_row">
+                            <div class="">
                                 <input class="text" name="level" type="text" value="<?php echo isset($data['level']) ? $data['level'] : '3'; ?>" />
                             </div>
                         </div>

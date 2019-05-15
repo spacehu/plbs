@@ -33,7 +33,7 @@
     <body>
         <div id="Menu-left">
             <div class="title">
-                <a class="first mainRed" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >MATERIAL 素材</a>
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >MATERIAL 素材</a>
                 <div class="sub_title">
                     <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >IMAGE 图片素材</a>
