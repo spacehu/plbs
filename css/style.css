@@ -27,12 +27,18 @@ a{ color:#000;}
 /* top end */
 
 /* left */
-.title{ margin:0 0 0 15px;}
-.title a{font-size:12px;line-height: 24px;}
+#Menu-left{padding:20px 10px}
+.title{ margin:0 0 10px 10px;border-radius: 5px;border:1px solid #d1d1d1;}
+.title .title{border-width: 0 0 1px 0;margin: 0;padding: 0;border-radius: 0;}
+.title .title:last-child{border-width:0}
+.title a{font-size:14px;line-height: 28px;text-decoration: none;}
+.title .title a{font-size: 12px;padding-left: 10px}
 .title a:hover{color:#099ce0;}
 .title .mainRed{color:#099ce0;}
+.first{padding: 5px 10px;border-bottom:1px solid #d1d1d1;display: block;}
+.first:last-child{border-width:0}
 .second{color:#808080;}
-.sub_title{/*display:none;*/}
+.sub_title{padding: 5px 10px;}
 /* left end */
 
 /* main */
