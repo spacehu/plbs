@@ -12,15 +12,17 @@ class UserInfoDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
+        $and = "";
         if (!empty($keywords)) {
             $where .= " where ui.name like '%" . $keywords . "%' ";
+            $and .= " and ui.name like '%" . $keywords . "%' ";
         }
         $sql = "select ui.* from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         if ($enterprise_id !== '') {
-            $sql = "select ui.* "
+            $sql = "select ui.*,eu.status as euStatus "
                     . "from " . $base->table_name("user_info") . " as ui "
                     . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and eu.enterprise_id=" . $enterprise_id . " "
-                    . " " . $where . " "
+                    . " where (eu.status=0 or eu.status=1)  " . $and . " "
                     . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         }
         return $base->getFetchAll($sql);
@@ -30,15 +32,17 @@ class UserInfoDAL {
     public static function getTotal($keywords, $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
+        $and = "";
         if (!empty($keywords)) {
-            $where .= " where name like '%" . $keywords . "%' ";
+            $where .= " where ui.name like '%" . $keywords . "%' ";
+            $and .= " and ui.name like '%" . $keywords . "%' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("user_info") . " " . $where . " limit 1 ;";
         if ($enterprise_id !== '') {
             $sql = "select count(1) as total "
                     . "from " . $base->table_name("user_info") . " as ui "
                     . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and eu.enterprise_id=" . $enterprise_id . " "
-                    . " " . $where . " ;";
+                    . " where (eu.status=0 or eu.status=1)  " . $and . " ;";
         }
         return $base->getFetchRow($sql)['total'];
     }
@@ -170,6 +174,37 @@ class UserInfoDAL {
             }
             $set = implode(',', $_data);
             $sql = "insert into " . $base->table_name('user_course') . " values (null," . $set . ");";
+            //echo $sql;die;
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
+    public static function saveEnterpriseUser($user_id, $enterprise_id, $_data) {
+        if (empty($_data)) {
+            return true;
+        }
+        $base = new BaseDAL();
+        // 删除
+        $sql = "select id from " . $base->table_name('enterprise_user') . " where `user_id` = " . $user_id . " and enterprise_id=" . $enterprise_id . " ;";
+        $row = $base->getFetchRow($sql);
+        return self::updateEnterpriseUser($row['id'], $_data);
+    }
+
+    /** 更新用户信息 */
+    public static function updateEnterpriseUser($id, $data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where id=" . $id . " ;";
             //echo $sql;die;
             return $base->query($sql);
         } else {

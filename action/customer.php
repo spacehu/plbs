@@ -98,4 +98,18 @@ class customer {
         }
     }
 
+    function setEu() {
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        try {
+            $_data = [
+                'status' => $_GET['status'],
+                'edit_time' => date("Y-m-d H:i:s"),
+            ];
+            UserInfoDAL::saveEnterpriseUser($id, $this->enterprise_id, $_data);
+            Common::js_redir(Common::getSession($this->class));
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+        }
+    }
+
 }

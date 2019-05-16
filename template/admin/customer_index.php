@@ -32,7 +32,7 @@ $class = \action\customer::$data['class'];
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >用户名</td>
                     <td class="td1" width="20%">授权时间</td>
-                    <td class="td1" width="20%">操作</td>
+                    <td class="td1" width="30%">操作</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -43,6 +43,14 @@ $class = \action\customer::$data['class'];
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['add_time']; ?></td>
                             <td class="td1">
+                                <?php if (!empty($v['euStatus'])) { ?>
+                                    <?php if ($v['euStatus'] == 0) { ?>
+                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=1">允许加入</a> |
+                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">拒绝加入</a> |
+                                    <?php } else { ?>
+                                        已加入
+                                    <?php } ?>
+                                <?php } ?>
                                 <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
                             </td>
                         </tr>
@@ -56,7 +64,7 @@ $class = \action\customer::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords='.$keywords;
+            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>
