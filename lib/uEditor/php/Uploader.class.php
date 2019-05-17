@@ -9,6 +9,7 @@
  */
 class Uploader {
 
+    private $url; //路径 from space
     private $fileField; //文件域名
     private $file; //文件上传对象
     private $base64; //文件上传对象
@@ -55,6 +56,7 @@ class Uploader {
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
+        $this->url = mod\init::$config['env']['url']; // from space
         if ($type == "remote") {
             $this->saveRemote();
         } else if ($type == "base64") {
@@ -120,10 +122,10 @@ class Uploader {
         if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
-            $url = 'http://tiger.lc/index.php?a=material&m=saveImage&path=' . $this->filePath . '&md5='. md5(file_get_contents($this->filePath)).'&name=' . $this->fileName;
+            $url = '//' . $this->url . '/index.php?a=material&m=saveImage&path=' . $this->filePath . '&md5=' . md5(file_get_contents($this->filePath)) . '&name=' . $this->fileName;
             $re = file_get_contents($url);
             if (!$re['success']) {
-                $this->stateInfo = [$this->getStateInfo("ERROR_SQL"),json_decode($re),json_encode($url)];
+                $this->stateInfo = [$this->getStateInfo("ERROR_SQL"), json_decode($re), json_encode($url)];
             } else {
                 $this->stateInfo = $this->stateMap[0];
             }
@@ -355,7 +357,7 @@ class Uploader {
     public function getFileInfo() {
         return array(
             "state" => $this->stateInfo,
-            "url" => "//www.tiger.lc/".$this->fullName,
+            "url" => "//" . $this->url . "/" . $this->fullName,
             "title" => $this->fileName,
             "original" => $this->oriName,
             "type" => $this->fileType,
