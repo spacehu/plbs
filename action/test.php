@@ -55,7 +55,7 @@ class test {
             self::$data['class'] = $this->class;
             self::$data['lesson_id'] = $this->lesson_id;
             self::$data['select'] = $this->select;
-            self::$data['option'] = json_decode(self::$data['data']['overview']);
+            self::$data['option'] = (array)json_decode(self::$data['data']['overview']);
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
