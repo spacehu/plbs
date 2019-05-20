@@ -72,7 +72,7 @@ class test {
                 foreach ($_POST['overview'] as $k => $v) {
                     $_overview[$this->select[$k]] = $v;
                 }
-                $overview = json_encode($_overview);
+                $overview = json_encode($_overview,JSON_UNESCAPED_UNICODE);
             }
             if ($id != null) {
                 $data = [
