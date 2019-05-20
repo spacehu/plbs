@@ -118,13 +118,16 @@ class AccountDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = '';
+        $join = '';
         if ($enterprise_id !== '') {
-            $where .= " and c.enterprise_id=" . $enterprise_id . " ";
+            $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
+            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
                 . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
                 . "from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . $join
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
                 . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id AND ul.`delete` = 0 "
@@ -140,11 +143,14 @@ class AccountDAL {
     public static function getCoursesTotal($user_id, $enterprise_id = '') {
         $base = new BaseDAL();
         $where = '';
+        $join = '';
         if ($enterprise_id !== '') {
-            $where .= " and c.enterprise_id=" . $enterprise_id . " ";
+            $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
+            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . $join
                 . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " " . $where . "  ;";
         return $base->getFetchRow($sql)['num'];
     }

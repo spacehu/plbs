@@ -112,7 +112,8 @@ class UserInfoDAL {
         $sql = "select uc.* "
                 . "from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on uc.course_id=c.id "
-                . "where uc.user_id=" . $user_id . " and c.enterprise_id=" . $enterprise_id . " and uc.`delete`=0 "
+                . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . "where uc.user_id=" . $user_id . " and ec.enterprise_id=" . $enterprise_id . " and uc.`delete`=0 "
                 . "order by uc.edit_time desc  ;";
         return $base->getFetchAll($sql);
     }

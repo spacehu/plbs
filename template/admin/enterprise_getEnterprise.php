@@ -25,48 +25,29 @@ $list = \action\enterprise::$data['list'];
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>CODE 社会识别号；组织机构代码</span>
+                            <span>CODE 社会识别号</span>
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="code" type="text" value="<?php echo isset($data['code']) ? $data['code'] : ""; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>USERNAME 法人</span>
+                            <span>USERNAME 联系人</span>
                         </div>
                         <div class="leftAlist" >
-                            <input class="text" name="username" type="text" value="<?php echo isset($data['username']) ? $data['username'] : ""; ?>" />
+                            <input class="text" name="username" type="text" value="<?php echo isset($data['username']) ? $data['username'] : ""; ?>" /><span class="red"> * </span>
                         </div>
                         <div class="leftAlist" >
-                            <span>USERCODE 法人身份证</span>
+                            <span>PHONE 联系人电话</span>
                         </div>
                         <div class="leftAlist" >
-                            <input class="text" name="usercode" type="text" value="<?php echo isset($data['usercode']) ? $data['usercode'] : ""; ?>" />
+                            <input class="text" name="phone" type="text" value="<?php echo isset($data['phone']) ? $data['phone'] : ""; ?>" /><span class="red"> * </span>
                         </div>
                         <div class="leftAlist" >
-                            <span>PHONE 法人电话</span>
+                            <span>ADDRESS 企业地址</span>
                         </div>
                         <div class="leftAlist" >
-                            <input class="text" name="phone" type="text" value="<?php echo isset($data['phone']) ? $data['phone'] : ""; ?>" />
+                            <input class="text" name="address" type="text" value="<?php echo isset($data['address']) ? $data['address'] : ""; ?>" /><span class="red"> * </span>
                         </div>
-                        <div class="leftAlist" >
-                            <span>ADDRESS 法人地址</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <input class="text" name="address" type="text" value="<?php echo isset($data['address']) ? $data['address'] : ""; ?>" />
-                        </div>
-                        <!--                        <div class="leftAlist" >
-                                                    <span>USER 管理员账号</span>
-                                                </div>
-                                                <div class="leftAlist" >
-                                                    <select name="user_id">
-                                                        <option value="0">无图片</option>
-                        <?php if (is_array($list)) { ?>
-                            <?php foreach ($list as $k => $v) { ?>
-                                                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['user_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                            <?php } ?>
-                        <?php } ?>
-                                                    </select>
-                                                </div>-->
                     </div>
                 </div>
                 <div class="pathB">

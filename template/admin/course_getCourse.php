@@ -1,9 +1,11 @@
 <?php
 $data = \action\course::$data['data'];
 $class = \action\course::$data['class'];
+$enterprise_id = \action\course::$data['enterprise_id'];
 $list = \action\course::$data['list'];
 $image = \action\course::$data['image'];
 $enterprise = \action\course::$data['enterprise'];
+$enterprise_course = \action\course::$data['enterprise_course'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -82,18 +84,22 @@ $enterprise = \action\course::$data['enterprise'];
                         <div class="leftAlist" >
                             <input class="text" name="text_max" type="text" value="<?php echo isset($data['text_max']) ? $data['text_max'] : 5; ?>" />
                         </div>
-                        <div class="leftAlist" >
-                            <span>IS ENTERPRISE 隶属企业</span>
+                        <div class="leftAlist <?php echo!empty($enterprise_id) ? 'hide' : ''; ?>" >
+                            <span>IS ENTERPRISE 隶属企业</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
                         </div>
-                        <div class="leftAlist" >
-                            <select name="enterprise_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($enterprise)) { ?>
-                                    <?php foreach ($enterprise as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
+                        <div class="leftAlist <?php echo!empty($enterprise_id) ? 'hide' : ''; ?> list_image" >
+                            <?php if (!empty($enterprise_course)) { ?>
+                                <?php foreach ($enterprise_course as $lk => $lv) { ?>
+                                    <select name="enterprise_id[]">
+                                        <option value="0">请选择</option>
+                                        <?php if (is_array($enterprise)) { ?>
+                                            <?php foreach ($enterprise as $k => $v) { ?>
+                                                <option value="<?php echo $v['id']; ?>"  <?php echo $lv['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </select>
                                 <?php } ?>
-                            </select>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -104,7 +110,22 @@ $enterprise = \action\course::$data['enterprise'];
                 </div>
             </form>	
         </div>
+        <div class="leftAlist hide mod_image">
+            <select name="enterprise_id[]">
+                <option value="0">请选择</option>
+                <?php if (is_array($enterprise)) { ?>
+                    <?php foreach ($enterprise as $k => $v) { ?>
+                        <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        </div>
         <script type="text/javascript">
+            $(function () {
+                $(".add_image").click(function () {
+                    $(".mod_image").children().clone().appendTo('.list_image');
+                });
+            });
             var ue = UE.getEditor('container');
         </script>
     </body>

@@ -66,7 +66,7 @@ class enterprise {
                     'code' => $_POST['code'],
                     'edit_by' => Common::getSession("id"),
                     'username' => $_POST['username'],
-                    'usercode' => $_POST['usercode'],
+                    'usercode' => isset($_POST['usercode']) ? $_POST['usercode'] : "",
                     'phone' => $_POST['phone'],
                     'address' => $_POST['address'],
                 ];
@@ -87,7 +87,7 @@ class enterprise {
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
                     'username' => $_POST['username'],
-                    'usercode' => $_POST['usercode'],
+                    'usercode' => isset($_POST['usercode']) ? $_POST['usercode'] : "",
                     'phone' => $_POST['phone'],
                     'address' => $_POST['address'],
                     'user_id' => 0,

@@ -12,16 +12,20 @@ class CourseDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
+        $join = '';
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and c.name like '%" . $keywords . "%' ";
         }
         if ($cat_id !== '') {
-            $where .= " and category_id = '" . $cat_id . "' ";
+            $where .= " and c.category_id = '" . $cat_id . "' ";
         }
         if ($enterprise_id !== '') {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
+            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        $sql = "select * from " . $base->table_name("course") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select c.* from " . $base->table_name("course") . " as c "
+                . $join
+                . "where c.`delete`=0 " . $where . " order by c.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
@@ -29,16 +33,20 @@ class CourseDAL {
     public static function getTotal($keywords = '', $cat_id = '', $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
+        $join = '';
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and c.name like '%" . $keywords . "%' ";
         }
         if ($cat_id !== '') {
-            $where .= " and category_id = '" . $cat_id . "' ";
+            $where .= " and c.category_id = '" . $cat_id . "' ";
         }
         if ($enterprise_id !== '') {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
+            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("course") . " where `delete`=0 " . $where . " limit 1 ;";
+        $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
+                . $join
+                . "where c.`delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
     }
 

@@ -8,6 +8,7 @@ use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Cms\EnterpriseCourseDAL;
 use config\code;
 
 class course {
@@ -60,14 +61,17 @@ class course {
         try {
             if ($id != null) {
                 self::$data['data'] = CourseDAL::getOne($id);
+                self::$data['enterprise_course'] = EnterpriseCourseDAL::getAll($id);
             } else {
                 self::$data['data'] = null;
+                self::$data['enterprise_course'] = null;
             }
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
             self::$data['image'] = ImageDAL::getAll(1, 99, '');
             self::$data['enterprise'] = EnterpriseDAL::getAll(1, 99, '');
             self::$data['class'] = $this->class;
-            //Common::pr(self::$data['list']);die;
+            self::$data['enterprise_id'] = $this->enterprise_id;
+            //Common::pr(self::$data['enterprise_course']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -88,7 +92,7 @@ class course {
                     'edit_by' => Common::getSession("id"),
                     'media_id' => $_POST['media_id'],
                     'text_max' => $_POST['text_max'],
-                    'enterprise_id' => $_POST['enterprise_id'],
+                    'enterprise_id' => 0,
                 ];
                 self::$data = CourseDAL::update($id, $data);
             } else {
@@ -111,11 +115,21 @@ class course {
                     'delete' => 0,
                     'media_id' => $_POST['media_id'],
                     'text_max' => $_POST['text_max'],
-                    'enterprise_id' => $_POST['enterprise_id'],
+                    'enterprise_id' => 0,
                 ];
                 self::$data = CourseDAL::insert($data);
             }
             if (self::$data) {
+                $_data = [
+                    'add_by' => Common::getSession("id"),
+                    'add_time' => date("Y-m-d H:i:s"),
+                    'edit_by' => Common::getSession("id"),
+                    'edit_time' => date("Y-m-d H:i:s"),
+                    'delete' => 0,
+                ];
+                if (!empty($_POST['enterprise_id'])) {
+                    EnterpriseCourseDAL::save(array_unique($_POST['enterprise_id']), $id, $_data);
+                }
                 //Common::pr(Common::getSession($this->class));die;
                 Common::js_redir(Common::getSession($this->class));
             } else {

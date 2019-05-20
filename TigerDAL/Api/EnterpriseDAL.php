@@ -12,7 +12,7 @@ class EnterpriseDAL {
         //$sql = "select * from " . $base->table_name("enterprise") . " where `delete`=0 and user_id='" . $id . "'  limit 1 ;";
         $sql = "select e.* "
                 . "from " . $base->table_name("enterprise") . " as e "
-                . "left join ".$base->table_name("user")." as u on e.id=u.enterprise_id "
+                . "left join " . $base->table_name("user") . " as u on e.id=u.enterprise_id "
                 . "where e.`delete`=0 and u.id='" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql);
     }
@@ -31,7 +31,7 @@ class EnterpriseDAL {
         $sql = "select count(distinct(eu.user_id)) as num "
                 . "from " . $base->table_name("enterprise_user") . " as eu "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id "
-                . "inner join " . $base->table_name("course") . " as c on uc.course_id = c.id and c.enterprise_id = " . $id . " "
+                . "inner join " . $base->table_name("enterprise_course") . " as ec on uc.course_id = ec.course_id and ec.enterprise_id = " . $id . " "
                 . "where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql)['num'];
     }
@@ -53,7 +53,7 @@ class EnterpriseDAL {
                 . "FROM " . $base->table_name("user_info") . " AS u  "
                 . "LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id AND eu.enterprise_id ='" . $id . "' "
                 . "LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = eu.user_id and uc.`delete`=0 "
-                . "LEFT JOIN " . $base->table_name("course") . " AS c ON c.enterprise_id = eu.enterprise_id and uc.course_id=c.id "
+                . "LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON ec.enterprise_id = eu.enterprise_id and uc.course_id=ec.course_id "
                 . "LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.point>60 "
                 . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id  "
                 . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id "
@@ -73,9 +73,10 @@ class EnterpriseDAL {
         $sql = "SELECT "
                 . "c.*,i.original_src,count(DISTINCT(uc.user_id)) as joinPerson "
                 . "from " . $base->table_name("course") . "  as c  "
+                . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
-                . "where c.enterprise_id=" . $id . "  "
+                . "where ec.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         $res = $base->getFetchAll($sql);
@@ -102,10 +103,11 @@ class EnterpriseDAL {
         $sql = "SELECT "
                 . "c.*,i.original_src,count(DISTINCT(e.user_id)) as passExam "
                 . "from " . $base->table_name("course") . "  as c  "
+                . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
                 . "left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>60 "
-                . "where c.enterprise_id=" . $id . "  "
+                . "where ec.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         $res = $base->getFetchAll($sql);
