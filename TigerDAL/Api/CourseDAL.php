@@ -27,7 +27,7 @@ class CourseDAL {
         if ($user_id !== '') {
             $ids = self::getIdByUserCourse($user_id);
             if (!empty($ids)) {
-                $where .= " and (ec.enterprise_id=0 or c.id in (" . $ids . ") ) ";
+                $where .= " and (ec.enterprise_id is null or c.id in (" . $ids . ") ) ";
                 $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             }
         }
@@ -60,7 +60,7 @@ class CourseDAL {
         if ($user_id !== '') {
             $ids = self::getIdByUserCourse($user_id);
             if (!empty($ids)) {
-                $where .= " and (ec.enterprise_id=0 or c.id in (" . $ids . ") ) ";
+                $where .= " and (ec.enterprise_id is null or c.id in (" . $ids . ") ) ";
                 $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             }
         }

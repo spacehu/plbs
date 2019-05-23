@@ -74,7 +74,7 @@ class material {
     function updateImage() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        $path = "/data/image_doc";
+        $path = \mod\init::$config['env']['path']['image'];
         $upload = new Upload();
         try {
             if ($id != null) {
