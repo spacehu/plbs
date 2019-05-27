@@ -16,6 +16,8 @@ $enterprise_course = \action\course::$data['enterprise_course'];
         <script type="text/javascript" src="lib/uEditor/ueditor.config.js"></script>
         <!-- 编辑器源码文件 -->
         <script type="text/javascript" src="lib/uEditor/ueditor.all.js"></script>
+        <!-- 图片控件 -->
+        <script src="lib/cos-js-sdk-v5-master/dist/cos-js-sdk-v5.js"></script>
         <title>无标题文档</title>
     </head>
 
@@ -79,6 +81,16 @@ $enterprise_course = \action\course::$data['enterprise_course'];
                             </select>
                         </div>
                         <div class="leftAlist" >
+                            <div class="r_row">
+                                <INPUT TYPE="file" NAME="file_url" id="f1" onchange="document.getElementById('edit_doc').value = 1" />
+                                <input type="hidden" name="edit_doc" id="edit_doc" value="0" />
+                            </div>
+                            <div class="r_row">
+                                <div class="r_title">&nbsp;</div>
+                                <img class="r_row_img" src=".<?php echo isset($data['original_src']) ? $data['original_src'] : '/img/no_img.jpg'; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
                             <span>TESTMAX 题数</span>
                         </div>
                         <div class="leftAlist" >
@@ -124,6 +136,31 @@ $enterprise_course = \action\course::$data['enterprise_course'];
             $(function () {
                 $(".add_image").click(function () {
                     $(".mod_image").children().clone().appendTo('.list_image');
+                });
+
+                var config = {
+                    Bucket: 'plbs-test-1257286922',
+                    Region: 'ap-shanghai'
+                };
+                var path = "path/";
+                var filename = "1.jpg";
+                // 监听选文件
+                $("#file-selector").on("change", function () {
+                    var file = this.files[0];
+                    if (!file)
+                        return;
+                    cos.putObject({
+                        Bucket: config.Bucket, /* 必须 */
+                        Region: config.Region, /* 必须 */
+                        //Key:  file.name,              /* 必须 */
+                        Key: path + filename,
+                        Body: file,
+                    }, function (err, data) {
+                        console.log(err || data);
+                    });
+                });
+                $("#get").on("click", function () {
+                    $("#show").attr("src", "http://" + config.Bucket + ".cos." + config.Region + ".myqcloud.com/" + path + filename);
                 });
             });
             var ue = UE.getEditor('container');
