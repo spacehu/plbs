@@ -8,9 +8,9 @@
 var cos = new COS({
     getAuthorization: function (options, callback) {
         // 异步获取临时密钥
-        $.get('../server/sts.php', {
+        $.get('../lib/cos-js-sdk-v5-master/server/sts.php', {
             bucket: options.Bucket,
-            region: options.Region,
+            region: options.Region
         }, function (data) {
             callback({
                 TmpSecretId: data.credentials.tmpSecretId,

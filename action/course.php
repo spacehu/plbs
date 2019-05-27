@@ -71,6 +71,7 @@ class course {
             self::$data['enterprise'] = EnterpriseDAL::getAll(1, 99, '');
             self::$data['class'] = $this->class;
             self::$data['enterprise_id'] = $this->enterprise_id;
+            self::$data['config'] = \mod\init::$config['env'];
             //Common::pr(self::$data['enterprise_course']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -82,6 +83,11 @@ class course {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $media_id = 0;
+            if ($_POST['edit_doc'] !== "") {
+                $material = new material();
+                $media_id = $material->_saveImage($_POST['edit_doc']);
+            }
             if ($id != null) {
                 $data = [
                     'category_id' => $_POST['category_id'],
@@ -90,7 +96,7 @@ class course {
                     'detail' => $_POST['detail'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
-                    'media_id' => $_POST['media_id'],
+                    'media_id' => $media_id,
                     'text_max' => $_POST['text_max'],
                     'enterprise_id' => 0,
                 ];
@@ -113,7 +119,7 @@ class course {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'media_id' => $_POST['media_id'],
+                    'media_id' => $media_id,
                     'text_max' => $_POST['text_max'],
                     'enterprise_id' => 0,
                 ];

@@ -44,12 +44,23 @@ class ImageDAL {
         return $base->getFetchRow($sql);
     }
 
+    /** 新增返回id */
+    public static function insert_return_id($data) {
+        self::insert($data);
+        $base = new BaseDAL();
+        return $base->last_insert_id();
+    }
+
     /** 新增用户信息 */
     public static function insert($data) {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $v) {
-                $_data[] = " '" . $v . "' ";
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
             }
             $set = implode(',', $_data);
             $sql = "insert into " . $base->table_name('image') . " values (null," . $set . ");";
@@ -64,7 +75,11 @@ class ImageDAL {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $k => $v) {
-                $_data[] = " `" . $k . "`='" . $v . "' ";
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('image') . " set " . $set . "  where id=" . $id . " ;";

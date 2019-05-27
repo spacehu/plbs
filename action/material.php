@@ -311,4 +311,29 @@ class material {
         exit(json_encode(self::$data));
     }
 
+    /** 内部调用 */
+    function _saveImage($filePath) {
+        try {
+            $filePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $filePath);
+            $unique = '';
+            //Common::pr(UserDAL::getUser($_POST['name']));die;
+            $data = [
+                'name' => $filePath,
+                'original_src' => $filePath,
+                'original_link' => "",
+                'order_by' => 50,
+                'add_by' => 0,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_by' => 0,
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+                'unique' => $unique,
+            ];
+            return ImageDAL::insert_return_id($data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            return false;
+        }
+    }
+
 }

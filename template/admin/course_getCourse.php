@@ -6,7 +6,16 @@ $list = \action\course::$data['list'];
 $image = \action\course::$data['image'];
 $enterprise = \action\course::$data['enterprise'];
 $enterprise_course = \action\course::$data['enterprise_course'];
+$config = \action\course::$data['config'];
+if (is_array($image)) {
+    foreach ($image as $k => $v) {
+        if ($data['media_id'] == $v['id']) {
+            $original_src = $v['original_src'];
+        }
+    }
+}
 ?>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,6 +27,7 @@ $enterprise_course = \action\course::$data['enterprise_course'];
         <script type="text/javascript" src="lib/uEditor/ueditor.all.js"></script>
         <!-- 图片控件 -->
         <script src="lib/cos-js-sdk-v5-master/dist/cos-js-sdk-v5.js"></script>
+        <script type="text/javascript" src="js/tencent_cos.js"></script>
         <title>无标题文档</title>
     </head>
 
@@ -71,23 +81,13 @@ $enterprise_course = \action\course::$data['enterprise_course'];
                             <span>IMAGE 封面</span>
                         </div>
                         <div class="leftAlist" >
-                            <select name="media_id">
-                                <option value="0">无图片</option>
-                                <?php if (is_array($image)) { ?>
-                                    <?php foreach ($image as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['media_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="leftAlist" >
                             <div class="r_row">
-                                <INPUT TYPE="file" NAME="file_url" id="f1" onchange="document.getElementById('edit_doc').value = 1" />
-                                <input type="hidden" name="edit_doc" id="edit_doc" value="0" />
+                                <INPUT TYPE="file" NAME="file_url" id="f1" />
+                                <input type="hidden" name="edit_doc" id="edit_doc" value="" />
                             </div>
                             <div class="r_row">
                                 <div class="r_title">&nbsp;</div>
-                                <img class="r_row_img" src=".<?php echo isset($data['original_src']) ? $data['original_src'] : '/img/no_img.jpg'; ?>" />
+                                <img class="r_row_img" src="<?php echo isset($original_src) ? $original_src : './img/no_img.jpg'; ?>" />
                             </div>
                         </div>
                         <div class="leftAlist" >
@@ -139,28 +139,30 @@ $enterprise_course = \action\course::$data['enterprise_course'];
                 });
 
                 var config = {
-                    Bucket: 'plbs-test-1257286922',
-                    Region: 'ap-shanghai'
+                    Bucket: "<?php echo $config['lib']['tencent']['cos']['bucket']; ?>",
+                    Region: "<?php echo $config['lib']['tencent']['cos']['region']; ?>",
+                    path: "<?php echo $config['path']['image']; ?>",
+                    filename: "<?php echo time(); ?>",
+                    url: "<?php echo $config['lib']['tencent']['cos']['url']; ?>"
                 };
-                var path = "path/";
-                var filename = "1.jpg";
                 // 监听选文件
-                $("#file-selector").on("change", function () {
+                $("#f1").on("change", function () {
                     var file = this.files[0];
                     if (!file)
                         return;
+                    var fileExtension = file.name.split('.').pop();
+                    var _file = config.path + "/" + config.filename + "." + fileExtension;
                     cos.putObject({
                         Bucket: config.Bucket, /* 必须 */
                         Region: config.Region, /* 必须 */
                         //Key:  file.name,              /* 必须 */
-                        Key: path + filename,
-                        Body: file,
+                        Key: _file,
+                        Body: file
                     }, function (err, data) {
                         console.log(err || data);
+                        $(".r_row_img").attr("src", config.url + _file);
+                        $("#edit_doc").attr("value", config.url + _file);
                     });
-                });
-                $("#get").on("click", function () {
-                    $("#show").attr("src", "http://" + config.Bucket + ".cos." + config.Region + ".myqcloud.com/" + path + filename);
                 });
             });
             var ue = UE.getEditor('container');
