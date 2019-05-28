@@ -64,11 +64,27 @@ class LessonImageDAL {
         if (empty($_data)) {
             return true;
         }
+        $_arr = '';
+        foreach ($_data as $v) {
+            $_imageData = [
+                'name' => $v,
+                'original_src' => $v,
+                'original_link' => "",
+                'order_by' => 50,
+                'add_by' => 0,
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_by' => 0,
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+                'unique' => '',
+            ];
+            $_arr[] = ImageDAL::insert_return_id($_imageData);
+        }
         $base = new BaseDAL();
         $sql = "delete from " . $base->table_name('lesson_image') . " where `lesson_id`='" . $aid . "';";
         $base->query($sql);
 
-        foreach ($_data as $v) {
+        foreach ($_arr as $v) {
             if ($v != 0) {
                 $os = $_sourseData;
                 array_unshift($os, $v, $aid);

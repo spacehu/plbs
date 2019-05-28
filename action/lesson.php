@@ -61,6 +61,7 @@ class lesson {
             //self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
             self::$data['class'] = $this->class;
             self::$data['course_id'] = $this->course_id;
+            self::$data['config'] = \mod\init::$config['env'];
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -72,6 +73,11 @@ class lesson {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $media_id = 0;
+            if ($_POST['edit_doc'] !== "") {
+                $material = new material();
+                $media_id = $material->_saveMedia($_POST['edit_doc'], $_POST['type']);
+            }
             if ($id != null) {
                 $data = [
                     'course_id' => $_POST['course_id'],
@@ -80,7 +86,7 @@ class lesson {
                     'detail' => $_POST['detail'],
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
-                    'media_id' => $_POST['media_id'],
+                    'media_id' => $media_id,
                     'type' => $_POST['type'],
                 ];
                 self::$data = LessonDAL::update($id, $data);
@@ -102,7 +108,7 @@ class lesson {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'media_id' => $_POST['media_id'],
+                    'media_id' => $media_id,
                     'type' => $_POST['type'],
                 ];
                 self::$data = $id = LessonDAL::insertLesson($data);

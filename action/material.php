@@ -336,4 +336,31 @@ class material {
         }
     }
 
+    function _saveMedia($filePath, $type) {
+        try {
+            $filePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $filePath);
+            $unique = '';
+            /** 新增操作 */
+            $data = [
+                'name' => $filePath,
+                'overview' => $filePath,
+                'src' => $filePath,
+                'type' => $type,
+                'order_by' => 50,
+                'add_by' => Common::getSession("id"),
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_by' => Common::getSession("id"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => 0,
+                'minstrel' => isset($_POST['minstrel']) ? $_POST['minstrel'] : "",
+                'duration' => isset($_POST['duration']) ? $_POST['duration'] : "",
+                'unique' => $unique,
+            ];
+            return MediaDAL::insert_return_id($data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            return false;
+        }
+    }
+
 }

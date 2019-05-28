@@ -83,7 +83,7 @@ if (is_array($image)) {
                         <div class="leftAlist" >
                             <div class="r_row">
                                 <INPUT TYPE="file" NAME="file_url" id="f1" />
-                                <input type="hidden" name="edit_doc" id="edit_doc" value="" />
+                                <input type="hidden" name="edit_doc" id="edit_doc" value="<?php echo isset($original_src) ? $original_src : './img/no_img.jpg'; ?>" />
                             </div>
                             <div class="r_row">
                                 <div class="r_title">&nbsp;</div>
@@ -141,7 +141,8 @@ if (is_array($image)) {
                 var config = {
                     Bucket: "<?php echo $config['lib']['tencent']['cos']['bucket']; ?>",
                     Region: "<?php echo $config['lib']['tencent']['cos']['region']; ?>",
-                    path: "<?php echo $config['path']['image']; ?>",
+                    imagePath: "<?php echo $config['path']['image']; ?>",
+                    mediaPath: "<?php echo $config['path']['media']; ?>",
                     filename: "<?php echo time(); ?>",
                     url: "<?php echo $config['lib']['tencent']['cos']['url']; ?>"
                 };
@@ -151,7 +152,7 @@ if (is_array($image)) {
                     if (!file)
                         return;
                     var fileExtension = file.name.split('.').pop();
-                    var _file = config.path + "/" + config.filename + "." + fileExtension;
+                    var _file = config.mediaPath + "/" + config.filename + "." + fileExtension;
                     cos.putObject({
                         Bucket: config.Bucket, /* 必须 */
                         Region: config.Region, /* 必须 */
