@@ -41,6 +41,7 @@ class category {
             }
             self::$data['list'] = CategoryDAL::tree();
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
+            self::$data['config'] = \mod\init::$config['env'];
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -52,12 +53,17 @@ class category {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $media_id = 0;
+            if ($_POST['edit_doc'] !== "") {
+                $material = new material();
+                $media_id = $material->_saveImage($_POST['edit_doc']);
+            }
             if ($id != null) {
                 $data = [
                     'parent_id' => $_POST['parent_id'],
                     'name' => $_POST['name'],
                     'overview' => $_POST['overview'],
-                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
+                    'media_id' => $media_id,
                     'edit_by' => Common::getSession("id"),
                 ];
                 self::$data = CategoryDAL::update($id, $data);
@@ -79,7 +85,7 @@ class category {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
+                    'media_id' => $media_id,
                 ];
                 self::$data = CategoryDAL::insert($data);
             }

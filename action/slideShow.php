@@ -52,7 +52,8 @@ class slideShow {
             } else {
                 self::$data['data'] = null;
             }
-            self::$data['list'] = ImageDAL::getAll(1, 999, '');
+            self::$data['image'] = ImageDAL::getAll(1, 999, '');
+            self::$data['config'] = \mod\init::$config['env'];
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SYSTEM_INDEX], code::SYSTEM_INDEX, json_encode($ex));
@@ -64,10 +65,15 @@ class slideShow {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $media_id = 0;
+            if ($_POST['edit_doc'] !== "") {
+                $material = new material();
+                $media_id = $material->_saveImage($_POST['edit_doc']);
+            }
             if ($id != null) {
                 /** 更新操作 */
                 $data = [
-                    'image_id' => $_POST['image_id'],
+                    'image_id' => $media_id,
                     'link' => $_POST['link'],
                     'order_by' => isset($_POST['order_by']) ? $_POST['order_by'] : 50,
                     'edit_by' => Common::getSession("id"),
@@ -75,7 +81,7 @@ class slideShow {
                 self::$data = SlideShowDAL::update($id, $data);
             } else {
                 $data = [
-                    'image_id' => $_POST['image_id'],
+                    'image_id' => $media_id,
                     'link' => $_POST['link'],
                     'order_by' => isset($_POST['order_by']) ? $_POST['order_by'] : 50,
                     'add_by' => Common::getSession("id"),

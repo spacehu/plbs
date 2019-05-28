@@ -68,6 +68,7 @@ class show {
             //Common::pr(self::$data['data']);die;
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
+            self::$data['config'] = \mod\init::$config['env'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
         }
@@ -78,6 +79,11 @@ class show {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
+            $media_id = 0;
+            if ($_POST['edit_doc'] !== "") {
+                $material = new material();
+                $media_id = $material->_saveImage($_POST['edit_doc']);
+            }
             if ($id != null) {
                 /** 更新操作 */
                 $data = [
@@ -87,7 +93,7 @@ class show {
                     'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
                     'access' => isset($_POST['access']) ? $_POST['access'] : 0,
                     'source' => isset($_POST['source']) ? $_POST['source'] : '',
-                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
+                    'media_id' => $media_id,
                     'edit_by' => Common::getSession("id"),
                 ];
                 self::$data = ArticleDAL::update($id, $data);
@@ -106,7 +112,7 @@ class show {
                     'delete' => 0,
                     'access' => isset($_POST['access']) ? $_POST['access'] : 0,
                     'source' => isset($_POST['source']) ? $_POST['source'] : '',
-                    'media_id' => isset($_POST['media_id']) ? $_POST['media_id'] : 0,
+                    'media_id' => $media_id,
                 ];
                 self::$data = ArticleDAL::insert($data);
             }

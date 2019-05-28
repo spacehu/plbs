@@ -14,10 +14,10 @@
                     //$(this).addClass('mainRed').next().show();
                     $(".first").removeClass('mainRed').next();
                     $(".second").removeClass('mainRed');
-                    if($(this).parent().find(".sub_title").length){
-                        var siblings_second=$(this).siblings(".sub_title").find(".title").eq(0).find(".second");
+                    if ($(this).parent().find(".sub_title").length) {
+                        var siblings_second = $(this).siblings(".sub_title").find(".title").eq(0).find(".second");
                         siblings_second.addClass('mainRed').next();
-                    }else{
+                    } else {
                         $(this).addClass('mainRed').next();
                     }
                 });
@@ -32,6 +32,7 @@
     </head>
     <body>
         <div id="Menu-left">
+            <!-- 
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >MATERIAL 素材</a>
                 <div class="sub_title">
@@ -46,16 +47,19 @@
                     </div>
                 </div>
             </div>
+            -->
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>
-                <!--            <div class="sub_title">
+                <!--            
+                <div class="sub_title">
                                 <div class="title">
                                     <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
                                 </div>
                                 <div class="title">
                                     <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
                                 </div>
-                            </div>-->
+                            </div>
+                -->
             </div>
             <?php //\mod\common::pr($_COOKIE); ?>
             <?php if (\mod\common::getSession('level') <= 1) { ?>
