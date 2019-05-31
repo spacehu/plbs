@@ -39,7 +39,7 @@ if (is_array($image)) {
                             <span>CATEGORY 分类</span>
                         </div>
                         <div class="leftAlist" >
-                            <select name="cat_id">
+                            <select name="cat_id" id="cat_id">
                                 <option value="0">请选择</option>
                                 <?php if (is_array($list)) { ?>
                                     <?php foreach ($list as $k => $v) { ?>
@@ -218,6 +218,19 @@ if (is_array($image)) {
                         $(".r_row_img").attr("src", config.url + _file);
                         $("#edit_doc").attr("value", config.url + _file);
                     });
+                });
+                // 切换
+                $("#cat_id").on("change", function () {
+                    if ($(this).val() === "15" || $(this).val() === "16") {
+                        $(".c_15_16").show();
+                        $(".c_17").hide();
+                    } else if ($(this).val() === "17") {
+                        $(".c_17").show();
+                        $(".c_15_16").hide();
+                    } else {
+                        $(".c_17").hide();
+                        $(".c_15_16").hide();
+                    }
                 });
             });
             var ue = UE.getEditor('container');
