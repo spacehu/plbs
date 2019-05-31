@@ -52,13 +52,13 @@
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>
                 <!--            
                 <div class="sub_title">
-                                <div class="title">
-                                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
-                                </div>
-                                <div class="title">
-                                    <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
-                                </div>
-                            </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
+                    </div>
+                </div>
                 -->
             </div>
             <?php //\mod\common::pr($_COOKIE); ?>

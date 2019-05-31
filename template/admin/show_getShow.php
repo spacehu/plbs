@@ -1,7 +1,9 @@
 <?php
+$class = \action\show::$data['class'];
 $data = \action\show::$data['data'];
 $image = \action\show::$data['image'];
 $list = \action\show::$data['list'];
+$typeList = \action\show::$data['typeList'];
 $config = \action\show::$data['config'];
 if (is_array($image)) {
     foreach ($image as $k => $v) {
@@ -30,9 +32,22 @@ if (is_array($image)) {
         <div class="status r_top">
         </div>
         <div class="content">
-            <form name="theForm" id="demo" action="./index.php?a=show&m=updateShow&id=<?php echo $data['id']; ?>" method="post" enctype='multipart/form-data'>
+            <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateShow&id=<?php echo $data['id']; ?>" method="post" enctype='multipart/form-data'>
                 <div class="pathA ">
                     <div class="leftA">
+                        <div class="leftAlist" >
+                            <span>CATEGORY 分类</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="cat_id">
+                                <option value="0">请选择</option>
+                                <?php if (is_array($list)) { ?>
+                                    <?php foreach ($list as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <div class="leftAlist" >
                             <span>NAME 标题</span>
                         </div>
@@ -41,6 +56,8 @@ if (is_array($image)) {
                                 <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ''; ?>" />
                             </div>
                         </div>
+                    </div>
+                    <div class="leftA c_15_16 <?php echo ($data['cat_id'] == 15 || $data['cat_id'] == 16) ? "" : "hide"; ?>">
                         <div class="leftAlist" >
                             <span>IMAGE 封面</span>
                         </div>
@@ -68,18 +85,101 @@ if (is_array($image)) {
 <?php echo isset($data['detail']) ? $data['detail'] : ""; ?>
                             </script>
                         </div>
+                    </div>
+                    <div class="leftA c_17 <?php echo ($data['cat_id'] == 17) ? "" : "hide"; ?>">
                         <div class="leftAlist" >
-                            <span>CATEGORY 分类</span>
+                            <span>工作类型</span>
                         </div>
                         <div class="leftAlist" >
-                            <select name="cat_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($list)) { ?>
-                                    <?php foreach ($list as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                            <select name="type">
+                                <option value="">请选择</option>
+                                <?php if (is_array($typeList)) { ?>
+                                    <?php foreach ($typeList as $v) { ?>
+                                        <option value="<?php echo $v; ?>"  <?php echo $data['type'] == $v ? 'selected' : ''; ?>><?php echo $v; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>薪水</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="salary" type="text" value="<?php echo isset($data['salary']) ? $data['salary'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>省</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="province" type="text" value="<?php echo isset($data['province']) ? $data['province'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>市</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="city" type="text" value="<?php echo isset($data['city']) ? $data['city'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>区</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="district" type="text" value="<?php echo isset($data['district']) ? $data['district'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>地址</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="address" type="text" value="<?php echo isset($data['address']) ? $data['address'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>工龄</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="age_min" type="text" value="<?php echo isset($data['age_min']) ? $data['age_min'] : ''; ?>" />
+                                <input class="text" name="age_max" type="text" value="<?php echo isset($data['age_max']) ? $data['age_max'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>学历</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="education" type="text" value="<?php echo isset($data['education']) ? $data['education'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>标签</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="">
+                                <input class="text" name="tag" type="text" value="<?php echo isset($data['tag']) ? $data['tag'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>岗位职责</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <script id="container2" name="responsibilities" type="text/plain">
+<?php echo isset($data['responsibilities']) ? $data['responsibilities'] : ""; ?>
+                            </script>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>任职资格</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <script id="container3" name="qualifications" type="text/plain">
+<?php echo isset($data['qualifications']) ? $data['qualifications'] : ""; ?>
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -121,6 +221,8 @@ if (is_array($image)) {
                 });
             });
             var ue = UE.getEditor('container');
+            var ue = UE.getEditor('container2');
+            var ue = UE.getEditor('container3');
         </script>
     </body>
 </html>

@@ -16,11 +16,13 @@ class show {
     private $mediaList = ['music', 'video'];
     public static $data;
     private $cat_id;
+    private $type;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
         //课程类
         $this->cat_id = 14;
+        $this->type = ['架构师', '设计师', '产品创意总监'];
     }
 
     function staticPage() {
@@ -36,15 +38,20 @@ class show {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
+            $category = isset($_GET['category']) ? $_GET['category'] : "";
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
+            self::$data['category'] = $category;
             self::$data['class'] = $this->class;
 
 
-            self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords);
-            self::$data['total'] = ArticleDAL::getTotal($keywords);
+            self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $category);
+            self::$data['total'] = ArticleDAL::getTotal($keywords, $category);
+
+            self::$data['list'] = CategoryDAL::tree($this->cat_id);
+            unset(self::$data['list'][$this->cat_id]);
 
             \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
         } catch (Exception $ex) {
@@ -57,8 +64,6 @@ class show {
     function getShow() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        $type = isset($_GET['type']) ? $_GET['type'] : null;
-        self::$data['type'] = $type;
         try {
             if ($id != null) {
                 self::$data['data'] = ArticleDAL::getOne($id);
@@ -66,8 +71,12 @@ class show {
                 self::$data['data'] = null;
             }
             //Common::pr(self::$data['data']);die;
+            self::$data['class'] = $this->class;
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
+            self::$data['typeList'] = $this->type;
+            unset(self::$data['list'][$this->cat_id]);
+            //Common::pr(self::$data['list']);die;
             self::$data['config'] = \mod\init::$config['env'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
@@ -95,6 +104,18 @@ class show {
                     'source' => isset($_POST['source']) ? $_POST['source'] : '',
                     'media_id' => $media_id,
                     'edit_by' => Common::getSession("id"),
+                    'type' => isset($_POST['type']) ? $_POST['type'] : '',
+                    'salary' => isset($_POST['salary']) ? $_POST['salary'] : '',
+                    'province' => isset($_POST['province']) ? $_POST['province'] : '',
+                    'city' => isset($_POST['city']) ? $_POST['city'] : '',
+                    'district' => isset($_POST['district']) ? $_POST['district'] : '',
+                    'address' => isset($_POST['address']) ? $_POST['address'] : '',
+                    'age_min' => isset($_POST['age_min']) ? $_POST['age_min'] : '',
+                    'age_max' => isset($_POST['age_max']) ? $_POST['age_max'] : '',
+                    'education' => isset($_POST['education']) ? $_POST['education'] : '',
+                    'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
+                    'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
+                    'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
                 ];
                 self::$data = ArticleDAL::update($id, $data);
             } else {
@@ -113,6 +134,18 @@ class show {
                     'access' => isset($_POST['access']) ? $_POST['access'] : 0,
                     'source' => isset($_POST['source']) ? $_POST['source'] : '',
                     'media_id' => $media_id,
+                    'type' => isset($_POST['type']) ? $_POST['type'] : '',
+                    'salary' => isset($_POST['salary']) ? $_POST['salary'] : '',
+                    'province' => isset($_POST['province']) ? $_POST['province'] : '',
+                    'city' => isset($_POST['city']) ? $_POST['city'] : '',
+                    'district' => isset($_POST['district']) ? $_POST['district'] : '',
+                    'address' => isset($_POST['address']) ? $_POST['address'] : '',
+                    'age_min' => isset($_POST['age_min']) ? $_POST['age_min'] : '',
+                    'age_max' => isset($_POST['age_max']) ? $_POST['age_max'] : '',
+                    'education' => isset($_POST['education']) ? $_POST['education'] : '',
+                    'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
+                    'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
+                    'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
                 ];
                 self::$data = ArticleDAL::insert($data);
             }

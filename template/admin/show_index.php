@@ -5,6 +5,8 @@ $currentPage = \action\show::$data['currentPage'];
 $pagesize = \action\show::$data['pagesize'];
 $keywords = \action\show::$data['keywords'];
 $class = \action\show::$data['class'];
+$list = \action\show::$data['list'];
+$category = \action\show::$data['category'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -16,7 +18,10 @@ $class = \action\show::$data['class'];
         <script>
             $(function () {
                 $('.button_find').click(function () {
-                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val() + '&type=<?php echo $type; ?>';
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val() + '&category=' + $('.list_select').val();
+                });
+                $('.list_select').on("change", function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val() + '&category=' + $('.list_select').val();
                 });
             });
         </script>
@@ -26,6 +31,14 @@ $class = \action\show::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
+            <select class="listSelect list_select" >
+                <option value="">请选择</option>
+                <?php if (!empty($list)) { ?>
+                    <?php foreach ($list as $k => $v) { ?>
+                        <option value="<?php echo $v['id']; ?>" <?php echo $v['id'] == $category ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
+                    <?php } ?>              
+                <?php } ?>
+            </select>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow'">添加新展示</a>
         </div>
         <div class="content">
@@ -58,7 +71,7 @@ $class = \action\show::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
+            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords . '&category=' . $category;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>
