@@ -46,6 +46,7 @@ $category = \action\show::$data['category'];
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >活动名</td>
                     <td class="td1" width="10%">属于</td>
+                    <td class="td1" width="10%">投递人数</td>
                     <td class="td1" width="20%">操作</td>
                 </tr>
                 <?php
@@ -56,6 +57,11 @@ $category = \action\show::$data['category'];
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['add_by']; ?></td>
+                            <td class="td1">
+                                <?php if (!empty($v['resumeCount'])) { ?>
+                                    <a href="index.php?a=<?php echo $class; ?>&m=getResumeList&id=<?php echo $v['id']; ?>"><?php echo $v['resumeCount']; ?></a>
+                                <?php } ?>
+                            </td>
                             <td class="td1">
                                 <a href="index.php?a=<?php echo $class; ?>&m=getShow&id=<?php echo $v['id']; ?>">编辑</a>
                                 <a href="index.php?a=<?php echo $class; ?>&m=deleteShow&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此展示删除?')">删除</a>

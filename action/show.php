@@ -7,6 +7,7 @@ use TigerDAL;
 use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ArticleDAL;
+use TigerDAL\Cms\UserResumeArticleDAL;
 use config\code;
 
 class show {
@@ -173,4 +174,48 @@ class show {
         }
     }
 
+    function getResumeList() {
+        Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        try {
+            $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+
+            self::$data['currentPage'] = $currentPage;
+            self::$data['pagesize'] = $pagesize;
+            self::$data['class'] = $this->class;
+            self::$data['id'] = $id;
+
+
+            self::$data['data'] = UserResumeArticleDAL::getAll($currentPage, $pagesize, $id);
+            self::$data['total'] = UserResumeArticleDAL::getTotal($id);
+
+            \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
+        }
+    }
+
+    function getUserResume() {
+        $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+        try {
+            self::$data['data'] = UserResumeArticleDAL::getOne($user_id);
+            //Common::pr(self::$data['data']);die;
+            self::$data['class'] = $this->class;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
+
+    function deleteUserResumeArticle() {
+        $ura_id = isset($_GET['ura_id']) ? $_GET['ura_id'] : null;
+        try {
+            self::$data['data'] = UserResumeArticleDAL::sendResume($ura_id);
+            //Common::pr(self::$data['data']);die;
+            Common::js_redir(Common::getSession($this->class));
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
+        }
+    }
 }

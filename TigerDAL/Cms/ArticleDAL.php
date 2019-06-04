@@ -13,12 +13,16 @@ class ArticleDAL {
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and a.name like '%" . $keywords . "%' ";
         }
         if (!empty($category)) {
-            $where .= " and cat_id = '" . $category . "' ";
+            $where .= " and a.cat_id = '" . $category . "' ";
         }
-        $sql = "select * from " . $base->table_name("article") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select a.*,count(ura.id) as resumeCount from " . $base->table_name("article") . " as a "
+                . "left join " . $base->table_name("user_resume_article") . " as ura on a.id=ura.article_id "
+                . "where a.`delete`=0 " . $where . " "
+                . "group by a.id "
+                . "order by a.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
