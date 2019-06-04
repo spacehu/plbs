@@ -3,6 +3,7 @@
 namespace TigerDAL;
 
 use TigerDAL\Api\LogDAL;
+
 /*
  * 基本数据类包
  * 类
@@ -61,7 +62,7 @@ class BaseDAL {
 
     /** 执行sql */
     public function query($sql) {
-        $this->sql=$sql;
+        $this->sql = $sql;
         $result = mysqli_query($this->conn, $sql);
         return $result;
     }
@@ -75,6 +76,43 @@ class BaseDAL {
     /** 获取mysql最近一条的id */
     public function last_insert_id() {
         return mysqli_insert_id($this->conn);
+    }
+
+    /** 新增用户信息 */
+    public function insert($data, $_db) {
+        if (is_array($data)) {
+            foreach ($data as $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "insert into " . $this->table_name($_db) . " values (null," . $set . ");";
+            //\mod\common::pr($sql);die;
+            return $this->query($sql);
+        } else {
+            return true;
+        }
+    }
+
+    /** 更新用户信息 */
+    public function update($id, $data, $_db) {
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "update " . $this->table_name($_db) . " set " . $set . "  where id=" . $id . " ;";
+            return $this->query($sql);
+        } else {
+            return true;
+        }
     }
 
 }

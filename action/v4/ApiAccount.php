@@ -10,6 +10,7 @@ use TigerDAL\Api\CourseDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\AccountDAL;
 use TigerDAL\Api\LessonDAL;
+use TigerDAL\Api\ResumeDAL;
 use TigerDAL\Api\LogDAL;
 use config\code;
 
@@ -162,7 +163,104 @@ class ApiAccount extends \action\RestfulApi {
 
     /** 投递简历 */
     function sendResume() {
-        
+        try {
+            //轮播列表
+            $res = ResumeDAL::sendResume($this->user_id, $this->post['article_id']);
+
+            //print_r($res);die;
+            self::$data['data'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 员工：更新简历 */
+    function updateResume() {
+        try {
+            $_data = [
+                'user_id' => $this->user_id,
+                'serialization' => "",
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'name' => isset($this->post['name']) ? $this->post['name'] : "",
+                'brithday' => isset($this->post['brithday']) ? $this->post['brithday'] : "",
+                'sex' => isset($this->post['sex']) ? $this->post['sex'] : "",
+                'education' => isset($this->post['education']) ? $this->post['education'] : "",
+                'age_work' => isset($this->post['age_work']) ? $this->post['age_work'] : "",
+                'phone' => isset($this->post['phone']) ? $this->post['phone'] : "",
+                'email' => isset($this->post['email']) ? $this->post['email'] : "",
+                'delete' => 0,
+                'about_self' => isset($this->post['about_self']) ? $this->post['about_self'] : "",
+            ];
+            $resume_id = ResumeDAL::saveOne($_data);
+            if (!empty($resume_id)) {
+                $_school = "";
+                $_company = "";
+                $_project = "";
+                if (!empty($this->post['school'])) {
+                    foreach ($this->post['school'] as $k => $v) {
+                        $v = (array) $v;
+                        $_school = [
+                            'id' => isset($v['id']) ? $v['id'] : 0,
+                            'user_id' => $this->user_id,
+                            'user_resume_id' => $resume_id,
+                            'add_time' => date("Y-m-d H:i:s"),
+                            'edit_time' => date("Y-m-d H:i:s"),
+                            'school' => isset($v['school']) ? $v['school'] : "",
+                            'profession' => isset($v['profession']) ? $v['profession'] : "",
+                            'start_time' => isset($v['start_time']) ? $v['start_time'] : "",
+                            'end_time' => isset($v['end_time']) ? $v['end_time'] : "",
+                            'delete' => isset($v['delete']) ? $v['delete'] : 0,
+                        ];
+                        ResumeDAL::saveOneSchool($_school);
+                    }
+                }
+                if (!empty($this->post['company'])) {
+                    foreach ($this->post['company'] as $k => $v) {
+                        $v = (array) $v;
+                        $_company = [
+                            'id' => isset($v['id']) ? $v['id'] : 0,
+                            'user_id' => $this->user_id,
+                            'user_resume_id' => $resume_id,
+                            'add_time' => date("Y-m-d H:i:s"),
+                            'edit_time' => date("Y-m-d H:i:s"),
+                            'company' => isset($v['company']) ? $v['company'] : "",
+                            'job' => isset($v['job']) ? $v['job'] : "",
+                            'start_time' => isset($v['start_time']) ? $v['start_time'] : "",
+                            'end_time' => isset($v['end_time']) ? $v['end_time'] : "",
+                            'infomation' => isset($v['infomation']) ? $v['infomation'] : "",
+                            'delete' => isset($v['delete']) ? $v['delete'] : 0,
+                        ];
+                        ResumeDAL::saveOneCompany($_company);
+                    }
+                }
+                if (!empty($this->post['project'])) {
+                    foreach ($this->post['project'] as $k => $v) {
+                        $v = (array) $v;
+                        $_project = [
+                            'id' => isset($v['id']) ? $v['id'] : 0,
+                            'user_id' => $this->user_id,
+                            'user_resume_id' => $resume_id,
+                            'add_time' => date("Y-m-d H:i:s"),
+                            'edit_time' => date("Y-m-d H:i:s"),
+                            'name' => isset($v['name']) ? $v['name'] : "",
+                            'start_time' => isset($v['start_time']) ? $v['start_time'] : "",
+                            'end_time' => isset($v['end_time']) ? $v['end_time'] : "",
+                            'overview' => isset($v['overview']) ? $v['overview'] : "",
+                            'delete' => isset($v['delete']) ? $v['delete'] : 0,
+                        ];
+                        ResumeDAL::saveOneProject($_project);
+                    }
+                }
+
+                self::$data['data'] = $resume_id;
+            }
+            //print_r($res);die;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
     }
 
     /** 编辑用户信息 头像路径，手机号，验证码，姓名，（原密码），密码，确认密码 
@@ -372,12 +470,23 @@ class ApiAccount extends \action\RestfulApi {
 
     /** 员工：简历 */
     function getResume() {
-        
-    }
+        try {
+            //轮播列表
+            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+                self::$data['success'] = false;
+                self::$data['data']['code'] = "errorType";
+                self::$data['msg'] = code::$code["errorType"];
+                return self::$data;
+            }
+            $res = ResumeDAL::getOne($this->user_id);
 
-    /** 员工：更新简历 */
-    function updateResume() {
-        
+            self::$data['data']['userType'] = $this->server_id;
+            //print_r($res);die;
+            self::$data['data']['info'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
     }
 
     /** 企业主：员工学习进度 */
