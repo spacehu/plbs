@@ -6,18 +6,36 @@ $pagesize = \action\test::$data['pagesize'];
 $keywords = \action\test::$data['keywords'];
 $class = \action\test::$data['class'];
 $lesson_id = \action\test::$data['lesson_id'];
+$category = \action\test::$data['category'];
+$categorys = \action\test::$data['categorys'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="js/jquery.js" ></script>
         <title>无标题文档</title>
+        <script>
+            $(function () {
+                $('.list_select').on("change", function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&category=' + $('.list_select').val();
+                });
+            });
+        </script>
     </head>
 
     <body>
 
         <div class="menu">
+            <?php if (!empty($categorys)) { ?>
+                <select class="listSelect list_select" >
+                    <option value="">请选择</option>
+                    <?php foreach ($categorys as $k => $v) { ?>
+                        <option value="<?php echo $v['id']; ?>" <?php echo $v['id'] == $category ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
+                    <?php } ?>              
+                </select>
+            <?php } ?>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getTest&lesson_id=<?php echo $lesson_id; ?>'">添加新试题</a>
         </div>
         <div class="content">

@@ -5,6 +5,7 @@ $list = \action\test::$data['list'];
 $select = \action\test::$data['select'];
 $option = \action\test::$data['option'];
 $lesson_id = \action\test::$data['lesson_id'];
+$categorys = \action\test::$data['categorys'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -32,19 +33,19 @@ $lesson_id = \action\test::$data['lesson_id'];
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
                             <input type="hidden" name="lesson_id" value="<?php echo $lesson_id; ?>">
                         </div>
-                        <!--                        <div class="leftAlist" >
-                                                    <span>LESSON 课时</span>
-                                                </div>
-                                                <div class="leftAlist" >
-                                                    <select name="lesson_id">
-                                                        <option value="0">请选择</option>
-                        <?php if (is_array($list)) { ?>
-                            <?php foreach ($list as $k => $v) { ?>
-                                                                                <option value="<?php echo $v['id']; ?>"  <?php echo $data['lesson_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                            <?php } ?>
+                        <?php if (is_array($categorys)) { ?>
+                            <div class="leftAlist" >
+                                <span>CATEGORY 分类</span>
+                            </div>
+                            <div class="leftAlist" >
+                                <select name="cat_id">
+                                    <option value="0">请选择</option>
+                                    <?php foreach ($categorys as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                         <?php } ?>
-                                                    </select>
-                                                </div>-->
                         <div class="leftAlist" >
                             <span>DETAIL 试题内容</span>
                         </div>

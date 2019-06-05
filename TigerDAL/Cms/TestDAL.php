@@ -7,7 +7,7 @@ use TigerDAL\BaseDAL;
 class TestDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords = '', $lesson_id = '') {
+    public static function getAll($currentPage, $pagesize, $keywords = '', $lesson_id = '', $category = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -17,13 +17,18 @@ class TestDAL {
         }
         if (!empty($lesson_id)) {
             $where .= " and lesson_id = " . $lesson_id . " ";
+        } else {
+            $where .= " and lesson_id=0 ";
+        }
+        if (!empty($category)) {
+            $where .= " and cat_id = '" . $category . "' ";
         }
         $sql = "select * from " . $base->table_name("test") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords = '', $lesson_id = '') {
+    public static function getTotal($keywords = '', $lesson_id = '', $category = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
@@ -31,6 +36,11 @@ class TestDAL {
         }
         if (!empty($lesson_id)) {
             $where .= " and lesson_id = " . $lesson_id . " ";
+        } else {
+            $where .= " and lesson_id=0 ";
+        }
+        if (!empty($category)) {
+            $where .= " and cat_id = '" . $category . "' and lesson_id=0 ";
         }
         $sql = "select count(1) as total from " . $base->table_name("test") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];

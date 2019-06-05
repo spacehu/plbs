@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\LessonDAL;
 use TigerDAL\Cms\TestDAL;
+use TigerDAL\Cms\CategoryDAL;
 use config\code;
 
 class test {
@@ -14,10 +15,13 @@ class test {
     public static $data;
     private $select = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
     private $lesson_id;
+    private $cat_id;
 
     function __construct() {
+        //课程类
+        $this->cat_id = 1;
         $this->class = str_replace('action\\', '', __CLASS__);
-        $this->lesson_id = !empty($_GET['lesson_id']) ? $_GET['lesson_id'] : '';
+        $this->lesson_id = !empty($_GET['lesson_id']) ? $_GET['lesson_id'] : 0;
     }
 
     function index() {
@@ -27,15 +31,22 @@ class test {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
+            $category = isset($_GET['category']) ? $_GET['category'] : "";
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = TestDAL::getTotal($keywords, $this->lesson_id);
-            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id);
+            self::$data['total'] = TestDAL::getTotal($keywords, $this->lesson_id, $category);
+            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id, $category);
             self::$data['class'] = $this->class;
             self::$data['lesson_id'] = $this->lesson_id;
+            self::$data['category'] = $category;
+            self::$data['categorys'] = "";
+            if (empty($this->lesson_id)) {
+                self::$data['categorys'] = CategoryDAL::tree($this->cat_id);
+                unset(self::$data['categorys'][$this->cat_id]);
+            }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -56,6 +67,11 @@ class test {
             self::$data['lesson_id'] = $this->lesson_id;
             self::$data['select'] = $this->select;
             self::$data['option'] = (array) json_decode(self::$data['data']['overview']);
+            self::$data['categorys'] = "";
+            if (empty($this->lesson_id)) {
+                self::$data['categorys'] = CategoryDAL::tree($this->cat_id);
+                unset(self::$data['categorys'][$this->cat_id]);
+            }
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
