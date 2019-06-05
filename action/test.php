@@ -55,7 +55,7 @@ class test {
             self::$data['class'] = $this->class;
             self::$data['lesson_id'] = $this->lesson_id;
             self::$data['select'] = $this->select;
-            self::$data['option'] = (array)json_decode(self::$data['data']['overview']);
+            self::$data['option'] = (array) json_decode(self::$data['data']['overview']);
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -72,7 +72,7 @@ class test {
                 foreach ($_POST['overview'] as $k => $v) {
                     $_overview[$this->select[$k]] = $v;
                 }
-                $overview = json_encode($_overview,JSON_UNESCAPED_UNICODE);
+                $overview = json_encode($_overview, JSON_UNESCAPED_UNICODE);
             }
             if ($id != null) {
                 $data = [
@@ -84,6 +84,7 @@ class test {
                     'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
                     'type' => $_POST['type'],
+                    'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
                 ];
                 self::$data = TestDAL::update($id, $data);
             } else {
@@ -106,6 +107,7 @@ class test {
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
                     'type' => $_POST['type'],
+                    'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
                 ];
                 self::$data = TestDAL::insert($data);
             }
