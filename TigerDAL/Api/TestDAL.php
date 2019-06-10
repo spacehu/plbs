@@ -62,7 +62,7 @@ class TestDAL {
         $_status = 1;
         $base = new BaseDAL();
         //获取课程信息
-        $_course = CourseDAL::getOne($_data['course_id'],$_data['user_id']);
+        $_course = CourseDAL::getOne($_data['course_id'], $_data['user_id']);
         if (empty($_data['aws'])) {
             return 'emptyparameter';
         }
@@ -105,7 +105,6 @@ class TestDAL {
         $_exam_id = self::insertExamGetId($data);
         //$_exam_id = 1;
         //答题详情
-        $_row;
         foreach ($_tests as $k => $v) {
             $_row = [
                 'user_id' => $_data['user_id'],
@@ -127,7 +126,7 @@ class TestDAL {
             $_status = 2;
             $_userCourse = self::updateUserCourse($_data['user_id'], $_data['course_id'], $_status);
         }
-        return ['exam' => $data, 'status' => $_status];
+        return ['exam' => $data, 'status' => $_status, 'detail' => $_tests];
     }
 
     /** 记录成绩 */
