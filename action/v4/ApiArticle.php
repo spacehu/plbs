@@ -48,10 +48,12 @@ class ApiArticle extends \action\RestfulApi {
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         $cat_id = isset($this->get['cat_id']) ? $this->get['cat_id'] : '';
+        $enterprise_id = isset($this->get['enterprise_id']) ? $this->get['enterprise_id'] : '';
+        $type = isset($this->get['type']) ? $this->get['type'] : '';
         try {
             //轮播列表
-            $res = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, 0);
-            $total = ArticleDAL::getTotal($keywords, $cat_id, 0);
+            $res = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, $enterprise_id, $type);
+            $total = ArticleDAL::getTotal($keywords, $cat_id, $enterprise_id, $type);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;

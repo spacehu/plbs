@@ -8,6 +8,7 @@ use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ArticleDAL;
 use TigerDAL\Cms\UserResumeArticleDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
 class show {
@@ -74,6 +75,7 @@ class show {
             //Common::pr(self::$data['data']);die;
             self::$data['class'] = $this->class;
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
+            self::$data['enterprise'] = EnterpriseDAL::getAll(1, 999, "");
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
             self::$data['typeList'] = $this->type;
             unset(self::$data['list'][$this->cat_id]);
@@ -117,6 +119,7 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
+                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : '',
                 ];
                 self::$data = ArticleDAL::update($id, $data);
             } else {
@@ -147,6 +150,7 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
+                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : '',
                 ];
                 self::$data = ArticleDAL::insert($data);
             }

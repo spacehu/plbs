@@ -4,6 +4,7 @@ $data = \action\show::$data['data'];
 $image = \action\show::$data['image'];
 $list = \action\show::$data['list'];
 $typeList = \action\show::$data['typeList'];
+$enterprise = \action\show::$data['enterprise'];
 $config = \action\show::$data['config'];
 if (is_array($image)) {
     foreach ($image as $k => $v) {
@@ -87,6 +88,19 @@ if (is_array($image)) {
                         </div>
                     </div>
                     <div class="leftA c_17 <?php echo ($data['cat_id'] == 17) ? "" : "hide"; ?>">
+                        <div class="leftAlist" >
+                            <span>企业</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="enterprise_id">
+                                <option value="">请选择</option>
+                                <?php if (is_array($enterprise)) { ?>
+                                    <?php foreach ($enterprise as $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <div class="leftAlist" >
                             <span>工作类型</span>
                         </div>
