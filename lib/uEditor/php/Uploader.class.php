@@ -10,6 +10,7 @@
 class Uploader {
 
     private $url; //路径 from space
+    private $_configToLib; //配置文件 from space
     private $fileField; //文件域名
     private $file; //文件上传对象
     private $base64; //文件上传对象
@@ -56,7 +57,9 @@ class Uploader {
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
-        $this->url = mod\init::$config['env']['url']; // from space
+        include_once('../../../env.php');
+        $this->_configToLib = include_once('../../../config/config.php');
+        $this->url = $this->_configToLib['env']['url']; // from space
         if ($type == "remote") {
             $this->saveRemote();
         } else if ($type == "base64") {
@@ -122,7 +125,7 @@ class Uploader {
         if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
-            $url = '//' . $this->url . '/index.php?a=material&m=saveImage&path=' . $this->filePath . '&md5=' . md5(file_get_contents($this->filePath)) . '&name=' . $this->fileName;
+            $url = 'https://' . $this->url . '/index.php?a=material&m=saveImage&path=' . $this->filePath . '&md5=' . md5(file_get_contents($this->filePath)) . '&name=' . $this->fileName;
             $re = file_get_contents($url);
             if (!$re['success']) {
                 $this->stateInfo = [$this->getStateInfo("ERROR_SQL"), json_decode($re), json_encode($url)];
@@ -361,7 +364,7 @@ class Uploader {
             "title" => $this->fileName,
             "original" => $this->oriName,
             "type" => $this->fileType,
-            "size" => $this->fileSize
+            "size" => $this->fileSize,
         );
     }
 
