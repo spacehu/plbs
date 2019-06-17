@@ -22,7 +22,7 @@ class LessonDAL {
         $sql = "select c.*,i.original_src from " . $base->table_name("lesson") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "where c.`delete`=0 " . $where . " "
-                . "order by c.edit_time desc "
+                . "order by c.order_by asc, c.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }

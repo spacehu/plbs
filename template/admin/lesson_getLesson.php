@@ -143,7 +143,7 @@ if (is_array($image)) {
                 $(".add_image").click(function () {
                     $(".mod_image").children().clone().appendTo('.list_image');
                 });
-                $(".remove_image").click(function () {
+                $(".remove_image").live('click', function () {
                     $(this).parent().parent().parent().remove();
                 });
                 $(".select_type").on("change", function () {

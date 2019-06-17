@@ -15,10 +15,8 @@ class TestDAL {
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
-        if (!empty($lesson_id)) {
+        if (is_int($lesson_id)) {
             $where .= " and lesson_id = " . $lesson_id . " ";
-        } else {
-            $where .= " and lesson_id=0 ";
         }
         if (!empty($category)) {
             $where .= " and cat_id = '" . $category . "' ";
@@ -34,11 +32,9 @@ class TestDAL {
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
-        if (!empty($lesson_id)) {
+        if (is_int($lesson_id)) {
             $where .= " and lesson_id = " . $lesson_id . " ";
-        } else {
-            $where .= " and lesson_id=0 ";
-        }
+        } 
         if (!empty($category)) {
             $where .= " and cat_id = '" . $category . "' and lesson_id=0 ";
         }

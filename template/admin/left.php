@@ -64,6 +64,9 @@
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
             </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=examination&m=index'" href="javascript:void(0);" >EXAM 试卷</a>
+            </div>
             <?php //\mod\common::pr($_COOKIE); ?>
             <?php if (\mod\common::getSession('level') <= 1) { ?>
                 <div class="title">

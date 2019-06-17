@@ -54,6 +54,33 @@ class TestDAL {
         return null;
     }
 
+    /** 随机出题 试卷 */
+    public static function getRandExamination($examination_id, $limit) {
+        $base = new BaseDAL();
+        $sql = "select test_id from " . $base->table_name("examination_test") . " where `delete`=0 and examination_id=" . $examination_id . " ;";
+        $_arr = $base->getFetchAll($sql);
+        if (!empty($_arr)) {
+            foreach ($_arr as $k => $v) {
+                $_rows[] = $v['test_id'];
+            }
+            $_ids = implode(",", $_rows);
+            $_sql = "select * from " . $base->table_name("test") . " where id in (" . $_ids . ") order by RAND() LIMIT " . $limit . " ;";
+            $_res = $base->getFetchAll($_sql);
+            if (!empty($_res)) {
+                foreach ($_res as $k => $v) {
+                    $res[$k] = $v;
+                    if ($v['type'] == 'select' || $v['type'] == "selects") {
+                        $res[$k]['select'] = json_decode($v['overview']);
+                    }
+                }
+            } else {
+                $res = $_res;
+            }
+            return $res;
+        }
+        return null;
+    }
+
     /** 答题 */
     public static function joinTest($_data) {
         //分数 是否合格
@@ -61,7 +88,8 @@ class TestDAL {
         $_num = 0;
         $_status = 1;
         $base = new BaseDAL();
-        //获取课程信息
+        
+        //获取课程信息 反馈数据 课程id 最大题数
         $_course = CourseDAL::getOne($_data['course_id'], $_data['user_id']);
         if (empty($_data['aws'])) {
             return 'emptyparameter';
