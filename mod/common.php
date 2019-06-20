@@ -264,7 +264,7 @@ class common {
             if (!empty($request)) {
                 foreach ($request as $k => $v) {
                     $_res = explode("=", $v);
-                    $res[$_res[0]] = $_res[1];
+                    $res[$_res[0]] = urldecode($_res[1]);
                 }
             }
         }
