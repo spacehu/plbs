@@ -126,4 +126,19 @@ class ArticleDAL {
         return $base->query($sql);
     }
 
+    public static function getCitys(){
+        $base = new BaseDAL();
+        $sql = "select city from " . $base->table_name("article") . " "
+                . "where `delete`=0 and city is not null and city <> '' "
+                . "group by city ;";
+        return $base->getFetchAll($sql);
+    }
+    
+    public static function getTypes(){
+        $base = new BaseDAL();
+        $sql = "select type from " . $base->table_name("article") . " "
+                . "where `delete`=0 and type is not null and type <> '' "
+                . "group by type ;";
+        return $base->getFetchAll($sql);
+    }
 }

@@ -3,9 +3,9 @@
 namespace action\v4;
 
 use mod\common as Common;
-use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\ImageDAL;
 use TigerDAL\Cms\CategoryDAL;
+use TigerDAL\Api\ArticleDAL;
 use config\code;
 
 class ApiBase extends \action\RestfulApi {
@@ -22,18 +22,6 @@ class ApiBase extends \action\RestfulApi {
         $this->post = Common::exchangePost();
         $this->get = Common::exchangeGet();
         $this->header = Common::exchangeHeader();
-//        $TokenDAL = new TokenDAL();
-//        $_token = $TokenDAL->checkToken();
-//        //Common::pr($_token);die;
-//        if ($_token['code'] != 90001) {
-//            self::$data['success'] = false;
-//            self::$data['data']['error_msg'] = 'tokenerror';
-//            self::$data['data']['code'] = $_token['code'];
-//            self::$data['msg'] = code::$code['tokenerror'];
-//            exit(json_encode(self::$data));
-//        }
-//        $this->user_id = $_token['data']['user_id'];
-//        $this->server_id = $_token['data']['server_id'];
         if (!empty($path)) {
             $_path = explode("-", $path);
             $actEval = "\$res = \$this ->" . $_path['2'] . "();";
@@ -79,4 +67,27 @@ class ApiBase extends \action\RestfulApi {
         return self::$data;
     }
 
+
+    /** 简历 城市 信息 */
+    function citys() {
+        try {
+            //轮播列表
+            $res = ArticleDAL::getCitys();
+            self::$data['data']['list'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+    /** 简历 类型 信息 */
+    function types() {
+        try {
+            //轮播列表
+            $res = ArticleDAL::getTypes();
+            self::$data['data']['list'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
 }
