@@ -153,9 +153,9 @@ class AuthDAL {
     /** 检查用户是否存在 */
     public function checkEnterPrise($phone, $password) {
 
-        if (!is_numeric($phone)) {
-            return ['error' => '1', 'code' => "errorPhone"];
-        }
+//        if (!is_numeric($phone)) {
+//            return ['error' => '1', 'code' => "errorPhone"];
+//        }
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("user") . "  "
                 . "where `name`='" . $phone . "' "
