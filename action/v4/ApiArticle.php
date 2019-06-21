@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\ArticleDAL;
 use TigerDAL\Api\AccountDAL;
+use TigerDAL\Api\ResumeDAL;
 use config\code;
 
 class ApiArticle extends \action\RestfulApi {
@@ -55,6 +56,14 @@ class ApiArticle extends \action\RestfulApi {
             $res = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $cat_id, $enterprise_id, $type);
             $total = ArticleDAL::getTotal($keywords, $cat_id, $enterprise_id, $type);
 
+            if ($cat_id == '17') {
+                if (!empty($res)) {
+                    foreach ($res as $k => $v) {
+                        $_row = ResumeDAL::getResumeArticle($this->user_id, $v['id']);
+                        $res[$k]['resume_article'] = (!empty($_row)) ? ($_row['delete'] == 0) ? 1 : 0 : 0;
+                    }
+                }
+            }
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $total;
@@ -76,8 +85,10 @@ class ApiArticle extends \action\RestfulApi {
             //轮播列表
             $res = ArticleDAL::getOne($this->get['article_id']);
             $resF = AccountDAL::getFavorite($this->user_id, $this->get['article_id']);
+            $resRA = ResumeDAL::getResumeArticle($this->user_id, $this->get['article_id']);
             self::$data['data'] = $res;
             self::$data['data']['favorites'] = (!empty($resF)) ? ($resF['delete'] == 0) ? 1 : 0 : 0;
+            self::$data['data']['resume_article'] = (!empty($resRA)) ? ($resRA['delete'] == 0) ? 1 : 0 : 0;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

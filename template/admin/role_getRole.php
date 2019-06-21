@@ -42,7 +42,7 @@ $list = \action\role::$data['list'];
                             <?php } ?>
                         </div>
                         <div class="leftAlist" >
-                            <span>LEVEL 等级</span>
+                            <span>LEVEL 等级 ( 1-6，1为最高等级 )</span>
                         </div>
                         <div class="leftAlist" >
                             <div class="">

@@ -58,8 +58,8 @@ class EnterpriseDAL {
                 . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id  "
                 . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id "
                 . "WHERE eu.`delete` = 0 "
-                . "AND eu. STATUS = 1 "
-                . ""
+                . "AND eu.`STATUS` = 1 "
+                . "group by u.id"
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         //echo $sql;die;
         return $base->getFetchAll($sql);

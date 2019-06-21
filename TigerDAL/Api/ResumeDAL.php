@@ -98,7 +98,7 @@ class ResumeDAL {
         $sql = "select * from " . $base->table_name('user_resume_article') . " where user_id=" . $user_id . " and article_id=" . $article_id . " ;";
         $row = $base->getFetchRow($sql);
         if (empty($row)) {
-            $resume=self::getOne($user_id);
+            $resume = self::getOne($user_id);
             $_data = [
                 'user_id' => $user_id,
                 'user_resume_id' => $resume['id'],
@@ -117,6 +117,14 @@ class ResumeDAL {
             $base->update($row['id'], $_data, 'user_resume_article');
         }
         return true;
+    }
+
+    /** 投递的状态 */
+    public static function getResumeArticle($user_id, $article_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("user_resume_article") . "  "
+                . "where user_id=" . $user_id . " and article_id=" . $article_id . " ;";
+        return $base->getFetchRow($sql);
     }
 
 }
