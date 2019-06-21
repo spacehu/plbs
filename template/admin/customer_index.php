@@ -43,7 +43,7 @@ $class = \action\customer::$data['class'];
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['add_time']; ?></td>
                             <td class="td1">
-                                <?php if (!empty($v['euStatus'])) { ?>
+                                <?php if (isset($v['euStatus'])) { ?>
                                     <?php if ($v['euStatus'] == 0) { ?>
                                         <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=1">允许加入</a> |
                                         <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">拒绝加入</a> |
