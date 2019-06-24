@@ -39,7 +39,7 @@ $category = \action\show::$data['category'];
                     <?php } ?>              
                 <?php } ?>
             </select>
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow'">添加新展示</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getShow&cat_id=<?php echo $category; ?>'">添加新展示</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >

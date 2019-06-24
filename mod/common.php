@@ -182,6 +182,12 @@ class common {
                             exit;
                         }
                     }
+                    if (!empty($_GET['category'])) {
+                        if (!in_array($_GET['a'] . "_" . $_GET['category'], $_role)) {
+                            Common::js_alert_redir("action: " . $_GET['a'] . "_" . $_GET['category'] . ". 1没有权限", ERROR_405);
+                            exit;
+                        }
+                    }
                     break;
                 case "staticPage":
                     if (!in_array($_GET['a'], $_role)) {

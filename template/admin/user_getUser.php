@@ -27,6 +27,14 @@ $enterprise = \action\user::$data['enterprise'];
                             </div>
                         </div>
                         <div class="leftAlist" >
+                            <span>EMAIL 电子邮箱地址</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="r_row">
+                                <input class="text" name="email" type="text" value="<?php echo isset($data['email']) ? $data['email'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
                             <span>REGISTRATION TIME 注册时间</span>
                         </div>
                         <div class="leftAlist" >

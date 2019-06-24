@@ -1,6 +1,7 @@
 <?php
 $class = \action\show::$data['class'];
 $data = \action\show::$data['data'];
+$cat_id = !empty(\action\show::$data['cat_id']) ? \action\show::$data['cat_id'] : $data['cat_id'];
 $image = \action\show::$data['image'];
 $list = \action\show::$data['list'];
 $typeList = \action\show::$data['typeList'];
@@ -36,29 +37,32 @@ if (is_array($image)) {
             <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateShow&id=<?php echo $data['id']; ?>" method="post" enctype='multipart/form-data'>
                 <div class="pathA ">
                     <div class="leftA">
+                        <!--                        
                         <div class="leftAlist" >
-                            <span>CATEGORY 分类</span>
+                        <span>CATEGORY 分类</span>
                         </div>
                         <div class="leftAlist" >
-                            <select name="cat_id" id="cat_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($list)) { ?>
-                                    <?php foreach ($list as $k => $v) { ?>
+                        <select name="cat_id" id="cat_id">
+                        <option value="0">请选择</option>
+                        <?php if (is_array($list)) { ?>
+                            <?php foreach ($list as $k => $v) { ?>
                                         <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
+                            <?php } ?>
+                        <?php } ?>
+                        </select>
                         </div>
+                        -->
                         <div class="leftAlist" >
                             <span>NAME 标题</span>
                         </div>
                         <div class="leftAlist" >
                             <div class="">
                                 <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ''; ?>" />
+                                <input class="text" name="cat_id" type="hidden" value="<?php echo $cat_id; ?>" />
                             </div>
                         </div>
                     </div>
-                    <div class="leftA c_15_16 <?php echo ($data['cat_id'] == 15 || $data['cat_id'] == 16) ? "" : "hide"; ?>">
+                    <div class="leftA c_15_16 <?php echo ($cat_id == 15 || $cat_id == 16) ? "" : "hide"; ?>">
                         <div class="leftAlist" >
                             <span>IMAGE 封面</span>
                         </div>
@@ -87,7 +91,7 @@ if (is_array($image)) {
                             </script>
                         </div>
                     </div>
-                    <div class="leftA c_17 <?php echo ($data['cat_id'] == 17) ? "" : "hide"; ?>">
+                    <div class="leftA c_17 <?php echo ($cat_id == 17) ? "" : "hide"; ?>">
                         <div class="leftAlist" >
                             <span>企业</span>
                         </div>

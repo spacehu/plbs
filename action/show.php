@@ -66,6 +66,7 @@ class show {
     function getShow() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $cat_id = isset($_GET['cat_id']) ? $_GET['cat_id'] : "";
         try {
             if ($id != null) {
                 self::$data['data'] = ArticleDAL::getOne($id);
@@ -81,6 +82,7 @@ class show {
             unset(self::$data['list'][$this->cat_id]);
             //Common::pr(self::$data['list']);die;
             self::$data['config'] = \mod\init::$config['env'];
+            self::$data['cat_id'] = $cat_id;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
         }
@@ -222,4 +224,5 @@ class show {
             TigerDAL\CatchDAL::markError(code::$code[code::SHOW_INDEX], code::SHOW_INDEX, json_encode($ex));
         }
     }
+
 }

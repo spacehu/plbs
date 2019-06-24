@@ -46,12 +46,15 @@ $class = \action\customer::$data['class'];
                                 <?php if (isset($v['euStatus'])) { ?>
                                     <?php if ($v['euStatus'] == 0) { ?>
                                         <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=1">允许加入</a> |
-                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">拒绝加入</a> |
+                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">拒绝加入</a>
                                     <?php } else { ?>
-                                        已加入
+                                        已加入 |
+                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">请离企业</a> |
+                                        <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
                                     <?php } ?>
+                                <?php } else { ?>
+                                    <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
                                 <?php } ?>
-                                <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
                             </td>
                         </tr>
                         <?php

@@ -79,10 +79,16 @@
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=role&m=index'" href="javascript:void(0);" >ROLE  管理员设置</a>
                 </div>
                 <div class="title">
-                    <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index'" href="javascript:void(0);" >SHOW 展示</a>
+                    <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=staticPage'" href="javascript:void(0);" >SHOW 展示</a>
                     <div class="sub_title">
                         <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index'" href="javascript:void(0);" >SHOW LIST 展示列表</a>
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index&category=15'" href="javascript:void(0);" >SHOW LIST 技术支持</a>
+                        </div>
+                        <div class="title">
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index&category=16'" href="javascript:void(0);" >SHOW LIST 文库列表</a>
+                        </div>
+                        <div class="title">
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=show&m=index&category=17'" href="javascript:void(0);" >SHOW LIST 工作机会</a>
                         </div>
                     </div>
                 </div>
@@ -126,6 +132,9 @@
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=index'" href="javascript:void(0);" >CONFIG 配置信息</a>
                 </div>
             <?php } ?>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=account&m=getAccount'" href="javascript:void(0);" >ACCOUNT 修改密码</a>
+            </div>
         </div>
     </body>
 

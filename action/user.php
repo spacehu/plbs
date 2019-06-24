@@ -71,6 +71,7 @@ class user {
                         'role_id' => $_POST['role_id'],
                         'edit_by' => Common::getSession("id"),
                         'enterprise_id' => $_POST['enterprise_id'],
+                        'email' => $_POST['email'],
                     ];
                 }
 
@@ -92,6 +93,7 @@ class user {
                     'role_id' => $_POST['role_id'],
                     'delete' => 0,
                     'enterprise_id' => $_POST['enterprise_id'],
+                    'email' => $_POST['email'],
                 ];
                 self::$data = UserDAL::insert($data);
             }
