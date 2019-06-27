@@ -67,6 +67,12 @@ if (is_array($image)) {
                                 <img class="r_row_img" src="<?php echo isset($original_src) ? $original_src : './img/no_img.jpg'; ?>" />
                             </div>
                         </div>
+                        <div class="leftAlist" >
+                            <span>ORDER BY 排序</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <input class="text" name="order_by" type="text" value="<?php echo isset($data['order_by']) ? $data['order_by'] : "50"; ?>" />
+                        </div>
                     </div>
                 </div>
                 <div class="pathB">

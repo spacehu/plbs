@@ -65,6 +65,7 @@ class category {
                     'overview' => $_POST['overview'],
                     'media_id' => $media_id,
                     'edit_by' => Common::getSession("id"),
+                    'order_by' => isset($_POST['order_by']) ? $_POST['order_by'] : 50,
                 ];
                 self::$data = CategoryDAL::update($id, $data);
             } else {
@@ -79,7 +80,7 @@ class category {
                     'name' => $_POST['name'],
                     'overview' => $_POST['overview'],
                     'type' => "",
-                    'order_by' => 50,
+                    'order_by' => isset($_POST['order_by']) ? $_POST['order_by'] : 50,
                     'add_by' => Common::getSession("id"),
                     'add_time' => date("Y-m-d H:i:s"),
                     'edit_by' => Common::getSession("id"),
