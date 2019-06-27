@@ -35,7 +35,7 @@ class ApiBase extends \action\RestfulApi {
         try {
             //轮播列表
 
-            $res = array_values(CategoryDAL::getCategorys(1, 12, '', 1));
+            $res = array_values(CategoryDAL::getCategorys(1, 96, '', 1));
             if (!empty($res)) {
                 foreach ($res as $k => $v) {
                     if (!empty($v['media_id'])) {
