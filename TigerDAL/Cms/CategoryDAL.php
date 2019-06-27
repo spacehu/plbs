@@ -15,7 +15,7 @@ class CategoryDAL {
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
-        $sql = "select * from " . $base->table_name("category") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select * from " . $base->table_name("category") . " where `delete`=0 " . $where . " order by order_by asc, edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
