@@ -93,7 +93,7 @@ class CategoryDAL {
         if (!empty($cat_id)) {
             $where .= " and parent_id = " . $cat_id . " ";
         }
-        $sql = "select * from " . $base->table_name("category") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select * from " . $base->table_name("category") . " where `delete`=0 " . $where . " order by order_by asc, edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
