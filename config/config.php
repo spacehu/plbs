@@ -117,6 +117,7 @@ return $config = [
             'GET /v4/ApiArticle-support.htm' => 'v4-ApiArticle-support', //文章详细
             'POST /v4/ApiAccount-favorite.htm' => 'v4-ApiAccount-favorite', //收藏文章
             'POST /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-sendResume', //投递简历
+            'GET /v4/ApiWeChat-getWeChatInfo.htm' => 'v4-ApiWeChat-getWeChatInfo',//微信获取用户信息的方法 （区别v2：切割了配置信息）
             
             'GET /v4/ApiExamination-examinations.htm' => 'v4-ApiExamination-examinations', //获取考卷列表
             'GET /v4/ApiExamination-examination.htm' => 'v4-ApiExamination-examination', //获取考卷详情
