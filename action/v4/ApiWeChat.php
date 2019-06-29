@@ -147,7 +147,8 @@ class ApiWeChat extends \action\RestfulApi {
             if (self::$data['success'] == false) {
                 return false;
             }
-            $this->access_token = $this->getOpenId();
+//            $this->access_token = $this->getOpenId();
+            $this->access_token = $this->getMinProgramOpenId();
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->access_token));
             if ($this->access_token['errcode'] == 40029) {
                 self::$data['success'] = false;
@@ -234,10 +235,22 @@ class ApiWeChat extends \action\RestfulApi {
 
     /**
      * @explain 
-     * 用于获取用户openid 
+     * 用于获取公众号用户openid 
      * */
     public function getOpenId() {
         $access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $this->appid . "&secret=" . $this->appsecret . "&code=" . $this->code . "&grant_type=authorization_code";
+        //LogDAL::saveLog("DEBUG", "info", $access_token_url);
+        $access_token_json = $this->https_request($access_token_url);
+        $access_token_array = json_decode($access_token_json, TRUE);
+        return $access_token_array;
+    }
+
+    /**
+     * @explain 
+     * 用于获取公众号用户openid 
+     * */
+    public function getMinProgramOpenId() {
+        $access_token_url = "https://api.weixin.qq.com/sns/jscode2session?appid=" . $this->appid . "&secret=" . $this->appsecret . "&js_code=" . $this->code . "&grant_type=authorization_code";
         //LogDAL::saveLog("DEBUG", "info", $access_token_url);
         $access_token_json = $this->https_request($access_token_url);
         $access_token_array = json_decode($access_token_json, TRUE);
