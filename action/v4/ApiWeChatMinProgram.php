@@ -16,7 +16,7 @@ use TigerDAL\Web\PointDAL;
 use TigerDAL\Api\TokenDAL;
 use config\code;
 
-class ApiWeChat extends \action\RestfulApi {
+class ApiWeChatMinProgram extends \action\RestfulApi {
 
     private $class;
     public $appid;                   //微信APPID，公众平台获取  
@@ -147,29 +147,28 @@ class ApiWeChat extends \action\RestfulApi {
             if (self::$data['success'] == false) {
                 return false;
             }
-            $this->access_token = $this->getOpenId();
+            $this->access_token = $this->getMinProgramOpenId();
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->access_token));
-            if ($this->access_token['errcode'] == 40029) {
+            if ($this->access_token['errcode'] !== 0) {
                 self::$data['success'] = false;
                 self::$data['data'] = $this->access_token;
                 return false;
             }
-            $userInfo = $this->getUserInfo();
-            LogDAL::saveLog("DEBUG", "INFO", json_encode($userInfo));
-            if (!empty($userInfo) && !empty($userInfo['openid'])) {
-                $result = $wechat->getOpenId($userInfo['openid']);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
+            $openid=$this->access_token['openid'];
+            if (!empty($openid)) {
+                $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
                 LogDAL::saveLog("DEBUG", "INFO", json_encode($result));
                 if (empty($result)) {
                     $_data = [
-                        'openid' => $userInfo['openid'],
-                        'nickname' => $userInfo['nickname'],
-                        'sex' => $userInfo['sex'],
-                        'language' => $userInfo['language'],
-                        'city' => $userInfo['city'],
-                        'province' => $userInfo['province'],
-                        'country' => $userInfo['country'],
-                        'headimgurl' => $userInfo['headimgurl'],
-                        'privilege' => json_encode($userInfo['privilege']),
+                        'openid' => $openid,
+                        'nickname' => '',
+                        'sex' => '',
+                        'language' => '',
+                        'city' => '',
+                        'province' => '',
+                        'country' => '',
+                        'headimgurl' => '',
+                        'privilege' => '',
                         'add_time' => date("Y-m-d H:i:s"),
                         'edit_time' => date("Y-m-d H:i:s"),
                         'user_id' => $this->user_id,
@@ -180,12 +179,10 @@ class ApiWeChat extends \action\RestfulApi {
                 }
                 //$_SESSION['openid'] = $userInfo['openid'];         //写到$_SESSION中。微信缓存很坑爹，调试时请及时清除缓存再试。  
                 //self::$data['data'] = 'openid: ' . $userInfo['openid'];
-                $openid = $userInfo['openid'];
             } else {
                 /** 微信返回错误 */
                 self::$data['success'] = false;
                 self::$data['data']['code'] = $this->access_token;
-                self::$data['data']['userError'] = $userInfo;
                 return false;
             }
         } else {
@@ -236,8 +233,8 @@ class ApiWeChat extends \action\RestfulApi {
      * @explain 
      * 用于获取公众号用户openid 
      * */
-    public function getOpenId() {
-        $access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $this->appid . "&secret=" . $this->appsecret . "&code=" . $this->code . "&grant_type=authorization_code";
+    public function getMinProgramOpenId() {
+        $access_token_url = "https://api.weixin.qq.com/sns/jscode2session?appid=" . $this->appid . "&secret=" . $this->appsecret . "&js_code=" . $this->code . "&grant_type=authorization_code";
         //LogDAL::saveLog("DEBUG", "info", $access_token_url);
         $access_token_json = $this->https_request($access_token_url);
         $access_token_array = json_decode($access_token_json, TRUE);
@@ -253,7 +250,7 @@ class ApiWeChat extends \action\RestfulApi {
      * access_token每日获取次数是有限制的，access_token有时间限制，可以存储到数据库7200s. 7200s后access_token失效 
      * */
     public function getUserInfo() {
-        $userinfo_url = "https://api.weixin.qq.com/sns/userinfo?access_token=" . $this->access_token['access_token'] . "&openid=" . $this->access_token['openid'] . "&lang=zh_CN";
+        $userinfo_url = "https://api.weixin.qq.com/wxa/getpaidunionid?access_token=" . $this->access_token['access_token'] . "&openid=" . $this->access_token['openid'] . "";
         //LogDAL::saveLog("DEBUG", "info", $userinfo_url);
         $userinfo_json = $this->https_request($userinfo_url);
         $userinfo_array = json_decode($userinfo_json, TRUE);
