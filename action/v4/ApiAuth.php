@@ -5,6 +5,7 @@ namespace action\v4;
 use mod\common as Common;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
+use TigerDAL\Api\WeChatDAL;
 use config\code;
 
 class ApiAuth extends \action\RestfulApi {
@@ -84,12 +85,37 @@ class ApiAuth extends \action\RestfulApi {
                 'sex' => '',
                 'add_time' => date("Y-m-d H:i:s", time()),
                 'edit_time' => date("Y-m-d H:i:s", time()),
-                'user_id' => 0,
+                'user_id' => 0, //弃用字段
                 'password' => md5($password),
             ];
             $res = $AuthDAL->insert($data);
             if (!empty($res)) {
                 self::$data['data'] = $res;
+                if (empty($this->header['openid'])) {
+                    $wechat = new WeChatDAL();
+                    $openid = $this->header['openid'];
+                    $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
+                    LogDAL::saveLog("DEBUG", "INFO", json_encode($result));
+                    if (empty($result)) {
+                        $_data = [
+                            'openid' => $openid,
+                            'nickname' => '',
+                            'sex' => '',
+                            'language' => '',
+                            'city' => '',
+                            'province' => '',
+                            'country' => '',
+                            'headimgurl' => '',
+                            'privilege' => '',
+                            'add_time' => date("Y-m-d H:i:s"),
+                            'edit_time' => date("Y-m-d H:i:s"),
+                            'user_id' => $res,
+                            'phone' => "",
+                        ];
+                        LogDAL::saveLog("DEBUG", "INFO", json_encode($_data));
+                        $wechat->addWeChatUserInfo($_data);
+                    }
+                }
             } else {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorSql";

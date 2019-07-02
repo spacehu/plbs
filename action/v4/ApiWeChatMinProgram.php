@@ -139,8 +139,6 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
     public function beforeWeb() {
         /** 初始化本地数据 */
         $wechat = new WeChatDAL();
-        $UserInfoDAL = new UserInfoDAL();
-        $PointDAL = new PointDAL();
         if (empty($this->header['openid'])) {                             //如果$_SESSION中没有openid，说明用户刚刚登陆，就执行getCode、getOpenId、getUserInfo获取他的信息  
             $this->code = $this->getCode();
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->code));
@@ -190,23 +188,12 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
         }
 
         $result = $wechat->getOpenId($openid);
-
-        $_res = $UserInfoDAL->getOne($result['user_id']);
-        if (!empty($_res)) {
-            $result['nickname'] = $_res['name'];
-            $result['phone'] = $_res['phone'];
-            $result['brithday'] = $_res['brithday'];
-            $result['sex'] = $_res['sex'];
-            $result['email'] = $_res['email'];
-        } else {
-            $result['brithday'] = '';
-            $result['email'] = '';
+        if (!empty($result) && !empty($result['user_id'])) {
+            self::$data['data']['token'] = TokenDAL::saveToken($result['user_id'], \mod\init::$config['token']['server_id']['customer']);
+            self::$data['data']['deathline'] = TokenDAL::getTimeOut();
         }
-        // 积分
-        $_point = $PointDAL->getUserPoint($result['id']);
-        $result['point'] = !empty($_point) ? $_point : 0;
         self::$data['success'] = true;
-        self::$data['data'] = $result;
+        self::$data['data']['openid'] = $openid;
         LogDAL::save(json_encode($openid));
     }
 
