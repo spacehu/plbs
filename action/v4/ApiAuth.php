@@ -140,6 +140,16 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['data']['code'] = $check['code'];
                 self::$data['msg'] = code::$code[$check['code']];
             } else {
+                if (empty($this->header['openid'])) {
+                    $wechat = new WeChatDAL();
+                    $openid = $this->header['openid'];
+                    $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
+                    LogDAL::saveLog("DEBUG", "INFO", json_encode($result));
+                    $_data = [
+                        'user_id' => $check['data']['id'],
+                    ];
+                    $wechat->addWeChatUserInfo($result['id'], $_data);
+                }
                 self::$data['data']['code'] = $check['code'];
                 self::$data['data']['token'] = TokenDAL::saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['customer']);
                 self::$data['data']['deathline'] = TokenDAL::getTimeOut();
@@ -155,6 +165,16 @@ class ApiAuth extends \action\RestfulApi {
         try {
             $TokenDAL = new TokenDAL();
             $TokenDAL->delToken();
+            if (empty($this->header['openid'])) {
+                $wechat = new WeChatDAL();
+                $openid = $this->header['openid'];
+                $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
+                LogDAL::saveLog("DEBUG", "INFO", json_encode($result));
+                $_data = [
+                    'user_id' => '',
+                ];
+                $wechat->addWeChatUserInfo($result['id'], $_data);
+            }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

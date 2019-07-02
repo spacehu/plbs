@@ -97,7 +97,11 @@ class AuthDAL {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $v) {
-                $_data[] = " '" . $v . "' ";
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
             }
             $set = implode(',', $_data);
             $sql = "insert into " . $base->table_name('user_info') . " values (null," . $set . ");";
@@ -112,7 +116,11 @@ class AuthDAL {
         $base = new BaseDAL();
         if (is_array($data)) {
             foreach ($data as $k => $v) {
-                $_data[] = " `" . $k . "`='" . $v . "' ";
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('user_info') . " set " . $set . "  where id=" . $id . " ;";

@@ -50,4 +50,23 @@ class WeChatDAL {
         }
     }
 
+    /** 更新用户信息 */
+    public function updateWeChatUserInfo($id, $data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " `" . $k . "`=" . $v . " ";
+                } else {
+                    $_data[] = " `" . $k . "`='" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "update " . $base->table_name('user_info_wechat') . " set " . $set . "  where id=" . $id . " ;";
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
 }
