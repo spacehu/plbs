@@ -149,12 +149,12 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
             }
             $this->access_token = $this->getMinProgramOpenId();
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->access_token));
-            if ($this->access_token['errcode'] !== 0) {
+            if (empty($this->access_token['openid']) && $this->access_token['errcode'] !== 0) {
                 self::$data['success'] = false;
                 self::$data['data'] = $this->access_token;
                 return false;
             }
-            $openid=$this->access_token['openid'];
+            $openid = $this->access_token['openid'];
             if (!empty($openid)) {
                 $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
                 LogDAL::saveLog("DEBUG", "INFO", json_encode($result));
