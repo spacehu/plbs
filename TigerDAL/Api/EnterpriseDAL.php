@@ -76,6 +76,7 @@ class EnterpriseDAL {
                 . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
+                . "left join " . $base->table_name("enterprise_user") . " as eu on eu.user_id=uc.user_id and eu.`delete`=0 and eu.`status`=1 "
                 . "where ec.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
@@ -106,6 +107,7 @@ class EnterpriseDAL {
                 . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
+                . "left join " . $base->table_name("enterprise_user") . " as eu on eu.user_id=uc.user_id and eu.`delete`=0 and eu.`status`=1 "
                 . "left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>60 "
                 . "where ec.enterprise_id=" . $id . "  "
                 . "group by c.id "
