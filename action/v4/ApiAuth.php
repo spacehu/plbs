@@ -148,7 +148,7 @@ class ApiAuth extends \action\RestfulApi {
                     $_data = [
                         'user_id' => $check['data']['id'],
                     ];
-                    $wechat->addWeChatUserInfo($result['id'], $_data);
+                    $wechat->updateWeChatUserInfo($result['id'], $_data);
                 }
                 self::$data['data']['code'] = $check['code'];
                 self::$data['data']['token'] = TokenDAL::saveToken($check['data']['id'], \mod\init::$config['token']['server_id']['customer']);
