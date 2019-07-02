@@ -6,6 +6,7 @@ use mod\common as Common;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\WeChatDAL;
+use TigerDAL\Api\LogDAL;
 use config\code;
 
 class ApiAuth extends \action\RestfulApi {
