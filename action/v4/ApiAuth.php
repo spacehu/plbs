@@ -141,7 +141,7 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['data']['code'] = $check['code'];
                 self::$data['msg'] = code::$code[$check['code']];
             } else {
-                if (empty($this->header['openid'])) {
+                if (!empty($this->header['openid'])) {
                     $wechat = new WeChatDAL();
                     $openid = $this->header['openid'];
                     $result = $wechat->getOpenId($openid);     //根据OPENID查找数据库中是否有这个用户，如果没有就写数据库。继承该类的其他类，用户都写入了数据库中。  
