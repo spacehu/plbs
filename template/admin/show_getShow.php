@@ -97,7 +97,7 @@ if (is_array($image)) {
                         </div>
                         <div class="leftAlist" >
                             <select name="enterprise_id">
-                                <option value="">请选择</option>
+                                <option value="0">请选择</option>
                                 <?php if (is_array($enterprise)) { ?>
                                     <?php foreach ($enterprise as $v) { ?>
                                         <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>

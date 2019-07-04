@@ -152,7 +152,7 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
-                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : '',
+                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
                 ];
                 self::$data = ArticleDAL::insert($data);
             }
