@@ -105,6 +105,7 @@ class CategoryDAL {
         $sql = "select c.*,c.name, COUNT(s.id) AS has_children "
                 . " from " . $base->table_name('category') . " as c "
                 . "left join " . $base->table_name('category') . " as s on s.parent_id=c.id "
+                . "where c.delete=0 "
                 . " GROUP BY c.id "
                 . " order by c.parent_id asc,c.order_by asc,c.id asc";
         //echo $sql;die;
