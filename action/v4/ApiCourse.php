@@ -93,7 +93,7 @@ class ApiCourse extends \action\RestfulApi {
             return self::$data;
         }
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : 100;
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         $course_id = $this->get['course_id'];
         try {
