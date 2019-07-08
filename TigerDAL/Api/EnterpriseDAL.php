@@ -75,8 +75,8 @@ class EnterpriseDAL {
                 . "from " . $base->table_name("course") . "  as c  "
                 . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
-                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.`delete`=0 "
-                . "left join " . $base->table_name("enterprise_user") . " as eu on eu.user_id=uc.user_id and eu.`delete`=0 and eu.`status`=1 "
+                . "left join " . $base->table_name("enterprise_user") . " as eu on eu.enterprise_id = ec.enterprise_id and eu.`delete`=0 and eu.`status`=1 "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and eu.user_id = uc.user_id and uc.`delete`=0 "
                 . "where ec.enterprise_id=" . $id . "  "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
