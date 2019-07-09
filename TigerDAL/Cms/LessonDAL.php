@@ -44,9 +44,9 @@ class LessonDAL {
     }
 
     /** 获取用户信息 */
-    public static function getByName($name, $course_id) {
+    public static function getByName($name, $course_id, $id) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("lesson") . " where `delete`=0 and course_id = '" . $course_id . "' and name='" . $name . "'  limit 1 ;";
+        $sql = "select * from " . $base->table_name("lesson") . " where `delete`=0 and course_id = '" . $course_id . "' and name='" . $name . "' and id <> '" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql);
     }
 
