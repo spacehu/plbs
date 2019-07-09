@@ -78,6 +78,11 @@ class lesson {
                 $material = new material();
                 $media_id = $material->_saveMedia($_POST['edit_doc'], $_POST['type']);
             }
+            if (LessonDAL::getByName($_POST['name'], $_POST['course_id'])) {
+                Common::js_alert(code::ALREADY_EXISTING_DATA);
+                TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                Common::js_redir(Common::getSession($this->class));
+            }
             if ($id != null) {
                 $data = [
                     'course_id' => $_POST['course_id'],
@@ -91,11 +96,6 @@ class lesson {
                 ];
                 self::$data = LessonDAL::update($id, $data);
             } else {
-                if (LessonDAL::getByName($_POST['name'])) {
-                    Common::js_alert(code::ALREADY_EXISTING_DATA);
-                    TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
-                    Common::js_redir(Common::getSession($this->class));
-                }
                 //Common::pr(UserDAL::getUser($_POST['name']));die;
                 $data = [
                     'course_id' => $_POST['course_id'],
