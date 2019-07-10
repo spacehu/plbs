@@ -100,10 +100,10 @@ class ApiAccount extends \action\RestfulApi {
             //轮播列表
             $_data = [
                 'user_id' => $this->user_id,
-                'course_id' => isset($this->post['course_id'])?$this->post['course_id']:0,
+                'course_id' => !empty($this->post['course_id'])?$this->post['course_id']:0,
                 'aws' => (array) $this->post['aws'],
                 'time' => date("Y-m-d H:i:s"),
-                'examination_id' => isset($this->post['examination_id'])?$this->post['examination_id']:0,
+                'examination_id' => !empty($this->post['examination_id'])?$this->post['examination_id']:0,
             ];
             $res = TestDAL::joinTest($_data);
 
