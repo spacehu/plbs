@@ -92,7 +92,7 @@ class TestDAL {
 
         //获取课程信息 反馈数据 课程id 最大题数
         $_course = CourseDAL::getOne($_data['course_id'], $_data['user_id']);
-        if (empty($_course)) {
+        if (empty($_course['id'])) {
             $_examination = ExaminationDAL::getOne($_data['examination_id']);
             if ($_examination['type'] == "random") {
                 $text_max = $_examination['export_count'];
