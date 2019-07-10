@@ -75,7 +75,11 @@ class ApiExamination extends \action\RestfulApi {
         try {
             self::$data['data']['info'] = ExaminationDAL::getOne($this->get['examination_id']);
             $_obj = self::$data['data']['info'];
-            $res = TestDAL::getRandExamination($this->get['examination_id'], $_obj['export_count']);
+            if (self::$data['data']['info']['type'] == "random") {
+                $res = TestDAL::getRandExamination($this->get['examination_id'], $_obj['export_count']);
+            } else if (self::$data['data']['info']['type'] == "regularize") {
+                $res = TestDAL::getRandExamination($this->get['examination_id'], $_obj['total']);
+            }
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = count($res);

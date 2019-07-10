@@ -60,7 +60,7 @@ $examination_test = \action\examination::$data['examination_test'];
                             </select>
                         </div>
                         <div class="leftAlist" >
-                            <span>IMAGES 详细多图</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
+                            <span>TESTS 试题列表</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
                         </div>
                         <div class="leftAlist list_image" >
                             <?php if (!empty($examination_test)) { ?>
