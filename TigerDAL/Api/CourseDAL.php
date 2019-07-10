@@ -73,7 +73,7 @@ class CourseDAL {
     /** 获取用户信息 */
     public static function getOne($id, $user_id) {
         $base = new BaseDAL();
-        $sql = "select c.*,i.original_src,count(l.id) as lessonCount,sum(ul.status) as lessonStartCount,uc.status as ucStatus "
+        $sql = "select c.*,i.original_src,count(DISTINCT(l.id)) as lessonCount,sum(ul.status) as lessonStartCount,uc.status as ucStatus "
                 . "from " . $base->table_name("course") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("lesson") . " as l on l.course_id=c.id "
