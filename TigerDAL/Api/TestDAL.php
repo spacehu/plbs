@@ -87,10 +87,22 @@ class TestDAL {
         $_point = 0;
         $_num = 0;
         $_status = 1;
+        $text_max = 0;
         $base = new BaseDAL();
-        
+
         //获取课程信息 反馈数据 课程id 最大题数
         $_course = CourseDAL::getOne($_data['course_id'], $_data['user_id']);
+        if (empty($_course)) {
+            $_examination = ExaminationDAL::getOne($_data['examination_id']);
+            if ($_examination['type'] == "random") {
+                $text_max = $_examination['export_count'];
+            } else if ($_examination['type'] == "regularize") {
+                $text_max = $_examination['total'];
+            }
+        } else {
+            $text_max = $_course['text_max'];
+        }
+
         if (empty($_data['aws'])) {
             return 'emptyparameter';
         }
@@ -119,16 +131,17 @@ class TestDAL {
                 }
             }
         }
-        $_point = ceil(100 * ($_num / $_course['text_max']));
+        $_point = ceil(100 * ($_num / $text_max));
         //记录答卷
         $data = [
             'user_id' => $_data['user_id'],
             'course_id' => $_data['course_id'],
             'point' => $_point,
-            'test_num' => $_course['text_max'],
+            'test_num' => $text_max,
             'add_time' => $_data['time'],
             'edit_time' => $_data['time'],
             'delete' => 0,
+            'examination_id' => $_data['examination_id'],
         ];
         $_exam_id = self::insertExamGetId($data);
         //$_exam_id = 1;
@@ -145,6 +158,7 @@ class TestDAL {
                 'edit_time' => $_data['time'],
                 'delete' => 0,
                 'exam_id' => $_exam_id,
+                'examination_id' => $_data['examination_id'],
             ];
             self::insertUserTest($_row);
         }
