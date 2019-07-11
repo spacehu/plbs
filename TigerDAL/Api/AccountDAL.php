@@ -291,4 +291,27 @@ class AccountDAL {
         return $base->getFetchRow($sql);
     }
 
+    /** 获取员工已考课程id */
+    public static function getExamListByCourse($user_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("exam") . " "
+                . "where `delete`=0 "
+                . "and user_id='" . $user_id . "' "
+                . "and course_id<>0 "
+                . "and course_id is not null ;";
+        //echo $sql;
+        return $base->getFetchRow($sql);
+    }
+
+    /** 获取员工已考试题id */
+    public static function getExamListByExamination($user_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("exam") . " "
+                . "where `delete`=0 "
+                . "and user_id='" . $user_id . "' "
+                . "and examination_id<>0 "
+                . "and examination_id is not null ;";
+        //echo $sql;
+        return $base->getFetchRow($sql);
+    }
 }

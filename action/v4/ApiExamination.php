@@ -9,6 +9,7 @@ use TigerDAL\Api\LessonDAL;
 use TigerDAL\Cms\LessonImageDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\ExaminationDAL;
+use TigerDAL\Api\AccountDAL;
 use config\code;
 
 class ApiExamination extends \action\RestfulApi {
@@ -51,10 +52,21 @@ class ApiExamination extends \action\RestfulApi {
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         try {
-
             $res = ExaminationDAL::getAll($currentPage, $pagesize, $keywords);
             $total = ExaminationDAL::getTotal($keywords);
-
+            if ($total > 0) {
+                $eids = AccountDAL::getExamListByExamination($this->user_id);
+                if (!empty($eids)) {
+                    foreach ($eids as $k => $v) {
+                        $_rows[$v['examination_id']] = $v['examination_id'];
+                    }
+                    foreach ($row as $k => $v) {
+                        if ($_rows[$v['id']] == $v['id']) {
+                            $row[$k]['passStatus'] = 1;
+                        }
+                    }
+                }
+            }
             //print_r($res);die;
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $total;
