@@ -60,14 +60,14 @@ class ApiExamination extends \action\RestfulApi {
                     foreach ($eids as $k => $v) {
                         $_rows[$v['examination_id']] = ["percentage" => $v['percentage'], "maxPoint" => $v['maxPoint']];
                     }
-                    foreach ($row as $k => $v) {
+                    foreach ($res as $k => $v) {
                         if (!empty($_rows[$v['id']])) {
-                            if ($_rows[$v['id']]["percentage"] > $v['point']) {
-                                $row[$k]['passStatus'] = 2;
+                            if ($_rows[$v['id']]["maxPoint"] > $v['percentage']) {
+                                $res[$k]['passStatus'] = 1;
                             } else {
-                                $row[$k]['passStatus'] = 1;
+                                $res[$k]['passStatus'] = 2;
                             }
-                            $row[$k]['maxPoint'] = $_rows[$v['id']]["maxPoint"];
+                            $res[$k]['maxPoint'] = $_rows[$v['id']]["maxPoint"];
                         }
                     }
                 }

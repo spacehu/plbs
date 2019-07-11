@@ -300,7 +300,7 @@ class AccountDAL {
                 . "and course_id<>0 "
                 . "and course_id is not null ;";
         //echo $sql;
-        return $base->getFetchRow($sql);
+        return $base->getFetchAll($sql);
     }
 
     /** 获取员工已考试题id */
@@ -315,6 +315,6 @@ class AccountDAL {
                 . "and e.examination_id is not null "
                 . "group by examination_id ;";
         //echo $sql;
-        return $base->getFetchRow($sql);
+        return $base->getFetchAll($sql);
     }
 }
