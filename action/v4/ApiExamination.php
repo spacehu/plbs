@@ -58,15 +58,16 @@ class ApiExamination extends \action\RestfulApi {
                 $eids = AccountDAL::getExamListByExamination($this->user_id);
                 if (!empty($eids)) {
                     foreach ($eids as $k => $v) {
-                        $_rows[$v['examination_id']] = $v['percentage'];
+                        $_rows[$v['examination_id']] = ["percentage" => $v['percentage'], "maxPoint" => $v['maxPoint']];
                     }
                     foreach ($row as $k => $v) {
                         if (!empty($_rows[$v['id']])) {
-                            if ($_rows[$v['id']] > $v['point']) {
+                            if ($_rows[$v['id']]["percentage"] > $v['point']) {
                                 $row[$k]['passStatus'] = 2;
                             } else {
                                 $row[$k]['passStatus'] = 1;
                             }
+                            $row[$k]['maxPoint'] = $_rows[$v['id']]["maxPoint"];
                         }
                     }
                 }
