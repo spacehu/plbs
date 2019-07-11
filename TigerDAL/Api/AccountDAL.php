@@ -306,11 +306,12 @@ class AccountDAL {
     /** 获取员工已考试题id */
     public static function getExamListByExamination($user_id) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("exam") . " "
-                . "where `delete`=0 "
-                . "and user_id='" . $user_id . "' "
-                . "and examination_id<>0 "
-                . "and examination_id is not null ;";
+        $sql = "select e.*,ex.percentage from " . $base->table_name("exam") . " as e "
+                . "left join " . $base->table_name("examination") . " as ex on e.examination_id=ex.id "
+                . "where e.`delete`=0 "
+                . "and e.user_id='" . $user_id . "' "
+                . "and e.examination_id<>0 "
+                . "and e.examination_id is not null ;";
         //echo $sql;
         return $base->getFetchRow($sql);
     }
