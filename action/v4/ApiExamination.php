@@ -67,7 +67,7 @@ class ApiExamination extends \action\RestfulApi {
                             } else {
                                 $res[$k]['passStatus'] = "2";
                             }
-                            $res[$k]['maxPoint'] = $_rows[$v['id']]["maxPoint"];
+                            $res[$k]['maxPoint'] = (int)$_rows[$v['id']]["maxPoint"];
                         }
                     }
                 }
