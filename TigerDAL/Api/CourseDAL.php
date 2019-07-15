@@ -32,6 +32,9 @@ class CourseDAL {
             if (!empty($ids)) {
                 $where .= " and (c.id in (" . $ids . ") or c.id not in (" . $_notin_ids . ") ) ";
                 $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
+            }else{
+                $where .= " and c.id not in (" . $_notin_ids . ") ";
+                $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             }
         }
         $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus "
