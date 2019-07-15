@@ -25,9 +25,12 @@ class CourseDAL {
             $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
         if ($user_id !== '') {
+            //已上课程
             $ids = self::getIdByUserCourse($user_id);
+            //需要排除的其他课程
+            $_notin_ids = self::getIdByUserId($user_id);
             if (!empty($ids)) {
-                $where .= " and (ec.enterprise_id is null or c.id in (" . $ids . ") ) ";
+                $where .= " and (c.id in (" . $ids . ") or c.id not in (" . $_notin_ids . ") ) ";
                 $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             }
         }
@@ -58,9 +61,12 @@ class CourseDAL {
             $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
         if ($user_id !== '') {
+            //已上课程
             $ids = self::getIdByUserCourse($user_id);
+            //需要排除的其他课程
+            $_notin_ids = self::getIdByUserId($user_id);
             if (!empty($ids)) {
-                $where .= " and (ec.enterprise_id is null or c.id in (" . $ids . ") ) ";
+                $where .= " and (c.id in (" . $ids . ") or c.id not in (" . $_notin_ids . ") ) ";
                 $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             }
         }
@@ -124,6 +130,24 @@ class CourseDAL {
         $sql = "select course_id "
                 . "from " . $base->table_name("user_course") . " "
                 . "where `delete`=0 and user_id=" . $user_id . " ;";
+        $res = $base->getFetchAll($sql);
+        if (!empty($res)) {
+            foreach ($res as $v) {
+                $_res[] = $v['course_id'];
+            }
+            return implode(',', $_res);
+        }
+        return false;
+    }
+
+    /** 需要排除的其他课程 */
+    public static function getIdByUserId($user_id) {
+        $base = new BaseDAL();
+        $enterprise = EnterpriseDAL::getByUserId($user_id);
+        $enterprise_id = $enterprise['enterprise_id'];
+        $sql = "select course_id "
+                . "from " . $base->table_name("enterprise_course") . " "
+                . "where `delete`=0 and enterprise_id<>" . $enterprise_id . " ;";
         $res = $base->getFetchAll($sql);
         if (!empty($res)) {
             foreach ($res as $v) {
