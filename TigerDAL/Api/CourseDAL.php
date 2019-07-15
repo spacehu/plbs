@@ -38,7 +38,7 @@ class CourseDAL {
                 . "from " . $base->table_name("course") . " as c "
                 . $join
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
-                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.user_id=" . $user_id . " and uc.delete=0 "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.user_id=" . $user_id . " and uc.`delete`=0 "
                 . "where c.`delete`=0 " . $where . " "
                 . "order by c.order_by asc, c.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
@@ -144,12 +144,18 @@ class CourseDAL {
     public static function getIdByUserId($user_id) {
         $base = new BaseDAL();
         $enterprise = EnterpriseDAL::getByUserId($user_id);
-        $enterprise_id = $enterprise['enterprise_id'];
+        if (!empty($enterprise)) {
+            $enterprise_id = $enterprise['enterprise_id'];
+        } else {
+            $enterprise_id = 0;
+        }
+
         $sql = "select course_id "
                 . "from " . $base->table_name("enterprise_course") . " "
                 . "where `delete`=0 and enterprise_id<>" . $enterprise_id . " ;";
         $res = $base->getFetchAll($sql);
         if (!empty($res)) {
+            $_res[] = 0;
             foreach ($res as $v) {
                 $_res[] = $v['course_id'];
             }
