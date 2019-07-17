@@ -22,8 +22,9 @@ a{ color:#000;}
 .logo1{ position:absolute;}
 .logo1 img{ height: 108px;}
 .topMap{ float:right; height:185px;}
-.topMap a{display: block;font-size:12px;text-align:center; cursor:pointer;margin:80px 20px 0 0;}
+.topMap a{display: block;font-size:12px;text-align:center; cursor:pointer;margin:15px 0px 0 0;}
 .topMap a:hover{color:#099ce0;}
+.topMap p{display: block;font-size:12px;text-align:center; margin: 50px 0 0 0;}
 /* top end */
 
 /* left */
