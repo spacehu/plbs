@@ -193,7 +193,52 @@ class UserInfoDAL {
         return self::updateEnterpriseUser($row['id'], $_data);
     }
 
-    /** 更新用户信息 */
+    public static function saveEnterpriseUserByPhone($phone, $enterprise_id) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name('user_info') . " where phone='" . $phone . "' ;";
+        $_userinfo = $base->getFetchRow($sql);
+        if (empty($_userinfo)) {
+            return false;
+        }
+        $sql = "select id from " . $base->table_name('enterprise_user') . " where `user_id` = " . $_userinfo['id'] . " and enterprise_id=" . $enterprise_id . " ;";
+        $row = $base->getFetchRow($sql);
+        if (empty($row)) {
+            $_data = [
+                'enterprise_id' => $enterprise_id,
+                'user_id' => $_userinfo['id'],
+                'status' => '1',
+                'add_by' => \mod\common::getSession("id"),
+                'add_time' => date("Y-m-d H:i:s"),
+                'edit_by' => \mod\common::getSession("id"),
+                'edit_time' => date("Y-m-d H:i:s"),
+                'delete' => '0',
+            ];
+            return self::insertEnterpriseUser($_data);
+        }
+        return true;
+    }
+
+    /** 新增用户企业关系信息 */
+    public static function insertEnterpriseUser($data) {
+        $base = new BaseDAL();
+        if (is_array($data)) {
+            foreach ($data as $v) {
+                if (is_numeric($v)) {
+                    $_data[] = " " . $v . " ";
+                } else {
+                    $_data[] = " '" . $v . "' ";
+                }
+            }
+            $set = implode(',', $_data);
+            $sql = "insert into " . $base->table_name('enterprise_user') . " values (null," . $set . ");";
+            //echo $sql;die;
+            return $base->query($sql);
+        } else {
+            return true;
+        }
+    }
+
+    /** 更新用户企业关系信息 */
     public static function updateEnterpriseUser($id, $data) {
         $base = new BaseDAL();
         if (is_array($data)) {

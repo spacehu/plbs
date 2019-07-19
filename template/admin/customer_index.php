@@ -18,6 +18,9 @@ $class = \action\customer::$data['class'];
                 $('.button_find').click(function () {
                     window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val();
                 });
+                $('.button_relation').click(function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=setRelation&phone=' + $('.find_phone').val();
+                });
             });
         </script>
     </head>
@@ -26,6 +29,8 @@ $class = \action\customer::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
+            <input type="text" name="keywords" class="find_phone" value="" placeholder="查询已注册用户手机号码" />
+            <a class="button_relation " href="javascript:void(0);">添加</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >

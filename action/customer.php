@@ -112,4 +112,19 @@ class customer {
         }
     }
 
+    function setRelation() {
+        $phone = isset($_GET['phone']) ? $_GET['phone'] : null;
+        try {
+            if (empty($this->enterprise_id)) {
+                Common::js_alert_redir("非企业管理员", Common::getSession($this->class));
+            }
+            if (!UserInfoDAL::saveEnterpriseUserByPhone($phone, $this->enterprise_id)) {
+                Common::js_alert_redir("用户不存在", Common::getSession($this->class));
+            }
+            Common::js_redir(Common::getSession($this->class));
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+        }
+    }
+
 }
