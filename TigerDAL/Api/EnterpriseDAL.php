@@ -78,7 +78,7 @@ class EnterpriseDAL {
                 . "left join " . $base->table_name("enterprise_user") . " as eu on eu.enterprise_id = ec.enterprise_id and eu.`delete`=0 and eu.`status`=1 "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and eu.user_id = uc.user_id and uc.`delete`=0 "
                 . "where ec.enterprise_id=" . $id . "  "
-                . "where c.`delete`=0 "
+                . "and c.`delete`=0 "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         $res = $base->getFetchAll($sql);
@@ -111,7 +111,7 @@ class EnterpriseDAL {
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and eu.user_id = uc.user_id and uc.`delete`=0 "
                 . "left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>60 "
                 . "where ec.enterprise_id=" . $id . "  "
-                . "where c.`delete`=0 "
+                . "and c.`delete`=0 "
                 . "group by c.id "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         $res = $base->getFetchAll($sql);
