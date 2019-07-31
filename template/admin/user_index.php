@@ -32,6 +32,7 @@ $class = \action\user::$data['class'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >用户名</td>
+                    <td class="td1" width="30%">企业</td>
                     <td class="td1" width="10%">角色</td>
                     <td class="td1" width="20%">操作</td>
                 </tr>
@@ -42,6 +43,7 @@ $class = \action\user::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['ename']; ?></td>
                             <td class="td1"><?php echo $v['rname']; ?></td>
                             <td class="td1">
                                 <a href="index.php?a=<?php echo $class; ?>&m=getUser&id=<?php echo $v['id']; ?>">编辑</a>

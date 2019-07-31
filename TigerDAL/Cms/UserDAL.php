@@ -18,8 +18,9 @@ class UserDAL {
         if (\mod\common::getSession("id") != 1) {
             $where .= " and u.id <> 1 ";
         }
-        $sql = "select u.*,r.name as rname from " . $base->table_name("user") . " as u "
+        $sql = "select u.*,r.name as rname,e.name as ename from " . $base->table_name("user") . " as u "
                 . "left join " . $base->table_name('role') . " as r on u.role_id=r.id "
+                . "left join " . $base->table_name('enterprise') . " as e on u.enterprise_id=e.id  and e.`delete`=0 "
                 . "where u.`delete`=0 " . $where . " "
                 . "order by u.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";

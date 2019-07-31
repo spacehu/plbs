@@ -72,6 +72,11 @@ class user {
                         'edit_by' => Common::getSession("id"),
                         'enterprise_id' => $_POST['enterprise_id'],
                         'email' => $_POST['email'],
+                        'is_email' => isset($_POST['is_email']) ? 1 : 0,
+                        'mail_content' => isset($_POST['mail_content']) ? $_POST['mail_content'] : "",
+                        'start_date' => isset($_POST['start_date']) ? $_POST['start_date'] : "",
+                        'times' => isset($_POST['times']) ? $_POST['times'] : "",
+                        'just_date' => isset($_POST['just_date']) ? $_POST['just_date'] : "",
                     ];
                 }
 
@@ -94,6 +99,11 @@ class user {
                     'delete' => 0,
                     'enterprise_id' => $_POST['enterprise_id'],
                     'email' => $_POST['email'],
+                    'is_email' => isset($_POST['is_email']) ? 1 : 0,
+                    'mail_content' => isset($_POST['mail_content']) ? $_POST['mail_content'] : "",
+                    'start_date' => isset($_POST['start_date']) ? $_POST['start_date'] : "",
+                    'times' => isset($_POST['times']) ? $_POST['times'] : "",
+                    'just_date' => isset($_POST['just_date']) ? $_POST['just_date'] : "",
                 ];
                 self::$data = UserDAL::insert($data);
             }
