@@ -119,10 +119,24 @@ class AccountDAL {
         $limit_end = $pagesize;
         $where = '';
         $join = '';
+        $_and = '';
         if ($enterprise_id !== '') {
             $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
             $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
+            $_and .= " and ec.enterprise_id<>" . $enterprise_id . " ";
         }
+        $_sql = "select id from " . $base->table_name("course") . " as c "
+                . "left join  " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . "where c.`delete`=0 and ec.`delete`=0 " . $_and . " "
+                . ";";
+        $_rows = $base->getFetchAll($_sql);
+        if (!empty($_rows)) {
+            foreach ($_rows as $k => $v) {
+                $ids[] = $v['id'];
+            }
+            $where .= " and id not in (" . implode(',', $ids) . ")";
+        }
+
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
                 . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
                 . "from " . $base->table_name("course") . " as c "
