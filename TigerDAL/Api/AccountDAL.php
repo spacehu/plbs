@@ -130,7 +130,7 @@ class AccountDAL {
                 . $join
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
-                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id AND ul.`delete` = 0 "
+                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id and ul.user_id= uc.user_id AND ul.`delete` = 0 "
                 . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
                 . "" . $where . " "
                 . "GROUP BY c.id "
