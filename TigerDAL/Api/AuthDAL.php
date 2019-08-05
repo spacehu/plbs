@@ -84,11 +84,11 @@ class AuthDAL {
     /** 获取用户信息 */
     public function getUserInfo($userid) {
         $base = new BaseDAL();
-        $sql = "select ui.id,ui.name,ui.phone,ui.nickname,ui.photo,ui.brithday,ui.province,ui.city,ui.district,ui.email,ui.sex,ui.user_id,eu.enterprise_id,e.name as eName,e.phone as ePhone,CONCAT(eu.status,'') as eStatus "
+        $sql = "select ui.id,ui.`name`,ui.phone,ui.nickname,ui.photo,ui.brithday,ui.province,ui.city,ui.district,ui.email,ui.sex,ui.user_id,eu.enterprise_id,e.name as eName,e.phone as ePhone,CONCAT(eu.`status`,'') as eStatus "
                 . "from " . $base->table_name("user_info") . " as ui "
-                . "left join  " . $base->table_name("enterprise_user") . " as eu on eu.user_id=ui.id and eu.status=1 "
+                . "left join  " . $base->table_name("enterprise_user") . " as eu on eu.user_id=ui.id "
                 . "left join  " . $base->table_name("enterprise") . " as e on e.id=eu.enterprise_id "
-                . "where ui.`id`=" . $userid . " limit 1; ";
+                . "where ui.`id`=" . $userid . " and eu.`status`=1 limit 1; ";
         return $base->getFetchRow($sql);
     }
 
