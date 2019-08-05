@@ -134,7 +134,7 @@ class AccountDAL {
             foreach ($_rows as $v) {
                 $ids[] = $v['id'];
             }
-            $where .= " and id not in (" . implode(',', $ids) . ")";
+            $where .= " and c.id not in (" . implode(',', $ids) . ")";
         }
 
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
