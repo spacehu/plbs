@@ -22,7 +22,7 @@ class UserInfoDAL {
             $sql = "select ui.*,eu.status as euStatus "
                     . "from " . $base->table_name("user_info") . " as ui "
                     . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " where (eu.status=0 or eu.status=1)  and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
                     . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         }
         return $base->getFetchAll($sql);
@@ -41,8 +41,8 @@ class UserInfoDAL {
         if ($enterprise_id !== '') {
             $sql = "select count(1) as total "
                     . "from " . $base->table_name("user_info") . " as ui "
-                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and eu.enterprise_id=" . $enterprise_id . " "
-                    . " where (eu.status=0 or eu.status=1)  " . $and . " ;";
+                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ;";
         }
         return $base->getFetchRow($sql)['total'];
     }
