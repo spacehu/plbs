@@ -202,14 +202,14 @@ class AccountDAL {
                     return [
                         'eName' => $row['name'],
                         'ePhone' => $row['phone'],
-                        'eStatus' => $data['status'],
+                        'eStatus' => (string) $data['status'],
                     ];
                 }
             }
             return [
                 'eName' => $row['name'],
                 'ePhone' => $row['phone'],
-                'eStatus' => $rowEU['status'],
+                'eStatus' => (string) $rowEU['status'],
             ];
         }
         $data = [
@@ -226,7 +226,7 @@ class AccountDAL {
             return [
                 'eName' => $row['name'],
                 'ePhone' => $row['phone'],
-                'eStatus' => $data['status'],
+                'eStatus' => (string) $data['status'],
             ];
         }
     }
@@ -318,4 +318,5 @@ class AccountDAL {
         //echo $sql;
         return $base->getFetchAll($sql);
     }
+
 }
