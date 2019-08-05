@@ -125,13 +125,14 @@ class AccountDAL {
         }
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
                 . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
-                . "from " . $base->table_name("user_course") . " as uc "
-                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . "from " . $base->table_name("course") . " as c "
+                . "left join " . $base->table_name("user_course") . " as uc on c.id=uc.course_id "
                 . $join
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
                 . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id AND ul.`delete` = 0 "
-                . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " " . $where . " "
+                . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
+                . "" . $where . " "
                 . "GROUP BY c.id "
                 . "order by uc.id desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";

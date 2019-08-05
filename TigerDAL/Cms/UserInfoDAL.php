@@ -188,11 +188,12 @@ class UserInfoDAL {
         }
         $base = new BaseDAL();
         // 删除
-        $sql = "select id from " . $base->table_name('enterprise_user') . " where `user_id` = " . $user_id . " and enterprise_id=" . $enterprise_id . " ;";
+        $sql = "select id from " . $base->table_name('enterprise_user') . " where `delete`=0 and `user_id` = " . $user_id . " and enterprise_id=" . $enterprise_id . " ;";
         $row = $base->getFetchRow($sql);
         return self::updateEnterpriseUser($row['id'], $_data);
     }
 
+    /** 企业强绑定用户 */
     public static function saveEnterpriseUserByPhone($phone, $enterprise_id) {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name('user_info') . " where phone='" . $phone . "' ;";
@@ -200,6 +201,8 @@ class UserInfoDAL {
         if (empty($_userinfo)) {
             return false;
         }
+        // 删除
+        self::deleteEnterpriseUser($_userinfo['id'], $enterprise_id);
         $sql = "select id from " . $base->table_name('enterprise_user') . " where `user_id` = " . $_userinfo['id'] . " and enterprise_id=" . $enterprise_id . " ;";
         $row = $base->getFetchRow($sql);
         if (empty($row)) {
@@ -214,6 +217,13 @@ class UserInfoDAL {
                 'delete' => '0',
             ];
             return self::insertEnterpriseUser($_data);
+        } else if ($row['delete'] == 1) {
+            $_data = [
+                'status' => '1',
+                'edit_by' => \mod\common::getSession("id"),
+                'delete' => '0',
+            ];
+            return self::updateEnterpriseUser($row['id'], $_data);
         }
         return true;
     }
@@ -256,6 +266,13 @@ class UserInfoDAL {
         } else {
             return true;
         }
+    }
+
+    /** 删除用户企业关系信息 */
+    public static function deleteEnterpriseUser($user_id, $enterprise_id) {
+        $base = new BaseDAL();
+        $sql = "update " . $base->table_name('enterprise_user') . " set `delete`=1  where user_id=" . $user_id . " and enterprise_id<>" . $enterprise_id . " ;";
+        return $base->query($sql);
     }
 
 }
