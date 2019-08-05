@@ -131,7 +131,7 @@ class AccountDAL {
                 . ";";
         $_rows = $base->getFetchAll($_sql);
         if (!empty($_rows)) {
-            foreach ($_rows as $k => $v) {
+            foreach ($_rows as $v) {
                 $ids[] = $v['id'];
             }
             $where .= " and id not in (" . implode(',', $ids) . ")";
