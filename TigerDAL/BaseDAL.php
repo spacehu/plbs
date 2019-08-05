@@ -62,7 +62,7 @@ class BaseDAL {
 
     /** 执行sql */
     public function query($sql) {
-        $this->sql = $sql;
+        $this->sql .= $sql;
         $result = mysqli_query($this->conn, $sql);
         return $result;
     }
