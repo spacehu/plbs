@@ -112,8 +112,11 @@ class AccountDAL {
         return $base->getFetchRow($sql)['num'];
     }
 
-    /** 获取已读课程信息列表 */
-    public static function getCourses($currentPage, $pagesize, $user_id, $enterprise_id = '') {
+    /** 获取已读课程信息列表 
+     * enterprise_id 需要筛选的企业
+     * _enterprise_id 所在企业
+     */
+    public static function getCourses($currentPage, $pagesize, $user_id, $enterprise_id = '', $_enterprise_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -123,6 +126,8 @@ class AccountDAL {
         if ($enterprise_id !== '') {
             $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
             $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
+        }
+        if ($_enterprise_id !== '') {
             $_and .= " and ec.enterprise_id<>" . $enterprise_id . " ";
         }
         $_sql = "select c.id from " . $base->table_name("course") . " as c "

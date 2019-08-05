@@ -100,10 +100,10 @@ class ApiAccount extends \action\RestfulApi {
             //轮播列表
             $_data = [
                 'user_id' => $this->user_id,
-                'course_id' => !empty($this->post['course_id'])?$this->post['course_id']:0,
+                'course_id' => !empty($this->post['course_id']) ? $this->post['course_id'] : 0,
                 'aws' => (array) $this->post['aws'],
                 'time' => date("Y-m-d H:i:s"),
-                'examination_id' => !empty($this->post['examination_id'])?$this->post['examination_id']:0,
+                'examination_id' => !empty($this->post['examination_id']) ? $this->post['examination_id'] : 0,
             ];
             $res = TestDAL::joinTest($_data);
 
@@ -378,7 +378,7 @@ class ApiAccount extends \action\RestfulApi {
                     $res = $AuthDAL->getUserInfo($this->user_id);
                     $res['subInfo']['joinCourse'] = AccountDAL::getCoursesTotal($this->user_id);
                     $res['subInfo']['passCourse'] = AccountDAL::getCoursesPass($this->user_id);
-                    $res['subInfo']['failCourse'] = (string)($res['subInfo']['joinCourse'] - $res['subInfo']['passCourse']); //AccountDAL::getCoursesFailed($this->user_id);
+                    $res['subInfo']['failCourse'] = (string) ($res['subInfo']['joinCourse'] - $res['subInfo']['passCourse']); //AccountDAL::getCoursesFailed($this->user_id);
                     break;
                 case \mod\init::$config['token']['server_id']['business']:
                     $res = EnterpriseDAL::getByUserId($this->user_id);
@@ -410,9 +410,10 @@ class ApiAccount extends \action\RestfulApi {
                 self::$data['msg'] = code::$code["errorType"];
                 return self::$data;
             }
+            $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
             $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
             $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
-            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id);
+            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id, '', $enterprise_id);
             $resT = AccountDAL::getCoursesTotal($this->user_id);
             self::$data['data']['userType'] = $this->server_id;
             //print_r($res);die;
@@ -457,7 +458,7 @@ class ApiAccount extends \action\RestfulApi {
         try {
             //轮播列表
 
-            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id, $enterprise_id);
+            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id, $enterprise_id, $enterprise_id);
             $total = AccountDAL::getCoursesTotal($this->user_id, $enterprise_id);
 
             //print_r($res);die;
