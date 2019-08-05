@@ -125,7 +125,7 @@ class AccountDAL {
             $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
             $_and .= " and ec.enterprise_id<>" . $enterprise_id . " ";
         }
-        $_sql = "select id from " . $base->table_name("course") . " as c "
+        $_sql = "select c.id from " . $base->table_name("course") . " as c "
                 . "left join  " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "where c.`delete`=0 and ec.`delete`=0 " . $_and . " "
                 . ";";

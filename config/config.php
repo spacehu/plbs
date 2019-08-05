@@ -122,6 +122,7 @@ return $config = [
             
             'GET /v4/ApiExamination-examinations.htm' => 'v4-ApiExamination-examinations', //获取考卷列表
             'GET /v4/ApiExamination-examination.htm' => 'v4-ApiExamination-examination', //获取考卷详情
+            
         ]
     ],
     'debug' => false, //调试器
