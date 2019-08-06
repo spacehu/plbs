@@ -84,7 +84,7 @@ class TokenDAL {
 
     /** 获取超时时间 */
     public static function getTimeOut() {
-        return time() + 28800;
+        return time() + 60/*28800*/;
     }
 
 }
