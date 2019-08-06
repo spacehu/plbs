@@ -76,7 +76,7 @@ class init {
 
         /** 自动产生初始化类 */
         $actEval = "\$act = new " . $action . "();";
-        
+
         //Common::pr($actEval);die;
         eval($actEval);
         if (isset($mod)) {
@@ -625,6 +625,22 @@ class init {
         $action = 'i_' . $action;
         $tmpPath = $template . 'inventory/page.xxx';
         include($tmpPath);
+    }
+
+    /** 计划任务 *************************************************************************************** */
+
+    /** 启动项 */
+    public function cli() {
+        /** 初始化系统类 */
+        $this->magicFunction();
+        /** 判断语言 */
+        $this->setLanguage(self::$config['language']['key']);
+
+        // 发送邮件
+        $act = new \action\cli\base();
+        $act->userEmail();
+
+        $this->afterRun();
     }
 
 }

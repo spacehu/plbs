@@ -1,5 +1,7 @@
 <?php
 
+namespace TigerDAL;
+
 /*
  * 基本数据类包
  * 类
@@ -11,7 +13,7 @@ class MailDAL {
 
     //默认方法
     function __construct() {
-        require_once("./lib/phpmailer/class.phpmailer.php");
+        require_once("../lib/phpmailer/class.phpmailer.php");
     }
 
     /*

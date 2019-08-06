@@ -1,6 +1,6 @@
 <?php
 
-namespace TigerDAL\Api;
+namespace TigerDAL\cli;
 
 use TigerDAL\BaseDAL;
 
@@ -40,12 +40,12 @@ class LogDAL {
     }
 
     public static function _save($str, $filename = 'log') {
-        $logPath = $_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['logPath'] . '/';
+        $logPath = APP_SRC . \mod\init::$config['env']['logPath'] . '/';
         if (!is_dir($logPath)) {
             mkdir($logPath, 0777);
         }
 
-        $file = $logPath . $filename . '_'.date("Y-m-d").'.txt';
+        $file = $logPath . $filename . '_' . date("Y-m-d") . '.txt';
         if (!is_file($file)) {
             touch($file);
         }

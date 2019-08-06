@@ -14,6 +14,9 @@ define('DEFAULT_ACTION_PATH', './action');
 define('MANAGE_TEMPLATE', './template');
 define('ERROR_405', './index.php?a=admin&m=error&message=405');
 define('ERROR_404', './index.php?a=admin&m=error&message=404');
+/** cli 配置信息 */
+define('APP_SRC', '/var/www/plbs');
+
 
 
 return $config = [
@@ -24,7 +27,7 @@ return $config = [
     'sysDelay' => 2, //系统延迟的秒数
     'shop_name' => 'AQ', //商店名称
     'cookie_pre' => '', //定义cookie的头部信息
-    'cookie_life_time' => 1000 * 60 * 60 * 24/* */, //cookie存活的时间&session
+    'cookie_life_time' => 1000 * 60 /* * 60 * 24*/, //cookie存活的时间&session
     'config' => [
         'password' => 123456,
     ],
@@ -117,12 +120,10 @@ return $config = [
             'GET /v4/ApiArticle-support.htm' => 'v4-ApiArticle-support', //文章详细
             'POST /v4/ApiAccount-favorite.htm' => 'v4-ApiAccount-favorite', //收藏文章
             'POST /v4/ApiAccount-resume.htm' => 'v4-ApiAccount-sendResume', //投递简历
-            'GET /v4/ApiWeChat-getWeChatInfo.htm' => 'v4-ApiWeChat-getWeChatInfo',//微信获取用户信息的方法 （区别v2：切割了配置信息）
-            'GET /v4/ApiWeChatMinProgram-getWeChatInfo.htm' => 'v4-ApiWeChatMinProgram-getWeChatInfo',//微信小程序获取用户openid的方法 （区别v2：切割了配置信息）
-            
+            'GET /v4/ApiWeChat-getWeChatInfo.htm' => 'v4-ApiWeChat-getWeChatInfo', //微信获取用户信息的方法 （区别v2：切割了配置信息）
+            'GET /v4/ApiWeChatMinProgram-getWeChatInfo.htm' => 'v4-ApiWeChatMinProgram-getWeChatInfo', //微信小程序获取用户openid的方法 （区别v2：切割了配置信息）
             'GET /v4/ApiExamination-examinations.htm' => 'v4-ApiExamination-examinations', //获取考卷列表
             'GET /v4/ApiExamination-examination.htm' => 'v4-ApiExamination-examination', //获取考卷详情
-            
         ]
     ],
     'debug' => false, //调试器
