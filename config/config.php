@@ -27,7 +27,7 @@ return $config = [
     'sysDelay' => 2, //系统延迟的秒数
     'shop_name' => 'AQ', //商店名称
     'cookie_pre' => '', //定义cookie的头部信息
-    'cookie_life_time' => 60/* 1000 * 60 * 60 * 24*/, //cookie存活的时间&session
+    'cookie_life_time' => 1000 * 60 * 60 * 24/* */, //cookie存活的时间&session
     'config' => [
         'password' => 123456,
     ],
