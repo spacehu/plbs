@@ -163,4 +163,36 @@ class StatisticsDAL {
         return $base->getFetchAll($sql);
     }
 
+    /** 成员在线学习 */
+    public static function getCustomerList($currentPage, $pagesize, $keywords, $enterprise_id, $_startTime, $_endTime) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $where = "";
+        $and = "";
+        if (!empty($keywords)) {
+            $where .= " where ui.name like '%" . $keywords . "%' ";
+            $and .= " and ui.name like '%" . $keywords . "%' ";
+        }
+        $sql = "select ui.* from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        if ($enterprise_id !== '') {
+            $sql = "select ui.*,eu.status as euStatus "
+                    . "from " . $base->table_name("user_info") . " as ui "
+                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                    . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        }
+        return $base->getFetchAll($sql);
+    }
+
+    /** 员工信息维护 */
+    public static function getUserList() {
+        
+    }
+
+    /** 在线课程学习 */
+    public static function getCourseList() {
+        
+    }
+
 }

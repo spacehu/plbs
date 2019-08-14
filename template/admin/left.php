@@ -110,6 +110,15 @@
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >STATISTICS 统计</a>
                     <div class="sub_title">
                         <div class="title">
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=customerList'" href="javascript:void(0);" >成员在线学习</a>
+                        </div>
+                        <div class="title">
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=userList'" href="javascript:void(0);" >员工信息维护</a>
+                        </div>
+                        <div class="title">
+                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=courseList'" href="javascript:void(0);" >在线课程学习</a>
+                        </div>
+                        <div class="title">
                             <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
                         </div>
                         <div class="title">

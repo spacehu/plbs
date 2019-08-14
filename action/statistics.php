@@ -85,13 +85,13 @@ class statistics {
             self::$data['startTime'] = $_startTime;
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
             self::$data['endTime'] = $_endTime;
-            
+
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
-            
-            self::$data['data'] = StatisticsDAL::getBonus($currentPage, $pagesize,$_startTime, $_endTime, $_source);
+
+            self::$data['data'] = StatisticsDAL::getBonus($currentPage, $pagesize, $_startTime, $_endTime, $_source);
             self::$data['total'] = StatisticsDAL::getBonusTotal($_startTime, $_endTime, $_source);
             self::$data['sources'] = StatisticsDAL::getSource();
 
@@ -116,6 +116,71 @@ class statistics {
             self::$data['data']['region'] = StatisticsDAL::getRegion();
 
 //            Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
+
+    /** 成员在线学习 */
+    function customerList() {
+        Common::isset_cookie();
+        try {
+            $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
+            $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
+            $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
+
+            $data = StatisticsDAL::getCustomerList($currentPage, $pagesize, $keywords, $this->enterprise_id, $_startTime, $_endTime);
+            self::$data['data'] = $data['data'];
+            self::$data['total'] = $data['total'];
+            
+            self::$data['currentPage'] = $currentPage;
+            self::$data['pagesize'] = $pagesize;
+            self::$data['keywords'] = $keywords;
+            self::$data['endTime'] = $_endTime;
+            self::$data['startTime'] = $_startTime;
+            self::$data['class'] = $this->class;
+
+
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
+
+    /** 员工信息维护 */
+    function userList() {
+        Common::isset_cookie();
+        try {
+            $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
+            $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
+            self::$data['endTime'] = $_endTime;
+            self::$data['startTime'] = $_startTime;
+
+            self::$data['data']['pv'] = StatisticsDAL::getUserList($_startTime, $_endTime);
+
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
+
+    /** 在线课程学习 */
+    function courseList() {
+        Common::isset_cookie();
+        try {
+            $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
+            $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
+            self::$data['endTime'] = $_endTime;
+            self::$data['startTime'] = $_startTime;
+
+            self::$data['data']['pv'] = StatisticsDAL::getCourseList($_startTime, $_endTime);
+
+            //Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }

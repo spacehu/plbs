@@ -71,6 +71,10 @@ class AuthDAL {
         if ($user['password'] !== md5($password)) {
             return ['error' => '1', 'code' => "errorPassword"];
         }
+        $data = [
+            'last_login_time' => date("Y-m-d H:i:s", time()),
+        ];
+        $this->updateUserInfo($user['id'], $data);
         return ['error' => '0', 'code' => "", 'data' => $user];
     }
 

@@ -88,6 +88,7 @@ class ApiAuth extends \action\RestfulApi {
                 'edit_time' => date("Y-m-d H:i:s", time()),
                 'user_id' => 0, //弃用字段
                 'password' => md5($password),
+                'last_login_time' => date("Y-m-d H:i:s", time()),
             ];
             $res = $AuthDAL->insert($data);
             if (!empty($res)) {
