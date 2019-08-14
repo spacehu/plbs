@@ -52,6 +52,7 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['last_login_time']; ?></td>
                             <td class="td1"><?php echo $v['necessary']; ?></td>
                             <td class="td1"><?php echo $v['unnecessary']; ?></td>
                             <td class="td1"><?php echo $v['learned']; ?></td>

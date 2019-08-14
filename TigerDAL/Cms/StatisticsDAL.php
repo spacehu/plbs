@@ -182,7 +182,8 @@ class StatisticsDAL {
                 . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
                 . "left join " . $base->table_name("user_course") . " as uc on ui.id=uc.user_id "
                 . "left join " . $base->table_name("enterprise_course") . " as ec on uc.course_id=ec.course_id and ec.enterprise_id= eu.enterprise_id "
-                . " where eu.status=1 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ";
+                . " where eu.status=1 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                . "GROUP BY ui.id ";
 
         $sql = "select "
                 . "ui.id,ui.`name`,ui.last_login_time, "
@@ -191,7 +192,6 @@ class StatisticsDAL {
                 . "case when ec.enterprise_id is not null then count(ec.enterprise_id) else 0 end AS necessary, "
                 . "(count(uc.id) - case when ec.enterprise_id is not null then count(ec.enterprise_id) else 0 end) AS unnecessary "
                 . $middle
-                . "GROUP BY ui.id "
                 . "order by ui.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         //echo $sql;die;
