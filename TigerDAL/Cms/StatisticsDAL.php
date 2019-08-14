@@ -199,7 +199,7 @@ class StatisticsDAL {
         $sql = "select count(*) as total from ( "
                 . "select count(1) as t "
                 . $middle
-                .");";
+                ." ) as os ;";
         //echo $sql;die;
         $total = $base->getFetchRow($sql)['total'];
         return ['data' => $data, 'total' => $total];
