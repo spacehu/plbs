@@ -196,8 +196,10 @@ class StatisticsDAL {
                 . "limit " . $limit_start . "," . $limit_end . " ;";
         //echo $sql;die;
         $data = $base->getFetchAll($sql);
-        $sql = "select count(1) as total "
-                . $middle;
+        $sql = "select count(*) as total from ( "
+                . "select count(1) as t "
+                . $middle
+                .");";
         //echo $sql;die;
         $total = $base->getFetchRow($sql)['total'];
         return ['data' => $data, 'total' => $total];
