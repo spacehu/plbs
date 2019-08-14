@@ -168,21 +168,39 @@ class StatisticsDAL {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
-        $where = "";
         $and = "";
         if (!empty($keywords)) {
-            $where .= " where ui.name like '%" . $keywords . "%' ";
             $and .= " and ui.name like '%" . $keywords . "%' ";
         }
-        $sql = "select ui.* from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
-        if ($enterprise_id !== '') {
-            $sql = "select ui.*,eu.status as euStatus "
-                    . "from " . $base->table_name("user_info") . " as ui "
-                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
-                    . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        if (!empty($_startTime)) {
+            $and .= " and ui.last_login_time >= '" . $_startTime . "' ";
         }
-        return $base->getFetchAll($sql);
+        if (!empty($_endTime)) {
+            $and .= " and ui.last_login_time <= '" . $_endTime . "' ";
+        }
+        $middle = "from " . $base->table_name("user_info") . " as ui "
+                . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                . "left join " . $base->table_name("user_course") . " as uc on ui.id=uc.user_id "
+                . "left join " . $base->table_name("enterprise_course") . " as ec on uc.course_id=ec.course_id and ec.enterprise_id= eu.enterprise_id "
+                . " where eu.status=1 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ";
+
+        $sql = "select "
+                . "ui.id,ui.`name`,ui.last_login_time, "
+                . "count(uc.id) AS learned, "
+                . "case when uc.`status`=2 then count(uc.id) else 0 end  AS finished, "
+                . "case when ec.enterprise_id is not null then count(ec.enterprise_id) else 0 end AS necessary, "
+                . "(count(uc.id) - case when ec.enterprise_id is not null then count(ec.enterprise_id) else 0 end) AS unnecessary "
+                . $middle
+                . "GROUP BY ui.id "
+                . "order by ui.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;die;
+        $data = $base->getFetchAll($sql);
+        $sql = "select count(1) as total "
+                . $middle;
+        //echo $sql;die;
+        $total = $base->getFetchRow($sql)['total'];
+        return ['data' => $data, 'total' => $total];
     }
 
     /** 员工信息维护 */

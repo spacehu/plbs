@@ -3,6 +3,7 @@
 namespace action;
 
 use TigerDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Cms\StatisticsDAL;
 use config\code;
 use mod\common as Common;
@@ -11,9 +12,20 @@ class statistics {
 
     private $class;
     public static $data;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                $this->enterprise_id = '';
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function staticPage() {
@@ -126,6 +138,10 @@ class statistics {
     function customerList() {
         Common::isset_cookie();
         try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
@@ -135,7 +151,7 @@ class statistics {
             $data = StatisticsDAL::getCustomerList($currentPage, $pagesize, $keywords, $this->enterprise_id, $_startTime, $_endTime);
             self::$data['data'] = $data['data'];
             self::$data['total'] = $data['total'];
-            
+
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;

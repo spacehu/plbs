@@ -4,6 +4,8 @@ $Total = \action\statistics::$data['total'];
 $currentPage = \action\statistics::$data['currentPage'];
 $pagesize = \action\statistics::$data['pagesize'];
 $keywords = \action\statistics::$data['keywords'];
+$startTime = \action\statistics::$data['startTime'];
+$endTime = \action\statistics::$data['endTime'];
 $class = \action\statistics::$data['class'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -16,10 +18,10 @@ $class = \action\statistics::$data['class'];
         <script>
             $(function () {
                 $('.button_find').click(function () {
-                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val();
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=customerList&keywords=' + $('.keywords').val();
                 });
-                $('.button_relation').click(function () {
-                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=setRelation&phone=' + $('.find_phone').val();
+                $('.button_time').click(function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=customerList&startTime=' + $('.start_date').val() + '&endTime=' + $('.end_date').val();
                 });
             });
         </script>
@@ -29,15 +31,19 @@ $class = \action\statistics::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
-            <input type="text" name="keywords" class="find_phone" value="" placeholder="查询已注册用户手机号码" />
-            <a class="button_relation " href="javascript:void(0);">添加</a>
+            <input type="text" name="start_date" class="start_date" value="<?php echo isset($startTime) ? $startTime : ""; ?>" /> -
+            <input type="text" name="end_date" class="end_date" value="<?php echo isset($endTime) ? $endTime : ""; ?>" />
+            <a class="button_time " href="javascript:void(0);">查找</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
-                    <td class="td1" >用户名</td>
-                    <td class="td1" width="20%">授权时间</td>
-                    <td class="td1" width="30%">操作</td>
+                    <td class="td1" >姓名</td>
+                    <td class="td1" width="20%">最后登录时间</td>
+                    <td class="td1" width="8%">必修课数</td>
+                    <td class="td1" width="8%">选修课数</td>
+                    <td class="td1" width="10%">总学习课程</td>
+                    <td class="td1" width="8%">完成课程</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -46,21 +52,10 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
-                            <td class="td1"><?php echo $v['add_time']; ?></td>
-                            <td class="td1">
-                                <?php if (isset($v['euStatus'])) { ?>
-                                    <?php if ($v['euStatus'] == 0) { ?>
-                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=1">允许加入</a> |
-                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">拒绝加入</a>
-                                    <?php } else { ?>
-                                        已加入 |
-                                        <a href="index.php?a=<?php echo $class; ?>&m=setEu&id=<?php echo $v['id']; ?>&status=2">请离企业</a> |
-                                        <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
-                                    <?php } ?>
-                                <?php } else { ?>
-                                    <a href="index.php?a=<?php echo $class; ?>&m=getCustomer&id=<?php echo $v['id']; ?>">查看</a>
-                                <?php } ?>
-                            </td>
+                            <td class="td1"><?php echo $v['necessary']; ?></td>
+                            <td class="td1"><?php echo $v['unnecessary']; ?></td>
+                            <td class="td1"><?php echo $v['learned']; ?></td>
+                            <td class="td1"><?php echo $v['finished']; ?></td>
                         </tr>
                         <?php
                         $sum_i++;
@@ -72,7 +67,7 @@ $class = \action\statistics::$data['class'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords;
+            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords . '&startTime=' . $startTime . '&endTime=' . $endTime;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>
