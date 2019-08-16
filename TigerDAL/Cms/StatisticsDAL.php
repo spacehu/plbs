@@ -199,15 +199,39 @@ class StatisticsDAL {
         $sql = "select count(*) as total from ( "
                 . "select count(1) as t "
                 . $middle
-                ." ) as os ;";
+                . " ) as os ;";
         //echo $sql;die;
         $total = $base->getFetchRow($sql)['total'];
         return ['data' => $data, 'total' => $total];
     }
 
     /** 员工信息维护 */
-    public static function getUserList() {
-        
+    public static function getUserList($currentPage, $pagesize, $keywords, $enterprise_id) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $and = "";
+        if (!empty($keywords)) {
+            $and .= " and u.name like '%" . $keywords . "%' ";
+        }
+        $middle = "from " . $base->table_name("user") . " as u "
+                . "left join " . $base->table_name("role") . " as r on u.role_id=r.id "
+                . " where u.`delete`=0 and u.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                . "";
+
+        $sql = "select "
+                . "u.id,u.`name`,u.email,u.add_time,r.`name` as rName "
+                . $middle
+                . "order by u.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;die;
+        $data = $base->getFetchAll($sql);
+        $sql = "select count(1) as total "
+                . $middle
+                . " ;";
+        //echo $sql;die;
+        $total = $base->getFetchRow($sql)['total'];
+        return ['data' => $data, 'total' => $total];
     }
 
     /** 在线课程学习 */

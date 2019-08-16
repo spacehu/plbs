@@ -171,13 +171,22 @@ class statistics {
     function userList() {
         Common::isset_cookie();
         try {
-            $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
-            $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
-            self::$data['endTime'] = $_endTime;
-            self::$data['startTime'] = $_startTime;
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
-            self::$data['data']['pv'] = StatisticsDAL::getUserList($_startTime, $_endTime);
+            $data = StatisticsDAL::getUserList($currentPage, $pagesize, $keywords, $this->enterprise_id);
+            self::$data['data'] = $data['data'];
+            self::$data['total'] = $data['total'];
 
+            self::$data['currentPage'] = $currentPage;
+            self::$data['pagesize'] = $pagesize;
+            self::$data['keywords'] = $keywords;
+            self::$data['class'] = $this->class;
             //Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
@@ -189,13 +198,27 @@ class statistics {
     function courseList() {
         Common::isset_cookie();
         try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
             $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
+
+
+            $data = StatisticsDAL::getCourseList($currentPage, $pagesize, $keywords, $this->enterprise_id, $_startTime, $_endTime);
+            self::$data['data'] = $data['data'];
+            self::$data['total'] = $data['total'];
+
+            self::$data['currentPage'] = $currentPage;
+            self::$data['pagesize'] = $pagesize;
+            self::$data['keywords'] = $keywords;
             self::$data['endTime'] = $_endTime;
             self::$data['startTime'] = $_startTime;
-
-            self::$data['data']['pv'] = StatisticsDAL::getCourseList($_startTime, $_endTime);
-
+            self::$data['class'] = $this->class;
             //Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
