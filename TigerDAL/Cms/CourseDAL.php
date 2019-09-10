@@ -58,10 +58,17 @@ class CourseDAL {
     }
 
     /** 获取用户信息 */
-    public static function getByName($name,$id) {
+    public static function getByName($name, $id) {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("course") . " where `delete`=0 and name='" . $name . "' and id <> '" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql);
+    }
+
+    /** 新增用户返回id */
+    public static function insertById($data) {
+        $base = new BaseDAL();
+        self::insert($data);
+        return $base->last_insert_id();
     }
 
     /** 新增用户信息 */
@@ -108,6 +115,22 @@ class CourseDAL {
         $base = new BaseDAL();
         $sql = "update " . $base->table_name('course') . " set `delete`=1  where id=" . $id . " ;";
         return $base->query($sql);
+    }
+
+    /** 根据分类ids获取ids下的课程数量 */
+    public static function getByCatId($cat_id, $enterprise_id) {
+        $base = new BaseDAL();
+        $where = "";
+        if (!empty($enterprise_id)) {
+            $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
+        }
+        $sql = "select count(c.category_id) as num,c.category_id "
+                . " from " . $base->table_name("course") . " as c "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . " where c.category_id in (" . $cat_id . ") "
+                . $where
+                . " GROUP by c.category_id; ";
+        return $base->getFetchAll($sql);
     }
 
 }

@@ -4,32 +4,34 @@ namespace action;
 
 use mod\common as Common;
 use TigerDAL;
-use TigerDAL\Cms\CategoryDAL;
-use TigerDAL\Cms\CourseDAL;
-use TigerDAL\Cms\ImageDAL;
+use TigerDAL\Cms\PositionDAL;
 use TigerDAL\Cms\EnterpriseDAL;
-use TigerDAL\Cms\EnterpriseCourseDAL;
+use TigerDAL\Cms\UserDAL;
+use TigerDAL\Cms\UserInfoDAL;
+use TigerDAL\Cms\EnterpriseUserDAL;
 use config\code;
 
-class course {
+class position {
 
     private $class;
     public static $data;
-    private $cat_id;
     private $enterprise_id;
+    private $department_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
-        //课程类
-        $this->cat_id = !empty($_REQUEST['cat_id']) ? $_REQUEST['cat_id'] : 1;
-        //企业id
         try {
             $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
             if (!empty($_enterprise)) {
                 $this->enterprise_id = $_enterprise['id'];
             } else {
-                $this->enterprise_id = '';
+                if (!empty($_GET['enterprise_id'])) {
+                    $this->enterprise_id = $_GET['enterprise_id'];
+                } else {
+                    Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                }
             }
+            $this->department_id = $_REQUEST['department_id'];
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -46,103 +48,72 @@ class course {
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
+            self::$data['enterprise_id'] = $this->enterprise_id;
+            self::$data['department_id'] = $this->department_id;
             //Common::pr(self::$data);die;
-            self::$data['total'] = CourseDAL::getTotal($keywords, $this->cat_id, $this->enterprise_id);
-            self::$data['data'] = CourseDAL::getAll($currentPage, $pagesize, $keywords, $this->cat_id, $this->enterprise_id);
+            self::$data['total'] = PositionDAL::getTotal($this->enterprise_id, $this->department_id, $keywords);
+            self::$data['data'] = PositionDAL::getAll($currentPage, $pagesize, $this->enterprise_id, $this->department_id, $keywords);
             self::$data['class'] = $this->class;
-            self::$data['cat_id'] = $this->cat_id;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
-    function getCourse() {
+    function getPosition() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
             if ($id != null) {
-                self::$data['data'] = CourseDAL::getOne($id);
-                self::$data['enterprise_course'] = EnterpriseCourseDAL::getAll($id);
+                self::$data['data'] = PositionDAL::getOne($id);
+                self::$data['enterpriseUser'] = UserInfoDAL::getEnterpriseUser($this->enterprise_id, $this->department_id, $id);
             } else {
                 self::$data['data'] = null;
-                self::$data['enterprise_course'] = null;
+                self::$data['enterpriseUser'] = UserInfoDAL::getEnterpriseUser($this->enterprise_id, $this->department_id, 0);
             }
-            self::$data['cat_id'] = $this->cat_id;
-            self::$data['image'] = ImageDAL::getAll(1, 99, '');
-            self::$data['enterprise'] = EnterpriseDAL::getAll(1, 99, '');
             self::$data['class'] = $this->class;
+            self::$data['list'] = UserDAL::getAll(1, 999, '');
             self::$data['enterprise_id'] = $this->enterprise_id;
-            //echo $this->enterprise_id;
-            self::$data['config'] = \mod\init::$config['env'];
-            //Common::pr(self::$data['enterprise_course']);die;
+            self::$data['department_id'] = $this->department_id;
+            //Common::pr(self::$data['department_id']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
-    function updateCourse() {
+    function updatePosition() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
-            $media_id = 0;
-            if ($_POST['edit_doc'] !== "") {
-                $material = new material();
-                $media_id = $material->_saveImage($_POST['edit_doc']);
-            }
-            if (CourseDAL::getByName($_POST['name'], $id)) {
-                Common::js_alert(code::ALREADY_EXISTING_DATA);
-                TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
-                Common::js_redir(Common::getSession($this->class));
-            }
             if ($id != null) {
                 $data = [
-                    'category_id' => $this->cat_id,
                     'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
-                    'detail' => $_POST['detail'],
-                    'order_by' => $_POST['order_by'],
                     'edit_by' => Common::getSession("id"),
-                    'media_id' => $media_id,
-                    'text_max' => $_POST['text_max'],
-                    'enterprise_id' => 0,
                 ];
-                self::$data = CourseDAL::update($id, $data);
+                self::$data = PositionDAL::update($id, $data);
             } else {
                 //Common::pr(UserDAL::getUser($_POST['name']));die;
                 $data = [
-                    'category_id' => $this->cat_id,
+                    'enterprise_id' => $_POST['enterprise_id'],
+                    'department_id' => $_POST['department_id'],
                     'name' => $_POST['name'],
-                    'overview' => $_POST['overview'],
-                    'detail' => $_POST['detail'],
-                    'order_by' => $_POST['order_by'],
                     'add_by' => Common::getSession("id"),
                     'add_time' => date("Y-m-d H:i:s"),
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'media_id' => $media_id,
-                    'text_max' => $_POST['text_max'],
-                    'enterprise_id' => 0,
                 ];
-                $id = self::$data = CourseDAL::insertById($data);
+                self::$data = PositionDAL::insert($data);
             }
             if (self::$data) {
-                $_data = [
-                    'add_by' => Common::getSession("id"),
-                    'add_time' => date("Y-m-d H:i:s"),
-                    'edit_by' => Common::getSession("id"),
-                    'edit_time' => date("Y-m-d H:i:s"),
-                    'delete' => 0,
-                ];
-                if (!empty($_POST['enterprise_id'])) {
-                    EnterpriseCourseDAL::save(array_unique($_POST['enterprise_id']), $id, $_data);
-                }
-                if (!empty($this->enterprise_id)) {
-                    EnterpriseCourseDAL::save([$this->enterprise_id], $id, $_data);
-                }
                 //Common::pr(Common::getSession($this->class));die;
+                if (!empty($_POST['departmentadd'])) {
+                    EnterpriseUserDAL::updatePositionId($_POST['departmentadd'], $id);
+                }
+                if (!empty($_POST['departmentremove'])) {
+                    EnterpriseUserDAL::updatePositionId($_POST['departmentremove'], 0);
+                }
                 Common::js_redir(Common::getSession($this->class));
             } else {
                 Common::js_alert('修改失败，请联系系统管理员');
@@ -152,12 +123,12 @@ class course {
         }
     }
 
-    function deleteCourse() {
+    function deletePosition() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
             if ($id != null) {
-                self::$data = CourseDAL::delete($id);
+                self::$data = PositionDAL::delete($id);
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {

@@ -1,11 +1,11 @@
 <?php
-$data = \action\course::$data['data'];
-$Total = \action\course::$data['total'];
-$currentPage = \action\course::$data['currentPage'];
-$pagesize = \action\course::$data['pagesize'];
-$keywords = \action\course::$data['keywords'];
-$class = \action\course::$data['class'];
-$cat_id = \action\course::$data['cat_id'];
+$data = \action\department::$data['data'];
+$Total = \action\department::$data['total'];
+$currentPage = \action\department::$data['currentPage'];
+$pagesize = \action\department::$data['pagesize'];
+$keywords = \action\department::$data['keywords'];
+$class = \action\department::$data['class'];
+$enterprise_id = \action\department::$data['enterprise_id'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +18,7 @@ $cat_id = \action\course::$data['cat_id'];
     <body>
 
         <div class="menu">
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getCourse&cat_id=<?php echo $cat_id; ?>'">添加新课程</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getDepartment&enterprise_id=<?php echo $enterprise_id; ?>'">添加新部门</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
@@ -42,9 +42,9 @@ $cat_id = \action\course::$data['cat_id'];
                                 }
                                 ?></td>
                             <td class="td1">
-                                <a href="index.php?a=lesson&m=index&course_id=<?php echo $v['id']; ?>">课时</a>
-                                | <a href="index.php?a=<?php echo $class; ?>&m=getCourse&id=<?php echo $v['id']; ?>&cat_id=<?php echo $cat_id; ?>">编辑</a>
-                                | <a href="index.php?a=<?php echo $class; ?>&m=deleteCourse&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此企业删除?')">删除</a></td>
+                                <a href="index.php?a=position&m=index&department_id=<?php echo $v['id']; ?>">职位</a>
+                                | <a href="index.php?a=<?php echo $class; ?>&m=getDepartment&id=<?php echo $v['id']; ?>">编辑</a>
+                                | <a href="index.php?a=<?php echo $class; ?>&m=deleteDepartment&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此部门删除?')">删除</a></td>
                         </tr>
                         <?php
                         $sum_i++;
@@ -56,7 +56,7 @@ $cat_id = \action\course::$data['cat_id'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords . '&cat_id=' . $cat_id;
+            $url = 'index.php?a=' . $class . '&m=index&keywords=' . $keywords . '&enterprise_id=' . $enterprise_id;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>

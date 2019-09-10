@@ -17,13 +17,15 @@ class UserInfoDAL {
             $where .= " where ui.name like '%" . $keywords . "%' ";
             $and .= " and ui.name like '%" . $keywords . "%' ";
         }
-        $sql = "select ui.* from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select ui.*,'' as edName,'' as epName  from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         if ($enterprise_id !== '') {
-            $sql = "select ui.*,eu.status as euStatus "
-                    . "from " . $base->table_name("user_info") . " as ui "
-                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
-                    . "order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+            $sql = "select ui.*,eu.status as euStatus,ed.`name` as edName,ep.`name` as epName "
+                    . " from " . $base->table_name("user_info") . " as ui "
+                    . " right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                    . " LEFT join " . $base->table_name("enterprise_department") . " as ed on eu.department_id=ed.id "
+                    . " LEFT join " . $base->table_name("enterprise_position") . " as ep on eu.position_id=ep.id "
+                    . " where (eu.`status`=0 or eu.`status`=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                    . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         }
         return $base->getFetchAll($sql);
     }
@@ -182,13 +184,17 @@ class UserInfoDAL {
         }
     }
 
-    public static function saveEnterpriseUser($user_id, $enterprise_id, $_data) {
+    public static function saveEnterpriseUser($user_ids, $enterprise_id, $_data) {
         if (empty($_data)) {
             return true;
         }
+        if ($_data['status'] == 2) {
+            $_data['department_id'] = 0;
+            $_data['position_id'] = 0;
+        }
         $base = new BaseDAL();
         // 删除
-        $sql = "select id from " . $base->table_name('enterprise_user') . " where `delete`=0 and `user_id` = " . $user_id . " and enterprise_id=" . $enterprise_id . " ;";
+        $sql = "select id from " . $base->table_name('enterprise_user') . " where `delete`=0 and `user_id` in (" . $user_ids . ") and enterprise_id=" . $enterprise_id . " ;";
         $row = $base->getFetchRow($sql);
         return self::updateEnterpriseUser($row['id'], $_data);
     }
@@ -273,6 +279,28 @@ class UserInfoDAL {
         $base = new BaseDAL();
         $sql = "update " . $base->table_name('enterprise_user') . " set `delete`=1  where user_id=" . $user_id . " and enterprise_id<>" . $enterprise_id . " ;";
         return $base->query($sql);
+    }
+
+    /** 获取 企业 职级关系 的用户列表 */
+    public static function getEnterpriseUser($enterprise_id, $department_id = '', $position_id = '') {
+        $base = new BaseDAL();
+        $where = "";
+        $or = "";
+        if (isset($department_id) && is_numeric($department_id)) {
+            $where = " and (eu.department_id = " . $department_id . " or eu.department_id = 0  or eu.department_id is null ) ";
+
+            if (isset($position_id) && is_numeric($position_id)) {
+                $where = " and (eu.department_id = " . $department_id . " )  "
+                        . " and (eu.position_id = " . $position_id . " or eu.position_id =0 or eu.position_id is null) ";
+            }
+        }
+        $sql = "select ui.*,eu.status as euStatus,eu.department_id,eu.position_id "
+                . "from " . $base->table_name("user_info") . " as ui "
+                . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . "order by ui.edit_time desc ;";
+        //echo $sql;
+        return $base->getFetchAll($sql);
     }
 
 }

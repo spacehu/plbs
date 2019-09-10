@@ -32,34 +32,13 @@
     </head>
     <body>
         <div id="Menu-left">
-            <!-- 
+            <!-- 企业管理员模块 -->
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >MATERIAL 素材</a>
-                <div class="sub_title">
-                    <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=image'" href="javascript:void(0);" >IMAGE 图片素材</a>
-                    </div>
-                    <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=music'" href="javascript:void(0);" >AUDIO 音频素材</a>
-                    </div>
-                    <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=material&m=index&type=video'" href="javascript:void(0);" >VIDEO 视频素材</a>
-                    </div>
-                </div>
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=department&m=index'" href="javascript:void(0);" >DEPARTMENT 部门</a>
             </div>
-            -->
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>
-                <!--            
-                <div class="sub_title">
-                    <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=lesson&m=index'" href="javascript:void(0);" >LESSON 课时</a>
-                    </div>
-                    <div class="title">
-                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
-                    </div>
-                </div>
-                -->
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=category&m=index&type=view'" href="javascript:void(0);" >CATEGORY 课程分类</a>
+                <!--<a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>-->
             </div>
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=test&m=index'" href="javascript:void(0);" >TEST 试题</a>
@@ -67,11 +46,12 @@
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=examination&m=index'" href="javascript:void(0);" >EXAM 试卷</a>
             </div>
-            <?php //\mod\common::pr($_COOKIE); ?>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  学员</a>
+            </div>
+            <!-- 企业管理员模块 end -->
             <?php if (\mod\common::getSession('level') <= 1) { ?>
-                <div class="title">
-                    <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  学员</a>
-                </div>
+                <!-- 总管理员模块 -->
                 <div class="title">
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=user&m=index'" href="javascript:void(0);" >USER  管理员授权</a>
                 </div>
@@ -92,6 +72,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="title">
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=category&m=index'" href="javascript:void(0);" >SYSTEM  系统</a>
                     <div class="sub_title">
@@ -141,9 +122,13 @@
                     <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=system&m=index'" href="javascript:void(0);" >CONFIG 配置信息</a>
                 </div>
             <?php } ?>
+            <!-- 总管理员模块 end -->
+
+            <!-- 公共模块 -->
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=account&m=getAccount'" href="javascript:void(0);" >ACCOUNT 修改密码</a>
             </div>
+            <!-- 公共模块 end -->
         </div>
     </body>
 

@@ -2,7 +2,7 @@
 $data = \action\course::$data['data'];
 $class = \action\course::$data['class'];
 $enterprise_id = \action\course::$data['enterprise_id'];
-$list = \action\course::$data['list'];
+$cat_id = \action\course::$data['cat_id'];
 $image = \action\course::$data['image'];
 $enterprise = \action\course::$data['enterprise'];
 $enterprise_course = \action\course::$data['enterprise_course'];
@@ -43,19 +43,7 @@ if (is_array($image)) {
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
-                        </div>
-                        <div class="leftAlist" >
-                            <span>CATEGORY 课程分类</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <select name="category_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($list)) { ?>
-                                    <?php foreach ($list as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['category_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
+                            <input class="text" name="cat_id" type="hidden" value="<?php echo $cat_id; ?>" />
                         </div>
                         <div class="leftAlist" >
                             <span>OVERVIEW 课程简述</span>

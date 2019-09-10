@@ -6,24 +6,57 @@ use mod\common as Common;
 use TigerDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ImageDAL;
+use TigerDAL\Cms\CourseDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
 class category {
 
     private $class;
     public static $data;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        //企业id
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                $this->enterprise_id = '';
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function index() {
         Common::isset_cookie();
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
+        $type = isset($_GET['type']) ? $_GET['type'] : null;
+        $cat_id = ($type == "view") ? 1 : 0;
         try {
             self::$data['total'] = CategoryDAL::getTotal("");
-            self::$data['data'] = CategoryDAL::tree(0, 0, false);
+            $_data = CategoryDAL::tree($cat_id, 0, false);
+            if (!empty($_data)) {
+                foreach ($_data as $k => $v) {
+                    $cat_ids[] = $v['id'];
+                }
+                $cat_id = implode(',', $cat_ids);
+                $countdata = CourseDAL::getByCatId($cat_id, $this->enterprise_id);
+                if (!empty($countdata)) {
+                    foreach ($countdata as $k => $v) {
+                        $_count[$v['category_id']] = $v['num'];
+                    }
+                    foreach ($_data as $k => $v) {
+                        $_data[$k]['num'] = !empty($_count[$v['id']]) ? $_count[$v['id']] : 0;
+                    }
+                }
+            }
+            self::$data['data'] = $_data;
             self::$data['class'] = $this->class;
+            self::$data['type'] = $type;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }

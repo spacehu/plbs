@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file://192.168.30.225/share/plbs/template/admin/course_index.php</file>
+            <file>file://192.168.30.225/share/plbs/template/admin/enterprise_index.php</file>
+            <file>file://192.168.30.225/share/plbs/template/admin/department_getDepartment.php</file>
+            <file>file://192.168.30.225/share/plbs/action/course.php</file>
+            <file>file://192.168.30.225/share/plbs/template/admin/department_index.php</file>
+            <file>file://192.168.30.225/share/plbs/template/admin/left.php</file>
+            <file>file://192.168.30.225/share/plbs/action/department.php</file>
+            <file>file://192.168.30.225/share/plbs/TigerDAL/Cms/DepartmentDAL.php</file>
+            <file>file://192.168.30.225/share/plbs/TigerDAL/Cms/CourseDAL.php</file>
+        </group>
     </open-files>
 </project-private>
