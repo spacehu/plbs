@@ -8,6 +8,8 @@ use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Cms\DepartmentDAL;
 use TigerDAL\Cms\UserInfoDAL;
 use TigerDAL\Cms\EnterpriseUserDAL;
+use TigerDAL\Cms\CourseDAL;
+use TigerDAL\Cms\EnterpriseCourseDAL;
 use config\code;
 
 class department {
@@ -63,12 +65,15 @@ class department {
             if ($id != null) {
                 self::$data['data'] = DepartmentDAL::getOne($id);
                 self::$data['enterpriseUser'] = UserInfoDAL::getEnterpriseUser($this->enterprise_id, $id);
+                self::$data['enterpriseCourse'] = EnterpriseCourseDAL::getEnterpriseCourse($this->enterprise_id, $id);
                 $enterprise_id = self::$data['data']['enterprise_id'];
             } else {
                 self::$data['data'] = null;
                 self::$data['enterpriseUser'] = UserInfoDAL::getEnterpriseUser($this->enterprise_id, 0);
+                self::$data['enterpriseCourse'] = EnterpriseCourseDAL::getEnterpriseCourse($this->enterprise_id, 0);
                 $enterprise_id = $this->enterprise_id;
             }
+            //Common::pr(self::$data['enterpriseCourse']);die;
             self::$data['class'] = $this->class;
             //print_r(self::$data['enterpriseUser']);die;
             self::$data['enterprise_id'] = $enterprise_id;
@@ -111,6 +116,12 @@ class department {
                 }
                 if (!empty($_POST['departmentremove'])) {
                     EnterpriseUserDAL::updateDepartmentId($_POST['departmentremove'], 0);
+                }
+                if (!empty($_POST['courses_add'])) {
+                    EnterpriseCourseDAL::updateDepartmentId($_POST['courses_add'], $id);
+                }
+                if (!empty($_POST['courses_remove'])) {
+                    EnterpriseCourseDAL::updateDepartmentId($_POST['courses_remove'], 0);
                 }
                 Common::js_redir(Common::getSession($this->class));
             } else {

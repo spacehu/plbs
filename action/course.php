@@ -135,6 +135,8 @@ class course {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
+                    'department_id' => 0,
+                    'position_id' => 0,
                 ];
                 if (!empty($_POST['enterprise_id'])) {
                     EnterpriseCourseDAL::save(array_unique($_POST['enterprise_id']), $id, $_data);

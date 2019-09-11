@@ -78,4 +78,49 @@ class EnterpriseCourseDAL {
         return $base->query($sql);
     }
 
+    /** 获取企业课程 */
+    public static function getEnterpriseCourse($enterprise_id, $department_id = '', $position_id = '') {
+        $base = new BaseDAL();
+        $where = "";
+        if (isset($department_id) && is_numeric($department_id)) {
+            $where = " and (ec.department_id = " . $department_id . " or ec.department_id = 0  or ec.department_id is null ) ";
+
+            if (isset($position_id) && is_numeric($position_id)) {
+                $where = " and (ec.department_id = " . $department_id . " )  "
+                        . " and (ec.position_id = " . $position_id . " or ec.position_id =0 or ec.position_id is null) ";
+            }
+        }
+        $sql = "select c.*,ec.department_id,ec.position_id "
+                . "from " . $base->table_name("course") . " as c "
+                . "right join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . " where  ec.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . "order by c.edit_time desc ;";
+        //echo $sql;
+        return $base->getFetchAll($sql);
+    }
+
+    /** 更新department */
+    public static function updateDepartmentId($_courseids, $id = "") {
+        $base = new BaseDAL();
+        if (!empty($id)) {
+            $set = " department_id=" . $id . " , position_id = 0 ";
+        } else {
+            $set = " department_id = 0 , position_id = 0 ";
+        }
+        $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where course_id in (" . $_courseids . ") ;";
+        return $base->query($sql);
+    }
+
+    /** 更新position */
+    public static function updatePositionId($_courseids, $id = "") {
+        $base = new BaseDAL();
+        if (!empty($id)) {
+            $set = " position_id=" . $id . " ";
+        } else {
+            $set = " position_id = 0 ";
+        }
+        $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where course_id in (" . $_courseids . ") ;";
+        return $base->query($sql);
+    }
+
 }

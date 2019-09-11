@@ -285,7 +285,6 @@ class UserInfoDAL {
     public static function getEnterpriseUser($enterprise_id, $department_id = '', $position_id = '') {
         $base = new BaseDAL();
         $where = "";
-        $or = "";
         if (isset($department_id) && is_numeric($department_id)) {
             $where = " and (eu.department_id = " . $department_id . " or eu.department_id = 0  or eu.department_id is null ) ";
 

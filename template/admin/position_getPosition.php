@@ -4,6 +4,7 @@ $class = \action\position::$data['class'];
 $enterpriseUser = \action\position::$data['enterpriseUser'];
 $enterprise_id = \action\position::$data['enterprise_id'];
 $department_id = \action\position::$data['department_id'];
+$enterpriseCourse = \action\position::$data['enterpriseCourse'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -49,6 +50,23 @@ $department_id = \action\position::$data['department_id'];
                             <input class="text" name="departmentremove" id="departmentremove" type="hidden" value="" />
                         </div>
                     </div>
+                    <div class="leftA">
+                        <div class="leftAlist" >
+                            <span>COURSE 私有课程</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <!-- 复选框 未分配的学员 -->
+                            <select multiple="multiple" id="course-selected-options" name="my-course[]">
+                                <?php if (!empty($enterpriseCourse)) { ?>
+                                    <?php foreach ($enterpriseCourse as $k => $v) { ?>
+                                        <option value='<?php echo $v['id']; ?>' <?php echo ($v['position_id'] == $data['id'] && $data['id'] != 0) ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                            <input class="text" name="courses_add" id="courses_add" type="hidden" value="" />
+                            <input class="text" name="courses_remove" id="courses_remove" type="hidden" value="" />
+                        </div>
+                    </div>
                 </div>
                 <div class="pathB">
                     <div class="leftA">
@@ -78,6 +96,28 @@ $department_id = \action\position::$data['department_id'];
                     console.log(users_remove.toString());
                     $("#departmentadd").attr("value", users_add.toString());
                     $("#departmentremove").attr("value", users_remove.toString());
+                }
+            });
+            var courses_add = [];
+            var courses_remove = [];
+            $('#course-selected-options').multiSelect({
+                selectableHeader: "<div class='custom-header'>企业课程</div>",
+                selectionHeader: "<div class='custom-header'>部门课程</div>",
+                afterSelect: function (values) {
+                    courses_add[courses_add.length] = values;
+                    courses_remove.splice($.inArray(values, courses_add), 1);
+                    console.log(courses_add.toString());
+                    console.log(courses_remove.toString());
+                    $("#courses_add").attr("value", courses_add.toString());
+                    $("#courses_remove").attr("value", courses_remove.toString());
+                },
+                afterDeselect: function (values) {
+                    courses_remove[courses_remove.length] = values;
+                    courses_add.splice($.inArray(values, courses_add), 1);
+                    console.log(courses_add.toString());
+                    console.log(courses_remove.toString());
+                    $("#courses_add").attr("value", courses_add.toString());
+                    $("#courses_remove").attr("value", courses_remove.toString());
                 }
             });
         </script>
