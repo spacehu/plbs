@@ -3,6 +3,7 @@
 namespace TigerDAL\Api;
 
 use TigerDAL\BaseDAL;
+use config\code;
 
 class TokenDAL {
 
@@ -88,8 +89,17 @@ class TokenDAL {
     }
 
     /** 选择是否需要使用token */
-    public static function reToken($token, $data) {
-        return;
+    public static function reToken($data) {
+        $_token = self::checkToken();
+        //Common::pr($_token);die;
+        if ($_token['code'] != 90001) {
+            $data['success'] = false;
+            $data['data']['error_msg'] = 'tokenerror';
+            $data['data']['code'] = $_token['code'];
+            $data['msg'] = code::$code['tokenerror'];
+            exit(json_encode($data));
+        }
+        return $_token['data'];
     }
 
 }

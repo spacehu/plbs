@@ -7,7 +7,9 @@ use TigerDAL\Cms\CourseDAL as cmsCourseDAL;
 
 class CourseDAL {
 
-    /** 获取用户信息列表 */
+    /** 获取课程信息列表 
+     * 
+     */
     public static function getAll($currentPage, $pagesize, $keywords = '', $cat_id = '', $enterprise_id = '', $user_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
@@ -24,19 +26,10 @@ class CourseDAL {
             $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
             $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        if ($user_id !== '') {
-            //已上课程
-            $ids = self::getIdByUserCourse($user_id);
-            //需要排除的企业课程
-            $_notin_ids = self::getIdByUserId();
-            if (!empty($ids)) {
-                $where .= " and (c.id in (" . $ids . ") or c.id not in (" . $_notin_ids . ") ) ";
-                $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
-            }else{
-                $where .= " and c.id not in (" . $_notin_ids . ") ";
-                $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
-            }
-        }
+        //用户id 为零 只取出公共课程 id不为零 取出和用户有关的课程（包含隶属企业，部门，职位）
+        $_notin_ids = self::getIdByUserId($user_id);
+        $where .= " and c.id not in (" . $_notin_ids . ") ";
+
         $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus "
                 . "from " . $base->table_name("course") . " as c "
                 . $join
@@ -63,16 +56,10 @@ class CourseDAL {
             $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
             $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        if ($user_id !== '') {
-            //已上课程
-            $ids = self::getIdByUserCourse($user_id);
-            //需要排除的企业课程
-            $_notin_ids = self::getIdByUserId();
-            if (!empty($ids)) {
-                $where .= " and (c.id in (" . $ids . ") or c.id not in (" . $_notin_ids . ") ) ";
-                $join = " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
-            }
-        }
+        //用户id 为零 只取出公共课程 id不为零 取出和用户有关的课程（包含隶属企业，部门，职位）
+        $_notin_ids = self::getIdByUserId($user_id);
+        $where .= " and c.id not in (" . $_notin_ids . ") ";
+        
         $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
                 . $join
                 . "where c.`delete`=0 " . $where . " limit 1 ;";
@@ -144,12 +131,37 @@ class CourseDAL {
     }
 
     /** 需要排除的其他课程 */
-    public static function getIdByUserId() {
+    public static function getIdByUserId($user_id) {
         $base = new BaseDAL();
+        $and = "  ";
+        if (!empty($user_id)) {
+            //普通用户id enterprise_user里面没有数据
+            $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+            $_ec = $base->getFetchRow($_sql);
+            //企业用户id enterprise_user有数据
+            if (!empty($_ec)) {
+                $enterprise_id = $_ec['enterprise_id'];
+                $department_id = $_ec['department_id'];
+                $position_id = $_ec['position_id'];
+                //获取企业课程
+                if (!empty($enterprise_id)) {
+                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
+                }
+                //获取部门课程
+                if (!empty($department_id)) {
+                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = 0) ";
+                }
+                //获取职位课程
+                if (!empty($position_id)) {
+                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = " . $position_id . ") ";
+                }
+            }
+        }
         $sql = "select course_id "
-                . "from " . $base->table_name("enterprise_course") . " "
-                . "where `delete`=0 "
-                . "group by course_id ;";
+                . " from " . $base->table_name("enterprise_course") . " "
+                . " where `delete`=0 "
+                . $and
+                . " group by course_id ;";
         $res = $base->getFetchAll($sql);
         if (!empty($res)) {
             $_res[] = 0;

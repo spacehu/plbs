@@ -25,18 +25,8 @@ class ApiCourse extends \action\RestfulApi {
         $this->post = Common::exchangePost();
         $this->get = Common::exchangeGet();
         $this->header = Common::exchangeHeader();
-        $TokenDAL = new TokenDAL();
-        $_token = $TokenDAL->checkToken();
-        //Common::pr($_token);die;
-        if ($_token['code'] != 90001) {
-            self::$data['success'] = false;
-            self::$data['data']['error_msg'] = 'tokenerror';
-            self::$data['data']['code'] = $_token['code'];
-            self::$data['msg'] = code::$code['tokenerror'];
-            exit(json_encode(self::$data));
-        }
-        $this->user_id = $_token['data']['user_id'];
-        $this->server_id = $_token['data']['server_id'];
+        $this->user_id = 0;
+        $this->server_id = 0;
         if (!empty($path)) {
             $_path = explode("-", $path);
             $actEval = "\$res = \$this ->" . $_path['2'] . "();";
@@ -47,6 +37,11 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课程 信息 */
     function courses() {
+        if ((!empty($this->header['token']))) {
+            $_base = TokenDAL::reToken(self::$data);
+            $this->user_id = $_base['user_id'];
+            $this->server_id = $_base['server_id'];
+        }
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
@@ -67,6 +62,9 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课程 信息 */
     function course() {
+        $_base = TokenDAL::reToken(self::$data);
+        $this->user_id = $_base['user_id'];
+        $this->server_id = $_base['server_id'];
         if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
@@ -86,6 +84,11 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课时 信息 */
     function lessons() {
+        if ((!empty($this->header['token']))) {
+            $_base = TokenDAL::reToken(self::$data);
+            $this->user_id = $_base['user_id'];
+            $this->server_id = $_base['server_id'];
+        }
         if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
@@ -113,6 +116,9 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 课时 信息 */
     function lesson() {
+        $_base = TokenDAL::reToken(self::$data);
+        $this->user_id = $_base['user_id'];
+        $this->server_id = $_base['server_id'];
         if (empty($this->get['lesson_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
@@ -134,6 +140,9 @@ class ApiCourse extends \action\RestfulApi {
 
     /** 试题 信息 */
     function tests() {
+        $_base = TokenDAL::reToken(self::$data);
+        $this->user_id = $_base['user_id'];
+        $this->server_id = $_base['server_id'];
         if (empty($this->get['course_id'])) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
