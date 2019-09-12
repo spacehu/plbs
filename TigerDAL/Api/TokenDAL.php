@@ -87,4 +87,9 @@ class TokenDAL {
         return time() + 28800/**/;
     }
 
+    /** 选择是否需要使用token */
+    public static function reToken($token, $data) {
+        return;
+    }
+
 }
