@@ -56,6 +56,13 @@ class PositionDAL {
         return $base->getFetchRow($sql);
     }
 
+    /** 返回id */
+    public static function insertGetId($data) {
+        $base = new BaseDAL();
+        self::insert($data);
+        return $base->last_insert_id();
+    }
+
     /** 新增用户信息 */
     public static function insert($data) {
         $base = new BaseDAL();
