@@ -59,11 +59,44 @@ class CourseDAL {
         //用户id 为零 只取出公共课程 id不为零 取出和用户有关的课程（包含隶属企业，部门，职位）
         $_notin_ids = self::getIdByUserId($user_id);
         $where .= " and c.id not in (" . $_notin_ids . ") ";
-        
+
         $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
                 . $join
                 . "where c.`delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
+    }
+
+    /** 获取企业允许用户使用的专用课程 */
+    public static function getEnterpriseCourse($currentPage, $pagesize, $user_id) {
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        //用户id 为零 只取出公共课程 id不为零 取出和用户有关的课程（包含隶属企业，部门，职位）
+        $_in_ids = self::getCourseIdByUserId($user_id);
+        $where = " and c.id in (" . $_in_ids . ") ";
+
+        $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus "
+                . "from " . $base->table_name("course") . " as c "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.user_id=" . $user_id . " and uc.`delete`=0 "
+                . "where c.`delete`=0 " . $where . " "
+                . "order by c.order_by asc, c.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        return $base->getFetchAll($sql);
+    }
+
+    /** 获取企业允许用户使用的专用课程 total */
+    public static function getEnterpriseCourseTotal($user_id) {
+        $base = new BaseDAL();
+        //用户id 为零 只取出公共课程 id不为零 取出和用户有关的课程（包含隶属企业，部门，职位）
+        $_in_ids = self::getCourseIdByUserId($user_id);
+        $where = " and c.id in (" . $_in_ids . ") ";
+
+        $sql = "select count(*) as num "
+                . "from " . $base->table_name("course") . " as c "
+                . "where c.`delete`=0 " . $where . " "
+                . " ;";
+        return $base->getFetchRow($sql)['num'];
     }
 
     /** 获取用户信息 */
@@ -169,6 +202,49 @@ class CourseDAL {
                 $_res[] = $v['course_id'];
             }
             return implode(',', $_res);
+        }
+        return 0;
+    }
+
+    /** 根据uid获取可以使用的课程id */
+    public static function getCourseIdByUserId($user_id) {
+        $base = new BaseDAL();
+        $and = "  ";
+        if (!empty($user_id)) {
+            //普通用户id enterprise_user里面没有数据
+            $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+            $_ec = $base->getFetchRow($_sql);
+            //企业用户id enterprise_user有数据
+            if (!empty($_ec)) {
+                $enterprise_id = $_ec['enterprise_id'];
+                $department_id = $_ec['department_id'];
+                $position_id = $_ec['position_id'];
+                //获取企业课程
+                if (!empty($enterprise_id)) {
+                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
+                }
+                //获取部门课程
+                if (!empty($department_id)) {
+                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = 0) ";
+                }
+                //获取职位课程
+                if (!empty($position_id)) {
+                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = " . $position_id . ") ";
+                }
+                $sql = "select course_id "
+                        . " from " . $base->table_name("enterprise_course") . " "
+                        . " where `delete`=0 "
+                        . $and
+                        . " group by course_id ;";
+                $res = $base->getFetchAll($sql);
+                if (!empty($res)) {
+                    $_res[] = 0;
+                    foreach ($res as $v) {
+                        $_res[] = $v['course_id'];
+                    }
+                    return implode(',', $_res);
+                }
+            }
         }
         return 0;
     }

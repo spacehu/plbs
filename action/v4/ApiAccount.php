@@ -413,7 +413,7 @@ class ApiAccount extends \action\RestfulApi {
             $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
             $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
             $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
-            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id, '', $enterprise_id);
+            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id);
             $resT = AccountDAL::getCoursesTotal($this->user_id);
             self::$data['data']['userType'] = $this->server_id;
             //print_r($res);die;
@@ -458,8 +458,8 @@ class ApiAccount extends \action\RestfulApi {
         try {
             //轮播列表
 
-            $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id, $enterprise_id, $enterprise_id);
-            $total = AccountDAL::getCoursesTotal($this->user_id, $enterprise_id);
+            $res = CourseDAL::getEnterpriseCourse($currentPage, $pagesize, $this->user_id);
+            $total = CourseDAL::getEnterpriseCourseTotal($this->user_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
