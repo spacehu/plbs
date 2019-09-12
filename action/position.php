@@ -107,7 +107,7 @@ class position {
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
                 ];
-                self::$data = PositionDAL::insert($data);
+                $id = self::$data = PositionDAL::insert($data);
             }
             if (self::$data) {
                 //Common::pr(Common::getSession($this->class));die;
