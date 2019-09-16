@@ -235,8 +235,47 @@ class StatisticsDAL {
     }
 
     /** 在线课程学习 */
-    public static function getCourseList() {
-        
+    public static function getCourseList($currentPage, $pagesize, $keywords, $enterprise_id, $_startTime, $_endTime) {
+        $base= new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $and = "";
+        if (!empty($keywords)) {
+            $and .= " and c.name like '%" . $keywords . "%' ";
+        }
+        if (!empty($_startTime)) {
+            $and .= " and c.add_time >= '" . $_startTime . "' ";
+        }
+        if (!empty($_endTime)) {
+            $and .= " and c.add_time <= '" . $_endTime . "' ";
+        }
+        $middle = "from " . $base->table_name("course") . " as c "
+                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . "left join " . $base->table_name("category") . " as cat on cat.id=c.category_id "
+                . "left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . "left join " . $base->table_name("enterprise_user") . " as  eu on ec.enterprise_id=eu.enterprise_id and ec.`delete`=0 "
+                . "left join " . $base->table_name("user_course") . " as uc on c.id=uc.course_id and eu.user_id=uc.user_id and uc.`delete`=0 "
+                . "left join " . $base->table_name("exam") . " as e on c.id=e.course_id and e.user_id=eu.user_id and e.`delete`=0 "
+                . " where ec.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                . "GROUP BY c.id ";
+
+        $sql = "select "
+                . "c.id,c.`name`,c.add_time,cat.`name` as catName,i.original_src,"
+                . "count(DISTINCT e.user_id) as userCount,"
+                . "sum(case when e.point >= c.percentage then 1 else 0 end) as userPassCount,"
+                . "case when count(e.user_id)>0 then (sum(case when e.point >= c.percentage then 1 else 0 end)/count(DISTINCT e.user_id))*100 else 0 end as userPassPercent "
+                . $middle
+                . "order by c.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;die;
+        $data = $base->getFetchAll($sql);
+        $sql = " "
+                . "select count(1) as total "
+                . $middle
+                . "  ;";
+        //echo $sql;die;
+        $total = $base->getFetchRow($sql)['total'];
+        return ['data' => $data, 'total' => $total];
     }
 
 }

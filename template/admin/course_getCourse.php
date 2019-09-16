@@ -84,6 +84,12 @@ if (is_array($image)) {
                         <div class="leftAlist" >
                             <input class="text" name="text_max" type="text" value="<?php echo isset($data['text_max']) ? $data['text_max'] : 5; ?>" />
                         </div>
+                        <div class="leftAlist" >
+                            <span>PERCENTAGE 及格线</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <input class="text" name="percentage" type="text" value="<?php echo isset($data['percentage']) ? $data['percentage'] : 60; ?>" />
+                        </div>
                         <div class="leftAlist <?php echo!empty($enterprise_id) ? 'hide' : ''; ?>" >
                             <span>IS ENTERPRISE 隶属企业</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
                         </div>

@@ -89,6 +89,7 @@ class TestDAL {
         $_status = 1;
         $text_max = 0;
         $base = new BaseDAL();
+        $_percentage = \mod\init::$config['plbs']['percentage'];
 
         //获取课程信息 反馈数据 课程id 最大题数
         $_course = CourseDAL::getOne($_data['course_id'], $_data['user_id']);
@@ -99,8 +100,10 @@ class TestDAL {
             } else if ($_examination['type'] == "regularize") {
                 $text_max = $_examination['total'];
             }
+            $_percentage = $_examination['percentage'];
         } else {
             $text_max = $_course['text_max'];
+            $_percentage = $_course['percentage'];
         }
 
         if (empty($_data['aws'])) {
@@ -120,7 +123,7 @@ class TestDAL {
         //\mod\common::pr($_data['aws']);die;
         foreach ($_tests as $k => $v) {
             foreach ($_data['aws'] as $key => $val) {
-                if ($key == $v['id']) {
+                if ((int) $key == $v['id']) {
                     if (trim($v['serialization']) == trim($val)) {
                         $_num++;
                         $_tests[$k]['scores'] = 1;
@@ -146,25 +149,30 @@ class TestDAL {
         $_exam_id = self::insertExamGetId($data);
         //$_exam_id = 1;
         //答题详情
+        LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($_tests) . "", "DEBUG");
         foreach ($_tests as $k => $v) {
-            $_row = [
-                'user_id' => $_data['user_id'],
-                'course_id' => $_data['course_id'],
-                'lesson_id' => $v['lesson_id'],
-                'test_id' => $v['id'],
-                'scores' => $v['scores'],
-                'answer' => $v['answer'],
-                'add_time' => $_data['time'],
-                'edit_time' => $_data['time'],
-                'delete' => 0,
-                'exam_id' => $_exam_id,
-                'examination_id' => $_data['examination_id'],
-            ];
-            self::insertUserTest($_row);
+            if ($v['scores']) {
+                $_row = [
+                    'user_id' => $_data['user_id'],
+                    'course_id' => $_data['course_id'],
+                    'lesson_id' => $v['lesson_id'],
+                    'test_id' => $v['id'],
+                    'scores' => $v['scores'],
+                    'answer' => $v['answer'],
+                    'add_time' => $_data['time'],
+                    'edit_time' => $_data['time'],
+                    'delete' => 0,
+                    'exam_id' => $_exam_id,
+                    'examination_id' => $_data['examination_id'],
+                ];
+                self::insertUserTest($_row);
+            } else {
+                LogDAL::save(date("Y-m-d H:i:s") . "-data---" . json_encode($_row) . "", "DEBUG");
+            }
         }
         //\mod\common::pr($_row);die;
         //课程是否完成
-        if ($_point >= 60) {
+        if ($_point >= $_percentage) {
             $_status = 2;
             $_userCourse = self::updateUserCourse($_data['user_id'], $_data['course_id'], $_status);
         }

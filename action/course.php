@@ -107,6 +107,7 @@ class course {
                     'media_id' => $media_id,
                     'text_max' => $_POST['text_max'],
                     'enterprise_id' => 0,
+                    'percentage' => $_POST['percentage'],
                 ];
                 self::$data = CourseDAL::update($id, $data);
             } else {
@@ -125,6 +126,7 @@ class course {
                     'media_id' => $media_id,
                     'text_max' => $_POST['text_max'],
                     'enterprise_id' => 0,
+                    'percentage' => $_POST['percentage'],
                 ];
                 $id = self::$data = CourseDAL::insertById($data);
             }

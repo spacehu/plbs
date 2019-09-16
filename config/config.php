@@ -157,7 +157,10 @@ return $config = [
             'business' => 2,
             'customer' => 3,
         ]
-    ]
+    ],
+    'plbs' => [
+        'percentage' => 60,
+    ],
 ];
 
 
