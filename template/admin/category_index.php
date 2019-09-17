@@ -23,8 +23,10 @@ $type = \action\category::$data['type'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1">标题</td>
+                    <!--
                     <td class="td1" width="10%">状态</td>
                     <td class="td1" width="10%">排序</td>
+                    -->
                     <td class="td1" width="20%">操作</td>
                 </tr>
                 <?php
@@ -46,14 +48,16 @@ $type = \action\category::$data['type'];
                                     echo '· ';
                                 } echo $v['name'];
                                 ?></td>
+                            <!--
                             <td class="td1"><?php
-                                if ($v['delete'] == 0) {
-                                    echo 'show';
-                                } else {
-                                    echo 'not show';
-                                }
-                                ?></td>
+                            if ($v['delete'] == 0) {
+                                echo 'show';
+                            } else {
+                                echo 'not show';
+                            }
+                            ?></td>
                             <td class="td1"><?php echo $v['order_by']; ?></td>
+                            -->
                             <td class="td1">
                                 <?php if (empty($type)) { ?>
                                     <a href="index.php?a=<?php echo $class; ?>&m=getCategory&id=<?php echo $v['id']; ?>">编辑</a>

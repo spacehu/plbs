@@ -93,7 +93,7 @@ class EnterpriseCourseDAL {
         $sql = "select c.*,ec.department_id,ec.position_id "
                 . "from " . $base->table_name("course") . " as c "
                 . "right join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
-                . " where  ec.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . " where  ec.enterprise_id=" . $enterprise_id . " and c.`delete`=0 and ec.`delete`=0 " . $where . " "
                 . "order by c.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);

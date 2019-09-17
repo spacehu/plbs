@@ -3,15 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file://192.168.30.225/share/plbs/template/admin/course_index.php</file>
-            <file>file://192.168.30.225/share/plbs/template/admin/enterprise_index.php</file>
-            <file>file://192.168.30.225/share/plbs/template/admin/department_getDepartment.php</file>
-            <file>file://192.168.30.225/share/plbs/action/course.php</file>
-            <file>file://192.168.30.225/share/plbs/template/admin/department_index.php</file>
-            <file>file://192.168.30.225/share/plbs/template/admin/left.php</file>
-            <file>file://192.168.30.225/share/plbs/action/department.php</file>
-            <file>file://192.168.30.225/share/plbs/TigerDAL/Cms/DepartmentDAL.php</file>
-            <file>file://192.168.30.225/share/plbs/TigerDAL/Cms/CourseDAL.php</file>
+            <file>file://192.168.31.116/share/plbs/template/admin/course_getCourse.php</file>
+            <file>file://192.168.31.116/share/plbs/action/v4/ApiCourse.php</file>
+            <file>file://192.168.31.116/share/plbs/action/department.php</file>
+            <file>file://192.168.31.116/share/plbs/action/course.php</file>
+            <file>file://192.168.31.116/share/plbs/action/customer.php</file>
+            <file>file://192.168.31.116/share/plbs/TigerDAL/Cms/StatisticsDAL.php</file>
+            <file>file://192.168.31.116/share/plbs/TigerDAL/Api/LogDAL.php</file>
+            <file>file://192.168.31.116/share/plbs/action/RestfulApi.php</file>
+            <file>file://192.168.31.116/share/plbs/action/v4/ApiAccount.php</file>
+            <file>file://192.168.31.116/share/plbs/config/config.php</file>
+            <file>file://192.168.31.116/share/plbs/TigerDAL/Api/TestDAL.php</file>
+            <file>file://192.168.31.116/share/plbs/TigerDAL/Api/CourseDAL.php</file>
+            <file>file://192.168.31.116/share/plbs/action/statistics.php</file>
+            <file>file://192.168.31.116/share/plbs/template/admin/statistics_courseList.php</file>
         </group>
     </open-files>
 </project-private>

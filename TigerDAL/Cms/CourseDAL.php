@@ -127,7 +127,7 @@ class CourseDAL {
         $sql = "select count(c.category_id) as num,c.category_id "
                 . " from " . $base->table_name("course") . " as c "
                 . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
-                . " where c.category_id in (" . $cat_id . ") "
+                . " where c.category_id in (" . $cat_id . ") and c.`delete`=0 and ec.`delete`=0 "
                 . $where
                 . " GROUP by c.category_id; ";
         return $base->getFetchAll($sql);
