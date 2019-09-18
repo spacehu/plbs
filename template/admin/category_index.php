@@ -64,7 +64,7 @@ $type = \action\category::$data['type'];
                                     <?php if ($v['has_children'] == 0) { ?>| <a href="index.php?a=<?php echo $class; ?>&m=deleteCategory&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此分类删除?')">删除</a><?php } ?>
                                 <?php } else { ?>
                                     <?php if ($v['id'] != 1) { ?>
-                                        <a href="index.php?a=course&m=index&cat_id=<?php echo $v['id']; ?>"><?php echo $v['num']; ?></a>
+                                        <a href="index.php?a=course&m=index&cat_id=<?php echo $v['id']; ?>">课程数<?php echo $v['num']; ?></a>
                                     <?php } ?>
                                 <?php } ?>
                             </td>

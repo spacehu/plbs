@@ -222,7 +222,7 @@ class CourseDAL {
                 $position_id = $_ec['position_id'];
                 //获取企业课程
                 if (!empty($enterprise_id)) {
-                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
+                    $and .= " (enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
@@ -235,7 +235,7 @@ class CourseDAL {
                 $sql = "select course_id "
                         . " from " . $base->table_name("enterprise_course") . " "
                         . " where `delete`=0 "
-                        . $and
+                        . " and (" . $and . ")"
                         . " group by course_id ;";
                 $res = $base->getFetchAll($sql);
                 if (!empty($res)) {
