@@ -24,7 +24,7 @@ class UserInfoDAL {
                     . " right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
                     . " LEFT join " . $base->table_name("enterprise_department") . " as ed on eu.department_id=ed.id "
                     . " LEFT join " . $base->table_name("enterprise_position") . " as ep on eu.position_id=ep.id "
-                    . " where (eu.`status`=0 or eu.`status`=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
+                    . " where (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
                     . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         }
         return $base->getFetchAll($sql);
@@ -44,7 +44,7 @@ class UserInfoDAL {
             $sql = "select count(1) as total "
                     . "from " . $base->table_name("user_info") . " as ui "
                     . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ;";
+                    . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ;";
         }
         return $base->getFetchRow($sql)['total'];
     }
@@ -296,7 +296,7 @@ class UserInfoDAL {
         $sql = "select ui.*,eu.status as euStatus,eu.department_id,eu.position_id "
                 . "from " . $base->table_name("user_info") . " as ui "
                 . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                . " where (eu.status=0 or eu.status=1) and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
                 . "order by ui.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);

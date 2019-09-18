@@ -4,6 +4,7 @@ namespace TigerDAL\Api;
 
 use TigerDAL\BaseDAL;
 use TigerDAL\Cms\CourseDAL as cmsCourseDAL;
+use TigerDAL\Cms\EnterpriseCourseDAL as cmsEnterpriseCourseDAL;
 
 class CourseDAL {
 

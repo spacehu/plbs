@@ -74,11 +74,12 @@ class user {
                         'email' => $_POST['email'],
                         'is_email' => isset($_POST['is_email']) ? 1 : 0,
                         'mail_content' => isset($_POST['mail_content']) ? $_POST['mail_content'] : "",
-                        'start_date' => isset($_POST['start_date']) ? $_POST['start_date'] : "",
+                        'start_date' => isset($_POST['start_date']) ? $_POST['start_date'] : null,
                         'times' => isset($_POST['times']) ? $_POST['times'] : "",
-                        'just_date' => isset($_POST['just_date']) ? $_POST['just_date'] : "",
+                        'just_date' => isset($_POST['just_date']) ? $_POST['just_date'] : null,
                     ];
                 }
+                //Common::pr($data);die;
 
                 self::$data = UserDAL::update($id, $data);
             } else {

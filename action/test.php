@@ -7,6 +7,7 @@ use TigerDAL;
 use TigerDAL\Cms\LessonDAL;
 use TigerDAL\Cms\TestDAL;
 use TigerDAL\Cms\CategoryDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
 class test {
@@ -16,12 +17,27 @@ class test {
     private $select = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
     private $lesson_id;
     private $cat_id;
+    private $enterprise_id;
 
     function __construct() {
         //课程类
         $this->cat_id = 1;
         $this->class = str_replace('action\\', '', __CLASS__);
         $this->lesson_id = !empty($_GET['lesson_id']) ? (int)$_GET['lesson_id'] : 0;
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                if (!empty($_GET['enterprise_id'])) {
+                    $this->enterprise_id = $_GET['enterprise_id'];
+                } else {
+                    Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                }
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function index() {
@@ -101,6 +117,7 @@ class test {
                     'edit_by' => Common::getSession("id"),
                     'type' => $_POST['type'],
                     'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
+                    'enterprise_id' => $this->enterprise_id,
                 ];
                 self::$data = TestDAL::update($id, $data);
             } else {
@@ -124,6 +141,7 @@ class test {
                     'delete' => 0,
                     'type' => $_POST['type'],
                     'cat_id' => isset($_POST['cat_id']) ? $_POST['cat_id'] : 0,
+                    'enterprise_id' => $this->enterprise_id,
                 ];
                 self::$data = TestDAL::insert($data);
             }

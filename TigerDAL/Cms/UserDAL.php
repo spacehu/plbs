@@ -81,12 +81,16 @@ class UserDAL {
             foreach ($data as $k => $v) {
                 if (is_numeric($v)) {
                     $_data[] = " `" . $k . "`=" . $v . " ";
+                } else if ($v == null) {
+                    $_data[] = " `" . $k . "`= null  ";
                 } else {
                     $_data[] = " `" . $k . "`='" . $v . "' ";
                 }
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('user') . " set " . $set . "  where id=" . $id . " ;";
+            echo $sql;
+            die;
             return $base->query($sql);
         } else {
             return true;

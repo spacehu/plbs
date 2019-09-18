@@ -60,6 +60,14 @@ $enterprise = \action\user::$data['enterprise'];
                             </div>
                         </div>
                         <div class="leftAlist" >
+                            <span>PASSWORD 密码</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <div class="r_row">
+                                <input class="text" name="password" type="password" value="" />
+                            </div>
+                        </div>
+                        <div class="leftAlist" >
                             <span>EMAIL 电子邮箱地址</span>
                         </div>
                         <div class="leftAlist" >

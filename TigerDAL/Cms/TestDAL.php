@@ -7,7 +7,7 @@ use TigerDAL\BaseDAL;
 class TestDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords = '', $lesson_id = '', $category = '') {
+    public static function getAll($currentPage, $pagesize, $keywords = '', $lesson_id = '', $category = '', $enterprise_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -21,12 +21,15 @@ class TestDAL {
         if (!empty($category)) {
             $where .= " and cat_id = '" . $category . "' ";
         }
+        if (!empty($enterprise_id)) {
+            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+        }
         $sql = "select * from " . $base->table_name("test") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords = '', $lesson_id = '', $category = '') {
+    public static function getTotal($keywords = '', $lesson_id = '', $category = '', $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
@@ -34,9 +37,12 @@ class TestDAL {
         }
         if (is_int($lesson_id)) {
             $where .= " and lesson_id = " . $lesson_id . " ";
-        } 
+        }
         if (!empty($category)) {
             $where .= " and cat_id = '" . $category . "' and lesson_id=0 ";
+        }
+        if (!empty($enterprise_id)) {
+            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("test") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
@@ -99,6 +105,17 @@ class TestDAL {
         $base = new BaseDAL();
         $sql = "update " . $base->table_name('test') . " set `delete`=1  where id=" . $id . " ;";
         return $base->query($sql);
+    }
+
+    /** 获取试卷使用的试题 */
+    public static function getExaminationTestList($enterprise_id) {
+        $base = new BaseDAL();
+        $where = "";
+        if (is_int($enterprise_id)) {
+            $where .= " and enterprise_id = " . $enterprise_id . " ";
+        }
+        $sql = "select * from " . $base->table_name("test") . " where `delete`=0 and lesson_id=0 " . $where . " order by edit_time desc ;";
+        return $base->getFetchAll($sql);
     }
 
 }

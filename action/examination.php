@@ -8,15 +8,32 @@ use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\ExaminationDAL;
 use TigerDAL\Cms\ExaminationTestDAL;
 use TigerDAL\Cms\TestDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
 class examination {
 
     private $class;
     public static $data;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                if (!empty($_GET['enterprise_id'])) {
+                    $this->enterprise_id = $_GET['enterprise_id'];
+                } else {
+                    Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                }
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
+        
     }
 
     function index() {
@@ -51,7 +68,7 @@ class examination {
                 self::$data['data'] = null;
                 self::$data['examination_test'] = null;
             }
-            self::$data['test'] = TestDAL::getAll(1, 99, '');
+            self::$data['test'] = TestDAL::getExaminationTestList($this->enterprise_id);
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
