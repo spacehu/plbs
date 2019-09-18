@@ -76,13 +76,18 @@ class CourseDAL {
         $_in_ids = self::getCourseIdByUserId($user_id);
         $where = " and c.id in (" . $_in_ids . ") ";
 
-        $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus "
+        $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus,count(l.id) as ls,count(ul.id) as uls, "
+                . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress  "
                 . "from " . $base->table_name("course") . " as c "
                 . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
                 . "left join " . $base->table_name("user_course") . " as uc on uc.course_id=c.id and uc.user_id=" . $user_id . " and uc.`delete`=0 "
+                . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
+                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id and ul.user_id= uc.user_id AND ul.`delete` = 0 "
                 . "where c.`delete`=0 " . $where . " "
+                . "GROUP BY c.id "
                 . "order by c.order_by asc, c.edit_time desc "
                 . "limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
         return $base->getFetchAll($sql);
     }
 
