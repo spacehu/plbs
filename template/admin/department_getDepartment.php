@@ -56,8 +56,8 @@ $enterpriseCourse = \action\department::$data['enterpriseCourse'];
                             <!-- 复选框 未分配的学员 -->
                             <select multiple="multiple" id="course-selected-options" name="my-course[]">
                                 <?php if (!empty($enterpriseCourse)) { ?>
-                                    <?php foreach ($enterpriseCourse as $k => $v) { ?>
-                                        <option value='<?php echo $v['id']; ?>' <?php echo ($v['department_id'] == $data['id'] && $data['id'] != 0) ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
+                                    <?php foreach ($enterpriseCourse as $k => $v) {$dids= explode(",", $v['d_ids']); ?>
+                                <option value='<?php echo $v['id']; ?>' <?php echo (in_array($data['id'],$dids )&& $data['id'] != 0) ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>

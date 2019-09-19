@@ -2,6 +2,7 @@
 
 namespace TigerDAL\Cms;
 
+use mod\common as Common;
 use TigerDAL\BaseDAL;
 
 class EnterpriseCourseDAL {
@@ -65,6 +66,7 @@ class EnterpriseCourseDAL {
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where id=" . $id . " ;";
+            //echo $sql;die;
             return $base->query($sql);
         } else {
             return true;
@@ -83,44 +85,123 @@ class EnterpriseCourseDAL {
         $base = new BaseDAL();
         $where = "";
         if (isset($department_id) && is_numeric($department_id)) {
-            $where = " and (ec.department_id = " . $department_id . " or ec.department_id = 0  or ec.department_id is null ) ";
+            //$where = " and (ec.department_id = " . $department_id . " or ec.department_id = 0  or ec.department_id is null ) ";
 
             if (isset($position_id) && is_numeric($position_id)) {
-                $where = " and (ec.department_id = " . $department_id . " )  "
-                        . " and (ec.position_id = " . $position_id . " or ec.position_id =0 or ec.position_id is null) ";
+//                $where = " and (ec.department_id = " . $department_id . " )  "
+//                        . " and (ec.position_id = " . $position_id . " or ec.position_id =0 or ec.position_id is null) ";
+                $where = " and (ec.department_id = " . $department_id . " )  ";
             }
         }
-        $sql = "select c.*,ec.department_id,ec.position_id "
+        $sql = "select c.*,ec.department_id,group_concat(distinct ec.department_id) as d_ids,ec.position_id,group_concat(distinct ec.position_id) as p_ids "
                 . "from " . $base->table_name("course") . " as c "
                 . "right join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . " where  ec.enterprise_id=" . $enterprise_id . " and c.`delete`=0 and ec.`delete`=0 " . $where . " "
+                . "group by c.id "
                 . "order by c.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);
     }
 
     /** 更新department */
-    public static function updateDepartmentId($_courseids, $id = "") {
+    public static function updateDepartmentId($enterprise_id, $_courseids, $fid = 0, $tid = 0) {
         $base = new BaseDAL();
-        if (!empty($id)) {
-            $set = " department_id=" . $id . " , position_id = 0 ";
-        } else {
-            $set = " department_id = 0 , position_id = 0 ";
+        if (!empty($_courseids)) {
+            $_courseidsArr = explode(",", $_courseids);
+            $where = " and ec.department_id=" . $fid . " ";
+            $elsewhere = " and ec.department_id <>" . $fid . " ";
+            foreach ($_courseidsArr as $v) {
+                $sql = "select id from " . $base->table_name("enterprise_course") . " as ec where ec.`delete`=0 and ec.enterprise_id= " . $enterprise_id . " and ec.course_id=" . $v . " " . $where . " ;";
+                //echo $sql;
+                $rows = $base->getFetchAll($sql);
+                if (!empty($rows)) {
+                    foreach ($rows as $key => $val) {
+                        if ($key == 0) {
+                            $sql = "select id from " . $base->table_name("enterprise_course") . " as ec where ec.`delete`=0 and ec.enterprise_id= " . $enterprise_id . " and ec.course_id=" . $v . " " . $elsewhere . " ;";
+                            //echo $sql;
+                            $exipt = $base->getFetchAll($sql);
+                            if (empty($exipt)) {
+                                //如果是唯一的数据 执行保留操作
+                                $_data = [
+                                    'department_id' => $tid,
+                                    'position_id' => 0,
+                                ];
+                                self::update($val['id'], $_data);
+                                continue;
+                            }
+                        }
+                        //执行删除操作
+                        $_data = [
+                            'delete' => 1,
+                        ];
+                        self::update($val['id'], $_data);
+                    }
+                } else {
+                    $_data = [
+                        "enterprise_id" => $enterprise_id,
+                        "course_id" => $v,
+                        'add_by' => Common::getSession("id"),
+                        'add_time' => date("Y-m-d H:i:s"),
+                        'edit_by' => Common::getSession("id"),
+                        'edit_time' => date("Y-m-d H:i:s"),
+                        'delete' => 0,
+                        "department_id" => $tid,
+                        "position_id" => 0,
+                    ];
+                    self::insert($_data);
+                }
+            }
         }
-        $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where course_id in (" . $_courseids . ") ;";
-        return $base->query($sql);
+        //die;
     }
 
     /** 更新position */
-    public static function updatePositionId($_courseids, $id = "") {
+    public static function updatePositionId($enterprise_id, $department_id, $_courseids, $fid = 0, $tid = 0) {
         $base = new BaseDAL();
-        if (!empty($id)) {
-            $set = " position_id=" . $id . " ";
-        } else {
-            $set = " position_id = 0 ";
+        if (!empty($_courseids)) {
+            $_courseidsArr = explode(",", $_courseids);
+            $where = " and ec.department_id=" . $department_id . " and ec.position_id=" . $fid . " ";
+            $elsewhere = " and ec.department_id =" . $department_id . " and ec.position_id <>" . $fid . " ";
+            foreach ($_courseidsArr as $v) {
+                $sql = "select id from " . $base->table_name("enterprise_course") . " as ec where ec.`delete`=0 and ec.enterprise_id= " . $enterprise_id . " and ec.course_id=" . $v . " " . $where . " ;";
+                //echo $sql;die;
+                $rows = $base->getFetchAll($sql);
+                if (!empty($rows)) {
+                    foreach ($rows as $key => $val) {
+                        if ($key == 0) {
+                            $sql = "select id from " . $base->table_name("enterprise_course") . " as ec where ec.`delete`=0 and ec.enterprise_id= " . $enterprise_id . " and ec.course_id=" . $v . " " . $elsewhere . " ;";
+                            //echo $sql;
+                            $exipt = $base->getFetchAll($sql);
+                            if (empty($exipt)) {
+                                //如果是唯一的数据 执行保留操作
+                                $_data = [
+                                    'position_id' => $tid,
+                                ];
+                                self::update($val['id'], $_data);
+                                continue;
+                            }
+                        }
+                        $_data = [
+                            'delete' => 1,
+                        ];
+                        self::update($val['id'], $_data);
+                    }
+                } else {
+                    $_data = [
+                        "enterprise_id" => $enterprise_id,
+                        "course_id" => $v,
+                        'add_by' => Common::getSession("id"),
+                        'add_time' => date("Y-m-d H:i:s"),
+                        'edit_by' => Common::getSession("id"),
+                        'edit_time' => date("Y-m-d H:i:s"),
+                        'delete' => 0,
+                        "department_id" => $department_id,
+                        "position_id" => $tid,
+                    ];
+                    self::insert($_data);
+                }
+            }
         }
-        $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where course_id in (" . $_courseids . ") ;";
-        return $base->query($sql);
     }
 
 }

@@ -25,7 +25,9 @@ class CourseDAL {
         }
         $sql = "select c.* from " . $base->table_name("course") . " as c "
                 . $join
-                . "where c.`delete`=0 " . $where . " order by c.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+                . "where c.`delete`=0 " . $where . " "
+                . "group by c.id "
+                . "order by c.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
@@ -44,9 +46,13 @@ class CourseDAL {
             $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
             $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
+        $sql = "select count(1) as total from ("
+                . "select count(1) as t,c.id from " . $base->table_name("course") . " as c "
                 . $join
-                . "where c.`delete`=0 " . $where . " limit 1 ;";
+                . "where c.`delete`=0 " . $where . " "
+                . "group by c.id "
+                . ") as o;";
+        //echo $sql;
         return $base->getFetchRow($sql)['total'];
     }
 
@@ -124,12 +130,16 @@ class CourseDAL {
         if (!empty($enterprise_id)) {
             $where .= " and ec.enterprise_id=" . $enterprise_id . " ";
         }
-        $sql = "select count(c.category_id) as num,c.category_id "
+        $sql = "select count(o.category_id) as num,o.category_id from ( "
+                . "select c.category_id,c.id "
                 . " from " . $base->table_name("course") . " as c "
                 . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . " where c.category_id in (" . $cat_id . ") and c.`delete`=0 and ec.`delete`=0 "
                 . $where
-                . " GROUP by c.category_id; ";
+                . " GROUP by c.id "
+                . ") as o "
+                . "group by o.category_id ;";
+        //echo $sql;die;
         return $base->getFetchAll($sql);
     }
 

@@ -117,10 +117,10 @@ class department {
                     EnterpriseUserDAL::updateDepartmentId($_POST['departmentremove'], 0);
                 }
                 if (!empty($_POST['courses_add'])) {
-                    EnterpriseCourseDAL::updateDepartmentId($_POST['courses_add'], $id);
+                    EnterpriseCourseDAL::updateDepartmentId($this->enterprise_id,$_POST['courses_add'],0, $id);
                 }
                 if (!empty($_POST['courses_remove'])) {
-                    EnterpriseCourseDAL::updateDepartmentId($_POST['courses_remove'], 0);
+                    EnterpriseCourseDAL::updateDepartmentId($this->enterprise_id,$_POST['courses_remove'],$id, 0);
                 }
                 Common::js_redir(Common::getSession($this->class));
             } else {

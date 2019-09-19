@@ -118,10 +118,10 @@ class position {
                     EnterpriseUserDAL::updatePositionId($_POST['departmentremove'], 0);
                 }
                 if (!empty($_POST['courses_add'])) {
-                    EnterpriseCourseDAL::updatePositionId($_POST['courses_add'], $id);
+                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id,$_POST['department_id'],$_POST['courses_add'],0, $id);
                 }
                 if (!empty($_POST['courses_remove'])) {
-                    EnterpriseCourseDAL::updatePositionId($_POST['courses_remove'], 0);
+                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id,$_POST['department_id'],$_POST['courses_remove'],$id, 0);
                 }
                 Common::js_redir(Common::getSession($this->class));
             } else {

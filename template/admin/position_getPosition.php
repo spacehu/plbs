@@ -58,8 +58,8 @@ $enterpriseCourse = \action\position::$data['enterpriseCourse'];
                             <!-- 复选框 未分配的学员 -->
                             <select multiple="multiple" id="course-selected-options" name="my-course[]">
                                 <?php if (!empty($enterpriseCourse)) { ?>
-                                    <?php foreach ($enterpriseCourse as $k => $v) { ?>
-                                        <option value='<?php echo $v['id']; ?>' <?php echo ($v['position_id'] == $data['id'] && $data['id'] != 0) ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
+                                    <?php foreach ($enterpriseCourse as $k => $v) { $pids= explode(",", $v['p_ids']);?>
+                                        <option value='<?php echo $v['id']; ?>' <?php echo (in_array($data['id'],$pids ) && $data['id'] != 0) ? "selected" : ""; ?>><?php echo $v['name']; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>
@@ -79,8 +79,8 @@ $enterpriseCourse = \action\position::$data['enterpriseCourse'];
             var users_add = [];
             var users_remove = [];
             $('#pre-selected-options').multiSelect({
-                selectableHeader: "<div class='custom-header'>企业员工/学员</div>",
-                selectionHeader: "<div class='custom-header'>部门员工/学员</div>",
+                selectableHeader: "<div class='custom-header'>部门员工/学员</div>",
+                selectionHeader: "<div class='custom-header'>职位员工/学员</div>",
                 afterSelect: function (values) {
                     users_add[users_add.length] = values;
                     users_remove.splice($.inArray(values, users_add), 1);
@@ -101,8 +101,8 @@ $enterpriseCourse = \action\position::$data['enterpriseCourse'];
             var courses_add = [];
             var courses_remove = [];
             $('#course-selected-options').multiSelect({
-                selectableHeader: "<div class='custom-header'>企业课程</div>",
-                selectionHeader: "<div class='custom-header'>部门课程</div>",
+                selectableHeader: "<div class='custom-header'>部门课程</div>",
+                selectionHeader: "<div class='custom-header'>职位课程</div>",
                 afterSelect: function (values) {
                     courses_add[courses_add.length] = values;
                     courses_remove.splice($.inArray(values, courses_add), 1);
