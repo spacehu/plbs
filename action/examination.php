@@ -48,8 +48,8 @@ class examination {
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = ExaminationDAL::getTotal($keywords);
-            self::$data['data'] = ExaminationDAL::getAll($currentPage, $pagesize, $keywords);
+            self::$data['total'] = ExaminationDAL::getTotal($keywords,$this->enterprise_id);
+            self::$data['data'] = ExaminationDAL::getAll($currentPage, $pagesize, $keywords,$this->enterprise_id);
             self::$data['class'] = $this->class;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -89,6 +89,7 @@ class examination {
                     'total' => $_POST['total'],
                     'type' => $_POST['type'],
                     'edit_by' => Common::getSession("id"),
+                    'enterprise_id' => $this->enterprise_id,
                 ];
                 self::$data = ExaminationDAL::update($id, $data);
             } else {
@@ -109,6 +110,7 @@ class examination {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
+                    'enterprise_id' => $this->enterprise_id,
                 ];
                 self::$data = $id = ExaminationDAL::insertExamination($data);
             }

@@ -23,7 +23,7 @@ class test {
         //课程类
         $this->cat_id = 1;
         $this->class = str_replace('action\\', '', __CLASS__);
-        $this->lesson_id = !empty($_GET['lesson_id']) ? (int)$_GET['lesson_id'] : 0;
+        $this->lesson_id = !empty($_GET['lesson_id']) ? (int) $_GET['lesson_id'] : 0;
         try {
             $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
             if (!empty($_enterprise)) {
@@ -47,14 +47,14 @@ class test {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
-            $category = isset($_GET['category']) ? $_GET['category'] : "";
+            $category = isset($_GET['cat_id']) ? $_GET['cat_id'] : "";
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = TestDAL::getTotal($keywords, $this->lesson_id, $category);
-            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id, $category);
+            self::$data['total'] = TestDAL::getTotal($keywords, $this->lesson_id, $category, $this->enterprise_id);
+            self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id, $category, $this->enterprise_id);
             self::$data['class'] = $this->class;
             self::$data['lesson_id'] = $this->lesson_id;
             self::$data['category'] = $category;

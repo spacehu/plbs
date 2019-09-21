@@ -19,7 +19,7 @@ $categorys = \action\test::$data['categorys'];
         <script>
             $(function () {
                 $('.list_select').on("change", function () {
-                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&category=' + $('.list_select').val();
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&cat_id=' + $('.list_select').val();
                 });
             });
         </script>

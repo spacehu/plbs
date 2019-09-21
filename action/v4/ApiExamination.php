@@ -46,14 +46,15 @@ class ApiExamination extends \action\RestfulApi {
         }
     }
 
-    /** 课程 信息 */
+    /** 试卷list */
     function examinations() {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
         $keywords = isset($this->get['keywords']) ? $this->get['keywords'] : "";
         try {
-            $res = ExaminationDAL::getAll($currentPage, $pagesize, $keywords);
-            $total = ExaminationDAL::getTotal($keywords);
+            $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
+            $res = ExaminationDAL::getAll($currentPage, $pagesize, $keywords, $enterprise_id);
+            $total = ExaminationDAL::getTotal($keywords, $enterprise_id);
             if ($total > 0) {
                 $eids = AccountDAL::getExamListByExamination($this->user_id);
                 if (!empty($eids)) {
@@ -62,12 +63,12 @@ class ApiExamination extends \action\RestfulApi {
                     }
                     foreach ($res as $k => $v) {
                         if (!empty($_rows[$v['id']])) {
-                            if ((int)$_rows[$v['id']]["maxPoint"] > (int)$v['percentage']) {
+                            if ((int) $_rows[$v['id']]["maxPoint"] > (int) $v['percentage']) {
                                 $res[$k]['passStatus'] = "1";
                             } else {
                                 $res[$k]['passStatus'] = "2";
                             }
-                            $res[$k]['maxPoint'] = (int)$_rows[$v['id']]["maxPoint"];
+                            $res[$k]['maxPoint'] = (int) $_rows[$v['id']]["maxPoint"];
                         }
                     }
                 }
@@ -81,7 +82,7 @@ class ApiExamination extends \action\RestfulApi {
         return self::$data;
     }
 
-    /** 课程 信息 */
+    /** 试卷info */
     function examination() {
         if (empty($this->get['examination_id'])) {
             self::$data['success'] = false;
