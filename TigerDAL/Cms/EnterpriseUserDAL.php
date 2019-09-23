@@ -59,26 +59,26 @@ class EnterpriseUserDAL {
     }
 
     /** 更新department */
-    public static function updateDepartmentId($_userids, $id = "") {
+    public static function updateDepartmentId($_userids, $id = "", $enterprise_id = 0) {
         $base = new BaseDAL();
         if (!empty($id)) {
             $set = " department_id=" . $id . " , position_id = 0 ";
         } else {
             $set = " department_id = 0 , position_id = 0 ";
         }
-        $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where user_id in (" . $_userids . ") ;";
+        $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where user_id in (" . $_userids . ") and enterprise_id= " . $enterprise_id . " ;";
         return $base->query($sql);
     }
 
     /** 更新position */
-    public static function updatePositionId($_userids, $id = "") {
+    public static function updatePositionId($_userids, $id = "", $enterprise_id = 0) {
         $base = new BaseDAL();
         if (!empty($id)) {
             $set = " position_id=" . $id . " ";
         } else {
             $set = " position_id = 0 ";
         }
-        $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where user_id in (" . $_userids . ") ;";
+        $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where user_id in (" . $_userids . ") and enterprise_id= " . $enterprise_id . " ;";
         return $base->query($sql);
     }
 

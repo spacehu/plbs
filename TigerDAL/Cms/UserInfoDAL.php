@@ -12,21 +12,21 @@ class UserInfoDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
-        $and = "";
         if (!empty($keywords)) {
-            $where .= " where ui.name like '%" . $keywords . "%' ";
-            $and .= " and ui.name like '%" . $keywords . "%' ";
+            $where .= " and ui.name like '%" . $keywords . "%' ";
         }
-        $sql = "select ui.*,'' as edName,'' as epName  from " . $base->table_name("user_info") . " as ui " . $where . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         if ($enterprise_id !== '') {
-            $sql = "select ui.*,eu.status as euStatus,ed.`name` as edName,ep.`name` as epName "
-                    . " from " . $base->table_name("user_info") . " as ui "
-                    . " right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " LEFT join " . $base->table_name("enterprise_department") . " as ed on eu.department_id=ed.id "
-                    . " LEFT join " . $base->table_name("enterprise_position") . " as ep on eu.position_id=ep.id "
-                    . " where (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " "
-                    . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+            $where .= " and (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . " ";
         }
+        $sql = "select ui.*,eu.status as euStatus,ed.`name` as edName,ep.`name` as epName,e.`name` as eName "
+                . " from " . $base->table_name("user_info") . " as ui "
+                . " LEFT join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 "
+                . " LEFT join " . $base->table_name("enterprise") . " as e on e.id=eu.enterprise_id and e.`delete`=0 "
+                . " LEFT join " . $base->table_name("enterprise_department") . " as ed on eu.department_id=ed.id and ed.`delete`=0 "
+                . " LEFT join " . $base->table_name("enterprise_position") . " as ep on eu.position_id=ep.id and ep.`delete`=0 "
+                . " where ui.id >0 " . $where . " "
+                . " order by ui.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
         return $base->getFetchAll($sql);
     }
 
@@ -34,18 +34,16 @@ class UserInfoDAL {
     public static function getTotal($keywords, $enterprise_id = '') {
         $base = new BaseDAL();
         $where = "";
-        $and = "";
         if (!empty($keywords)) {
-            $where .= " where ui.name like '%" . $keywords . "%' ";
-            $and .= " and ui.name like '%" . $keywords . "%' ";
+            $where .= " and ui.name like '%" . $keywords . "%' ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("user_info") . " " . $where . " limit 1 ;";
         if ($enterprise_id !== '') {
-            $sql = "select count(1) as total "
-                    . "from " . $base->table_name("user_info") . " as ui "
-                    . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                    . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $and . " ;";
+            $where .= " and (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . " ";
         }
+        $sql = "select count(1) as total "
+                . " from " . $base->table_name("user_info") . " as ui "
+                . " LEFT join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id and (eu.`status`=0 or eu.`status`=1) and eu.`delete`=0 "
+                . " where ui.id >0 " . $where . "  ;";
         return $base->getFetchRow($sql)['total'];
     }
 
@@ -286,17 +284,20 @@ class UserInfoDAL {
         $base = new BaseDAL();
         $where = "";
         if (isset($department_id) && is_numeric($department_id)) {
-            $where = " and (eu.department_id = " . $department_id . " or eu.department_id = 0  or eu.department_id is null ) ";
+            $where = " and (eu.department_id = " . $department_id . " or eu.department_id = 0  or eu.department_id is null or ( ed.`delete`=1 ) ) ";
 
             if (isset($position_id) && is_numeric($position_id)) {
                 $where = " and (eu.department_id = " . $department_id . " )  "
-                        . " and (eu.position_id = " . $position_id . " or eu.position_id =0 or eu.position_id is null) ";
+                        . " and (eu.position_id = " . $position_id . " or eu.position_id =0 or eu.position_id is null or ( ep.`delete`=1 )) ";
             }
         }
-        $sql = "select ui.*,eu.status as euStatus,eu.department_id,eu.position_id "
+        $sql = "select ui.*,eu.status as euStatus,eu.department_id,eu.position_id,ed.`delete` as edDelete,ep.`delete` as epDelete "
                 . "from " . $base->table_name("user_info") . " as ui "
-                . "right join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
-                . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . "left join " . $base->table_name("enterprise_user") . " as eu on ui.id=eu.user_id "
+                . "left join " . $base->table_name("enterprise") . " as e on e.id=eu.enterprise_id "
+                . "left join " . $base->table_name("enterprise_department") . " as ed ON ed.id = eu.department_id "
+                . "left join " . $base->table_name("enterprise_position") . " as ep ON ep.id = eu.position_id "
+                . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and e.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
                 . "order by ui.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);

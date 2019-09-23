@@ -86,6 +86,7 @@ $class = \action\customer::$data['class'];
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" width="5%"><input type="checkbox" class="checkbox" id="allids" /></td>
                     <td class="td1" >用户名</td>
+                    <td class="td1" >企业名</td>
                     <td class="td1" >部门名</td>
                     <td class="td1" >职位名</td>
                     <td class="td1" width="20%">授权时间</td>
@@ -99,6 +100,7 @@ $class = \action\customer::$data['class'];
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><input type="checkbox" class="checkbox ids"  data-value="<?php echo $v['id']; ?>" /></td>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['eName']; ?></td>
                             <td class="td1"><?php echo $v['edName']; ?></td>
                             <td class="td1"><?php echo $v['epName']; ?></td>
                             <td class="td1"><?php echo $v['add_time']; ?></td>

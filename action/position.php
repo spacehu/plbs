@@ -112,16 +112,16 @@ class position {
             if (self::$data) {
                 //Common::pr(Common::getSession($this->class));die;
                 if (!empty($_POST['departmentadd'])) {
-                    EnterpriseUserDAL::updatePositionId($_POST['departmentadd'], $id);
+                    EnterpriseUserDAL::updatePositionId($_POST['departmentadd'], $id, $_POST['enterprise_id']);
                 }
                 if (!empty($_POST['departmentremove'])) {
-                    EnterpriseUserDAL::updatePositionId($_POST['departmentremove'], 0);
+                    EnterpriseUserDAL::updatePositionId($_POST['departmentremove'], 0, $_POST['enterprise_id']);
                 }
                 if (!empty($_POST['courses_add'])) {
-                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id,$_POST['department_id'],$_POST['courses_add'],0, $id);
+                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id, $_POST['department_id'], $_POST['courses_add'], 0, $id);
                 }
                 if (!empty($_POST['courses_remove'])) {
-                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id,$_POST['department_id'],$_POST['courses_remove'],$id, 0);
+                    EnterpriseCourseDAL::updatePositionId($this->enterprise_id, $_POST['department_id'], $_POST['courses_remove'], $id, 0);
                 }
                 Common::js_redir(Common::getSession($this->class));
             } else {

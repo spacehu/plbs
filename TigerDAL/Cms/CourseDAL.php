@@ -12,7 +12,8 @@ class CourseDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
-        $join = '';
+        $join = "";
+        $fields = "";
         if (!empty($keywords)) {
             $where .= " and c.name like '%" . $keywords . "%' ";
         }
@@ -21,9 +22,11 @@ class CourseDAL {
         }
         if ($enterprise_id !== '') {
             $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
-            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
-        $sql = "select c.* from " . $base->table_name("course") . " as c "
+        $fields .= ",e.name as eName ";
+        $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . "left join " . $base->table_name("enterprise") . " as e on ec.enterprise_id=e.id ";
+        $sql = "select c.*" . $fields . " from " . $base->table_name("course") . " as c "
                 . $join
                 . "where c.`delete`=0 " . $where . " "
                 . "group by c.id "
@@ -44,8 +47,9 @@ class CourseDAL {
         }
         if ($enterprise_id !== '') {
             $where .= " and ec.enterprise_id = '" . $enterprise_id . "' ";
-            $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id ";
         }
+        $join .= " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+                . "left join " . $base->table_name("enterprise") . " as e on ec.enterprise_id=e.id ";
         $sql = "select count(1) as total from ("
                 . "select count(1) as t,c.id from " . $base->table_name("course") . " as c "
                 . $join
@@ -133,8 +137,8 @@ class CourseDAL {
         $sql = "select count(o.category_id) as num,o.category_id from ( "
                 . "select c.category_id,c.id "
                 . " from " . $base->table_name("course") . " as c "
-                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
-                . " where c.category_id in (" . $cat_id . ") and c.`delete`=0 and ec.`delete`=0 "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.`delete`=0 "
+                . " where c.category_id in (" . $cat_id . ") and c.`delete`=0 "
                 . $where
                 . " GROUP by c.id "
                 . ") as o "

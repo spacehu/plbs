@@ -32,7 +32,8 @@ class test {
                 if (!empty($_GET['enterprise_id'])) {
                     $this->enterprise_id = $_GET['enterprise_id'];
                 } else {
-                    Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                    $this->enterprise_id = '';
+                    //Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
                 }
             }
         } catch (Exception $ex) {

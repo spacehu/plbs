@@ -27,13 +27,13 @@ class examination {
                 if (!empty($_GET['enterprise_id'])) {
                     $this->enterprise_id = $_GET['enterprise_id'];
                 } else {
-                    Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                    $this->enterprise_id = '';
+                    //Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
                 }
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        
     }
 
     function index() {
@@ -48,8 +48,8 @@ class examination {
             self::$data['pagesize'] = $pagesize;
             self::$data['keywords'] = $keywords;
             //Common::pr(self::$data);die;
-            self::$data['total'] = ExaminationDAL::getTotal($keywords,$this->enterprise_id);
-            self::$data['data'] = ExaminationDAL::getAll($currentPage, $pagesize, $keywords,$this->enterprise_id);
+            self::$data['total'] = ExaminationDAL::getTotal($keywords, $this->enterprise_id);
+            self::$data['data'] = ExaminationDAL::getAll($currentPage, $pagesize, $keywords, $this->enterprise_id);
             self::$data['class'] = $this->class;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
@@ -60,15 +60,17 @@ class examination {
     function getExamination() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $enterprise_id = $this->enterprise_id;
         try {
             if ($id != null) {
                 self::$data['data'] = ExaminationDAL::getOne($id);
                 self::$data['examination_test'] = ExaminationTestDAL::getAll($id);
+                $enterprise_id = self::$data['data']['enterprise_id'];
             } else {
                 self::$data['data'] = null;
                 self::$data['examination_test'] = null;
             }
-            self::$data['test'] = TestDAL::getExaminationTestList($this->enterprise_id);
+            self::$data['test'] = TestDAL::getExaminationTestList($enterprise_id);
             self::$data['class'] = $this->class;
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {

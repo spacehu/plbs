@@ -13,12 +13,16 @@ class ExaminationDAL {
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and ex.name like '%" . $keywords . "%' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and ex.enterprise_id = '" . $enterprise_id . "' ";
         }
-        $sql = "select * from " . $base->table_name("examination") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select ex.*,e.name as eName from " . $base->table_name("examination") . " as ex "
+                . "left join " . $base->table_name("enterprise") . " as e on ex.enterprise_id=e.id "
+                . "where ex.`delete`=0 " . $where . " "
+                . "order by ex.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
@@ -27,12 +31,15 @@ class ExaminationDAL {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and ex.name like '%" . $keywords . "%' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and ex.enterprise_id = '" . $enterprise_id . "' ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("examination") . " where `delete`=0 " . $where . " limit 1 ;";
+        $sql = "select count(1) as total from " . $base->table_name("examination") . " as ex "
+                . "left join " . $base->table_name("enterprise") . " as e on ex.enterprise_id=e.id "
+                . "where ex.`delete`=0 " . $where . " "
+                . "limit 1 ;";
         return $base->getFetchRow($sql)['total'];
     }
 
@@ -64,6 +71,8 @@ class ExaminationDAL {
             foreach ($data as $v) {
                 if (is_numeric($v)) {
                     $_data[] = " " . $v . " ";
+                } else if (empty($v)) {
+                    $_data[] = " null ";
                 } else {
                     $_data[] = " '" . $v . "' ";
                 }
@@ -84,6 +93,8 @@ class ExaminationDAL {
             foreach ($data as $k => $v) {
                 if (is_numeric($v)) {
                     $_data[] = " `" . $k . "`=" . $v . " ";
+                } else if (empty($v)) {
+                    $_data[] = " `" . $k . "`= null ";
                 } else {
                     $_data[] = " `" . $k . "`='" . $v . "' ";
                 }

@@ -24,6 +24,7 @@ $cat_id = \action\course::$data['cat_id'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1">名称</td>
+                    <td class="td1" width="20%">企业</td>
                     <td class="td1" width="10%">状态</td>
                     <td class="td1" width="20%">操作</td>
                 </tr>
@@ -34,6 +35,7 @@ $cat_id = \action\course::$data['cat_id'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['eName']; ?></td>
                             <td class="td1"><?php
                                 if ($v['delete'] == 0) {
                                     echo '使用中';

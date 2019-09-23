@@ -13,18 +13,21 @@ class TestDAL {
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and t.name like '%" . $keywords . "%' ";
         }
         if (is_int($lesson_id)) {
-            $where .= " and lesson_id = " . $lesson_id . " ";
+            $where .= " and t.lesson_id = " . $lesson_id . " ";
         }
         if (!empty($category)) {
-            $where .= " and cat_id = '" . $category . "' ";
+            $where .= " and t.cat_id = '" . $category . "' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
         }
-        $sql = "select * from " . $base->table_name("test") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select t.*,e.name as eName from " . $base->table_name("test") . " as t "
+                . "left join " . $base->table_name("enterprise") . " as e on t.enterprise_id=e.id "
+                . "where t.`delete`=0 " . $where . " "
+                . "order by t.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
@@ -33,18 +36,21 @@ class TestDAL {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and t.name like '%" . $keywords . "%' ";
         }
         if (is_int($lesson_id)) {
-            $where .= " and lesson_id = " . $lesson_id . " ";
+            $where .= " and t.lesson_id = " . $lesson_id . " ";
         }
         if (!empty($category)) {
-            $where .= " and cat_id = '" . $category . "' and lesson_id=0 ";
+            $where .= " and t.cat_id = '" . $category . "' and t.lesson_id=0 ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("test") . " where `delete`=0 " . $where . " limit 1 ;";
+        $sql = "select count(1) as total from " . $base->table_name("test") . " as t "
+                . "left join " . $base->table_name("enterprise") . " as e on t.enterprise_id=e.id "
+                . "where t.`delete`=0 " . $where . " "
+                . "limit 1 ;";
         return $base->getFetchRow($sql)['total'];
     }
 
@@ -69,6 +75,8 @@ class TestDAL {
             foreach ($data as $v) {
                 if (is_numeric($v)) {
                     $_data[] = " " . $v . " ";
+                } else if (empty($v)) {
+                    $_data[] = " null ";
                 } else {
                     $_data[] = " '" . $v . "' ";
                 }
@@ -88,6 +96,8 @@ class TestDAL {
             foreach ($data as $k => $v) {
                 if (is_numeric($v)) {
                     $_data[] = " `" . $k . "`=" . $v . " ";
+                } else if (empty($v)) {
+                    $_data[] = " `" . $k . "`= null ";
                 } else {
                     $_data[] = " `" . $k . "`='" . $v . "' ";
                 }
@@ -111,8 +121,10 @@ class TestDAL {
     public static function getExaminationTestList($enterprise_id) {
         $base = new BaseDAL();
         $where = "";
-        if (is_int($enterprise_id)) {
+        if (!empty($enterprise_id)) {
             $where .= " and enterprise_id = " . $enterprise_id . " ";
+        } else {
+            $where .= " and (enterprise_id = 0 or enterprise_id is null) ";
         }
         $sql = "select * from " . $base->table_name("test") . " where `delete`=0 and lesson_id=0 " . $where . " order by edit_time desc ;";
         return $base->getFetchAll($sql);
