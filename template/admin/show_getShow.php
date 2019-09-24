@@ -6,6 +6,8 @@ $image = \action\show::$data['image'];
 $list = \action\show::$data['list'];
 $typeList = \action\show::$data['typeList'];
 $enterprise = \action\show::$data['enterprise'];
+$enterprise_id = \action\show::$data['enterprise_id'];
+$examination = \action\show::$data['examination'];
 $config = \action\show::$data['config'];
 if (is_array($image)) {
     foreach ($image as $k => $v) {
@@ -46,7 +48,7 @@ if (is_array($image)) {
                         <option value="0">请选择</option>
                         <?php if (is_array($list)) { ?>
                             <?php foreach ($list as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['cat_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
                             <?php } ?>
                         <?php } ?>
                         </select>
@@ -61,6 +63,23 @@ if (is_array($image)) {
                                 <input class="text" name="cat_id" type="hidden" value="<?php echo $cat_id; ?>" />
                             </div>
                         </div>
+                        <?php if (!empty($enterprise_id)) { ?>
+                            <input type="hidden" name="enterprise_id" value="<?php echo $enterprise_id; ?>" />
+                        <?php } else { ?>
+                            <div class="leftAlist" >
+                                <span>企业</span>
+                            </div>
+                            <div class="leftAlist" >
+                                <select name="enterprise_id">
+                                    <option value="0">请选择</option>
+                                    <?php if (is_array($enterprise)) { ?>
+                                        <?php foreach ($enterprise as $v) { ?>
+                                            <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        <?php } ?>
                     </div>
                     <div class="leftA c_15_16 <?php echo ($cat_id == 15 || $cat_id == 16) ? "" : "hide"; ?>">
                         <div class="leftAlist" >
@@ -92,19 +111,6 @@ if (is_array($image)) {
                         </div>
                     </div>
                     <div class="leftA c_17 <?php echo ($cat_id == 17) ? "" : "hide"; ?>">
-                        <div class="leftAlist" >
-                            <span>企业</span>
-                        </div>
-                        <div class="leftAlist" >
-                            <select name="enterprise_id">
-                                <option value="0">请选择</option>
-                                <?php if (is_array($enterprise)) { ?>
-                                    <?php foreach ($enterprise as $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['enterprise_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
-                        </div>
                         <div class="leftAlist" >
                             <span>工作类型</span>
                         </div>
@@ -198,6 +204,19 @@ if (is_array($image)) {
                             <script id="container3" name="qualifications" type="text/plain">
 <?php echo isset($data['qualifications']) ? $data['qualifications'] : ""; ?>
                             </script>
+                        </div>
+                        <div class="leftAlist" >
+                            <span>入职资格考试</span>
+                        </div>
+                        <div class="leftAlist" >
+                            <select name="examination_id">
+                                <option value="0">请选择</option>
+                                <?php if (is_array($examination)) { ?>
+                                    <?php foreach ($examination as $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"  <?php echo $data['examination_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                 </div>

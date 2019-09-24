@@ -9,6 +9,7 @@ use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ArticleDAL;
 use TigerDAL\Cms\UserResumeArticleDAL;
 use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Cms\ExaminationDAL;
 use config\code;
 
 class show {
@@ -17,11 +18,27 @@ class show {
     private $showList = ['article', 'notice', 'share'];
     private $mediaList = ['music', 'video'];
     public static $data;
+    private $enterprise_id;
     private $cat_id;
     private $type;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                if (!empty($_GET['enterprise_id'])) {
+                    $this->enterprise_id = $_GET['enterprise_id'];
+                } else {
+                    $this->enterprise_id = '';
+                    //Common::js_alert_redir("缺乏参数：enterprise_id", ERROR_405);
+                }
+            }
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
         //课程类
         $this->cat_id = 14;
         $this->type = ['架构师', '设计师', '产品创意总监'];
@@ -49,8 +66,8 @@ class show {
             self::$data['class'] = $this->class;
 
 
-            self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $category);
-            self::$data['total'] = ArticleDAL::getTotal($keywords, $category);
+            self::$data['data'] = ArticleDAL::getAll($currentPage, $pagesize, $keywords, $category, $this->enterprise_id);
+            self::$data['total'] = ArticleDAL::getTotal($keywords, $category, $this->enterprise_id);
 
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
             unset(self::$data['list'][$this->cat_id]);
@@ -77,6 +94,8 @@ class show {
             self::$data['class'] = $this->class;
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
             self::$data['enterprise'] = EnterpriseDAL::getAll(1, 999, "");
+            self::$data['enterprise_id'] = $this->enterprise_id;
+            self::$data['examination'] = ExaminationDAL::getAll(1, 999, "", $this->enterprise_id);
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
             self::$data['typeList'] = $this->type;
             unset(self::$data['list'][$this->cat_id]);
@@ -121,7 +140,8 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
-                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : '',
+                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
+                    'examination_id' => isset($_POST['examination_id']) ? $_POST['examination_id'] : 0,
                 ];
                 self::$data = ArticleDAL::update($id, $data);
             } else {
@@ -153,6 +173,7 @@ class show {
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
                     'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
+                    'examination_id' => isset($_POST['examination_id']) ? $_POST['examination_id'] : 0,
                 ];
                 self::$data = ArticleDAL::insert($data);
             }

@@ -7,7 +7,7 @@ use TigerDAL\BaseDAL;
 class ArticleDAL {
 
     /** 获取用户信息列表 */
-    public static function getAll($currentPage, $pagesize, $keywords, $category = '') {
+    public static function getAll($currentPage, $pagesize, $keywords, $category = '',$enterprise_id='') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
@@ -18,16 +18,20 @@ class ArticleDAL {
         if (!empty($category)) {
             $where .= " and a.cat_id = '" . $category . "' ";
         }
+        if(!empty($enterprise_id)){
+            $where .= " and a.enterprise_id = '" . $enterprise_id . "' ";
+        }
         $sql = "select a.*,count(ura.id) as resumeCount from " . $base->table_name("article") . " as a "
                 . "left join " . $base->table_name("user_resume_article") . " as ura on a.id=ura.article_id "
                 . "where a.`delete`=0 " . $where . " "
                 . "group by a.id "
                 . "order by a.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
         return $base->getFetchAll($sql);
     }
 
     /** 获取数量 */
-    public static function getTotal($keywords, $category = '') {
+    public static function getTotal($keywords, $category = '',$enterprise_id='') {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
@@ -35,6 +39,9 @@ class ArticleDAL {
         }
         if (!empty($category)) {
             $where .= " and cat_id = '" . $category . "' ";
+        }
+        if(!empty($enterprise_id)){
+            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("article") . " where `delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
