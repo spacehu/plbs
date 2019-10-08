@@ -384,7 +384,7 @@ class ApiAccount extends \action\RestfulApi {
                     $res = EnterpriseDAL::getByUserId($this->user_id);
                     $res['subInfo']['enterpriseUserCount'] = EnterpriseDAL::getEnterpriseUserCount($res['id']);
                     $res['subInfo']['joinCourseUserCount'] = EnterpriseDAL::getJoinCourseUserCount($res['id']);
-                    $res['subInfo']['courseCount'] = CourseDAL::getTotal("", "", $res['id']);
+                    $res['subInfo']['courseCount'] = CourseDAL::getEnterpriseCoursesTotal($res['id']);
                     break;
                 case \mod\init::$config['token']['server_id']['management']:
                     break;
