@@ -142,8 +142,8 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
-                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
-                    'examination_id' => isset($_POST['examination_id']) ? $_POST['examination_id'] : 0,
+                    'enterprise_id' => !empty($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
+                    'examination_id' => !empty($_POST['examination_id']) ? $_POST['examination_id'] : 0,
                 ];
                 self::$data = ArticleDAL::update($id, $data);
             } else {
@@ -174,8 +174,8 @@ class show {
                     'tag' => isset($_POST['tag']) ? $_POST['tag'] : '',
                     'responsibilities' => isset($_POST['responsibilities']) ? $_POST['responsibilities'] : '',
                     'qualifications' => isset($_POST['qualifications']) ? $_POST['qualifications'] : '',
-                    'enterprise_id' => isset($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
-                    'examination_id' => isset($_POST['examination_id']) ? $_POST['examination_id'] : 0,
+                    'enterprise_id' => !empty($_POST['enterprise_id']) ? $_POST['enterprise_id'] : 0,
+                    'examination_id' => !empty($_POST['examination_id']) ? $_POST['examination_id'] : 0,
                 ];
                 self::$data = ArticleDAL::insert($data);
             }
