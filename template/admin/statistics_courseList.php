@@ -15,6 +15,13 @@ $class = \action\statistics::$data['class'];
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <script type="text/javascript" src="js/jquery.js" ></script>
         <title>无标题文档</title>
+        <!-- 日历插件 -->
+        <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen" />
+        <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+        <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+        <script type="text/javascript" src="./js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+        <!-- 日历插件 end -->
         <script>
             $(function () {
                 $('.button_find').click(function () {
@@ -22,6 +29,29 @@ $class = \action\statistics::$data['class'];
                 });
                 $('.button_time').click(function () {
                     window.location.href = 'index.php?a=<?php echo $class; ?>&m=courseList&startTime=' + $('.start_date').val() + '&endTime=' + $('.end_date').val();
+                });
+                // 日历插件
+                $('#start_date').datetimepicker({
+                    language: 'zh-CN',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    forceParse: 0,
+                    format: 'yyyy-mm-dd'
+                });
+                $('#end_date').datetimepicker({
+                    language: 'zh-CN',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    forceParse: 0,
+                    format: 'yyyy-mm-dd'
                 });
             });
         </script>
@@ -31,8 +61,8 @@ $class = \action\statistics::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
             <a class="button_find " href="javascript:void(0);">查找</a>
-            <input type="text" name="start_date" class="start_date" value="<?php echo isset($startTime) ? $startTime : ""; ?>" /> -
-            <input type="text" name="end_date" class="end_date" value="<?php echo isset($endTime) ? $endTime : ""; ?>" />
+            <input type="text" name="start_date" id="start_date" class="start_date" value="<?php echo isset($startTime) ? $startTime : ""; ?>" readonly /> -
+            <input type="text" name="end_date" id="end_date" class="end_date" value="<?php echo isset($endTime) ? $endTime : ""; ?>" readonly />
             <a class="button_time " href="javascript:void(0);">查找</a>
         </div>
         <div class="content">

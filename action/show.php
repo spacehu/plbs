@@ -84,9 +84,11 @@ class show {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         $cat_id = isset($_GET['cat_id']) ? $_GET['cat_id'] : "";
+        $enterprise_id=$this->enterprise_id;
         try {
             if ($id != null) {
                 self::$data['data'] = ArticleDAL::getOne($id);
+                $enterprise_id=self::$data['data']['enterprise_id'];
             } else {
                 self::$data['data'] = null;
             }
@@ -95,7 +97,7 @@ class show {
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
             self::$data['enterprise'] = EnterpriseDAL::getAll(1, 999, "");
             self::$data['enterprise_id'] = $this->enterprise_id;
-            self::$data['examination'] = ExaminationDAL::getAll(1, 999, "", $this->enterprise_id);
+            self::$data['examination'] = ExaminationDAL::getAll(1, 999, "", $enterprise_id);
             self::$data['list'] = CategoryDAL::tree($this->cat_id);
             self::$data['typeList'] = $this->type;
             unset(self::$data['list'][$this->cat_id]);

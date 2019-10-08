@@ -3,6 +3,8 @@ $data = \action\examination::$data['data'];
 $class = \action\examination::$data['class'];
 $test = \action\examination::$data['test'];
 $examination_test = \action\examination::$data['examination_test'];
+$examination_test_id = \action\examination::$data['examination_test_id'];
+$enterprise_id = \action\examination::$data['enterprise_id'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -16,6 +18,9 @@ $examination_test = \action\examination::$data['examination_test'];
         <!-- 图片控件 -->
         <script src="lib/cos-js-sdk-v5-master/dist/cos-js-sdk-v5.js"></script>
         <script type="text/javascript" src="js/tencent_cos.js"></script>
+        <!-- 复选框 -->
+        <link rel="stylesheet" type="text/css" href="css/multi-select.css" />
+        <script type="text/javascript" src="js/jquery.multi-select.js"></script>
         <title>无标题文档</title>
     </head>
 
@@ -31,6 +36,7 @@ $examination_test = \action\examination::$data['examination_test'];
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
+                            <input class="text" name="enterprise_id" type="hidden" value="<?php echo $enterprise_id; ?>" />
                         </div>
                         <div class="leftAlist" >
                             <span>及格线 百分比</span>
@@ -60,24 +66,19 @@ $examination_test = \action\examination::$data['examination_test'];
                             </select>
                         </div>
                         <div class="leftAlist" >
-                            <span>TESTS 试题列表</span>&nbsp;<a href="javascript:void(0);" class="add_image">+</a>
+                            <span>TESTS 试题列表</span>
                         </div>
-                        <div class="leftAlist list_image" >
-                            <?php if (!empty($examination_test)) { ?>
-                                <?php foreach ($examination_test as $lk => $lv) { ?>
-                                    <div class="leftAlist" >
-                                        <select name="examination_test[]" class="">
-                                            <option value="0" >请选择</option>
-                                            <?php if (is_array($test)) { ?>
-                                                <?php foreach ($test as $k => $v) { ?>
-                                                    <option value="<?php echo $v['id']; ?>" <?php echo $lv['test_id'] == $v['id'] ? 'selected' : ''; ?>><?php echo $v['name']; ?></option>
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </select>
-                                        <div class="r_title"><a href="javascript:void(0);" class="remove_image">DELETE</a></div>
-                                    </div>
+                        <div class="leftAlist" >
+                            <!-- 复选框 未分配的学员 -->
+                            <select multiple="multiple" id="pre-selected-options" name="my-course[]">
+                                <?php if (is_array($test)) { ?>
+                                    <?php foreach ($test as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>" <?php echo is_array($examination_test_id) ? in_array($v['id'], $examination_test_id) ? 'selected' : '' : ''; ?>><?php echo $v['name']; ?></option>
+                                    <?php } ?>
                                 <?php } ?>
-                            <?php } ?>
+                            </select>
+                            <input class="text" name="test_add" id="test_add" type="hidden" value="" />
+                            <input class="text" name="test_remove" id="test_remove" type="hidden" value="" />
                         </div>
                     </div>
                 </div>
@@ -88,27 +89,28 @@ $examination_test = \action\examination::$data['examination_test'];
                 </div>
             </form>	
         </div>
-        <div class="leftAlist hide mod_image">
-            <div class="leftAlist" >
-                <select name="examination_test[]" class="">
-                    <option value="0" >请选择</option>
-                    <?php if (is_array($test)) { ?>
-                        <?php foreach ($test as $k => $v) { ?>
-                            <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
-                        <?php } ?>
-                    <?php } ?>
-                </select>
-                <div class="r_title"><a href="javascript:void(0);" class="remove_image">DELETE</a></div>
-            </div>
-        </div>
-        <script type="text/javascript">
-            $(function () {
-                $(".add_image").click(function () {
-                    $(".mod_image").children().clone().appendTo('.list_image');
-                });
-                $(".remove_image").live('click', function () {
-                    $(this).parent().parent().remove();
-                });
+        <script>
+            var users_add = [];
+            var users_remove = [];
+            $('#pre-selected-options').multiSelect({
+                selectableHeader: "<div class='custom-header'>题库</div>",
+                selectionHeader: "<div class='custom-header'>已选题目</div>",
+                afterSelect: function (values) {
+                    users_add[users_add.length] = values;
+                    users_remove.splice($.inArray(values, users_add), 1);
+                    console.log(users_add.toString());
+                    console.log(users_remove.toString());
+                    $("#test_add").attr("value", users_add.toString());
+                    $("#test_remove").attr("value", users_remove.toString());
+                },
+                afterDeselect: function (values) {
+                    users_remove[users_remove.length] = values;
+                    users_add.splice($.inArray(values, users_add), 1);
+                    console.log(users_add.toString());
+                    console.log(users_remove.toString());
+                    $("#test_add").attr("value", users_add.toString());
+                    $("#test_remove").attr("value", users_remove.toString());
+                }
             });
         </script>
     </body>

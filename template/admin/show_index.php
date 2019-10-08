@@ -45,6 +45,7 @@ $category = \action\show::$data['category'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >活动名</td>
+                    <td class="td1" width="10%">企业</td>
                     <td class="td1" width="10%">属于</td>
                     <td class="td1" width="10%">投递人数</td>
                     <td class="td1" width="20%">操作</td>
@@ -56,6 +57,7 @@ $category = \action\show::$data['category'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['eName']; ?></td>
                             <td class="td1"><?php echo $v['add_by']; ?></td>
                             <td class="td1">
                                 <?php if (!empty($v['resumeCount'])) { ?>

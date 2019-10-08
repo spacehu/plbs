@@ -65,14 +65,26 @@ class examination {
             if ($id != null) {
                 self::$data['data'] = ExaminationDAL::getOne($id);
                 self::$data['examination_test'] = ExaminationTestDAL::getAll($id);
+                $examination_test_id = [];
+                if (!empty(self::$data['examination_test'])) {
+                    foreach (self::$data['examination_test'] as $k => $v) {
+                        $examination_test_id[] = $v['test_id'];
+                    }
+                }
+                self::$data['examination_test_id'] = $examination_test_id;
                 $enterprise_id = self::$data['data']['enterprise_id'];
             } else {
                 self::$data['data'] = null;
                 self::$data['examination_test'] = null;
+                self::$data['examination_test_id'] = null;
+                $enterprise_id = $this->enterprise_id;
             }
             self::$data['test'] = TestDAL::getExaminationTestList($enterprise_id);
             self::$data['class'] = $this->class;
+            self::$data['enterprise_id'] = $enterprise_id;
             //Common::pr(self::$data['list']);die;
+            //Common::pr(self::$data);die;
+
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
@@ -91,7 +103,7 @@ class examination {
                     'total' => $_POST['total'],
                     'type' => $_POST['type'],
                     'edit_by' => Common::getSession("id"),
-                    'enterprise_id' => $this->enterprise_id,
+                    'enterprise_id' => $_POST['enterprise_id'],
                 ];
                 self::$data = ExaminationDAL::update($id, $data);
             } else {
@@ -112,21 +124,19 @@ class examination {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'enterprise_id' => $this->enterprise_id,
+                    'enterprise_id' => $_POST['enterprise_id'],
                 ];
                 self::$data = $id = ExaminationDAL::insertExamination($data);
             }
             if (self::$data) {
-                $_data = [
-                    'add_by' => Common::getSession("id"),
-                    'add_time' => date("Y-m-d H:i:s"),
-                    'edit_by' => Common::getSession("id"),
-                    'edit_time' => date("Y-m-d H:i:s"),
-                    'delete' => 0,
-                ];
-                if (!empty($_POST['examination_test'])) {
-                    ExaminationTestDAL::save(array_unique($_POST['examination_test']), $id, $_data);
-                }
+                    $_data = [
+                        'add_by' => Common::getSession("id"),
+                        'add_time' => date("Y-m-d H:i:s"),
+                        'edit_by' => Common::getSession("id"),
+                        'edit_time' => date("Y-m-d H:i:s"),
+                        'delete' => 0,
+                    ];
+                    ExaminationTestDAL::save($_POST['test_add'], $id, $_data,$_POST['test_remove']);
                 //Common::pr(Common::getSession($this->class));die;
                 Common::js_redir(Common::getSession($this->class));
             } else {

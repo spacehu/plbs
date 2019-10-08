@@ -47,7 +47,7 @@ class ExaminationTestDAL {
             }
             $set = implode(',', $_data);
             $sql = "insert into " . $base->table_name('examination_test') . " values (null," . $set . ");";
-            //echo $sql;die;
+            //echo $sql;//die;
             return $base->query($sql);
         } else {
             return true;
@@ -81,23 +81,37 @@ class ExaminationTestDAL {
     }
 
     /** 保存最新值 其他直接删除 */
-    public static function save($_data, $aid, $_sourseData) {
-        if (empty($_data)) {
-            return true;
-        }
+    public static function save($_data, $aid, $_sourseData,$_removeData) {
         $base = new BaseDAL();
-        $sql = "delete from " . $base->table_name('examination_test') . " where `examination_id`='" . $aid . "';";
-        $base->query($sql);
-
-        foreach ($_data as $v) {
-            if ($v != 0) {
-                $os = $_sourseData;
-                array_unshift($os, $aid, $v);
-                //print_r($os);
-                self::insert($os);
+        if (!empty($_removeData)) {
+            $sql = "delete from " . $base->table_name('examination_test') . " where examination_id=".$aid." and `test_id` in (" . $_removeData . ");";
+            //echo $sql;
+            $base->query($sql);
+        }
+        if (!empty($_data)) {
+            $arr=explode(",",$_data);
+            foreach ($arr as $v) {
+                if ($v != 0) {
+                    $os = $_sourseData;
+                    array_unshift($os, $aid, $v);
+                    print_r($os);
+                    self::insert($os);
+                }
             }
         }
+        //die;
         return true;
+    }
+    /** 更新department */
+    public static function updateDepartmentId($_userids, $id = "", $enterprise_id = 0) {
+        $base = new BaseDAL();
+        if (!empty($id)) {
+            $set = " department_id=" . $id . " , position_id = 0 ";
+        } else {
+            $set = " department_id = 0 , position_id = 0 ";
+        }
+        $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where user_id in (" . $_userids . ") and enterprise_id= " . $enterprise_id . " ;";
+        return $base->query($sql);
     }
 
 }

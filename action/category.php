@@ -39,6 +39,7 @@ class category {
         try {
             self::$data['total'] = CategoryDAL::getTotal("");
             $_data = CategoryDAL::tree($cat_id, 0, false);
+            $_total = 0;
             if (!empty($_data)) {
                 foreach ($_data as $k => $v) {
                     $cat_ids[] = $v['id'];
@@ -48,6 +49,7 @@ class category {
                 if (!empty($countdata)) {
                     foreach ($countdata as $k => $v) {
                         $_count[$v['category_id']] = $v['num'];
+                        $_total += $v['num'];
                     }
                     foreach ($_data as $k => $v) {
                         $_data[$k]['num'] = !empty($_count[$v['id']]) ? $_count[$v['id']] : 0;
@@ -57,6 +59,7 @@ class category {
             self::$data['data'] = $_data;
             self::$data['class'] = $this->class;
             self::$data['type'] = $type;
+            self::$data['course_total'] = $_total;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }

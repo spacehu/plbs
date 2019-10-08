@@ -19,7 +19,7 @@ class ArticleDAL {
             $where .= " and c.cat_id = '" . $cat_id . "' ";
         }
         if ($enterprise_id !== '') {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and (c.enterprise_id = '" . $enterprise_id . "' or c.enterprise_id=0 or c.enterprise_id='' or c.enterprise_id is null) ";
         }
         if ($type !== '') {
             $where .= " and type = '" . $type . "' ";
@@ -43,7 +43,7 @@ class ArticleDAL {
             $where .= " and cat_id = '" . $cat_id . "' ";
         }
         if ($enterprise_id !== '') {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and (enterprise_id = '" . $enterprise_id . "' or enterprise_id=0 or enterprise_id='' or enterprise_id is null) ";
         }
         if ($type !== '') {
             $where .= " and type = '" . $type . "' ";

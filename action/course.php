@@ -91,11 +91,11 @@ class course {
                 $material = new material();
                 $media_id = $material->_saveImage($_POST['edit_doc']);
             }
-            if (CourseDAL::getByName($_POST['name'], $id)) {
-                Common::js_alert(code::ALREADY_EXISTING_DATA);
-                TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
-                Common::js_redir(Common::getSession($this->class));
-            }
+//            if (CourseDAL::getByName($_POST['name'], $id)) {
+//                Common::js_alert(code::ALREADY_EXISTING_DATA);
+//                TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+//                Common::js_redir(Common::getSession($this->class));
+//            }
             if ($id != null) {
                 $data = [
                     'category_id' => $this->cat_id,

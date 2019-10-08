@@ -3,6 +3,7 @@ $data = \action\category::$data['data'];
 $Total = \action\category::$data['total'];
 $class = \action\category::$data['class'];
 $type = \action\category::$data['type'];
+$course_total = \action\category::$data['course_total'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -64,7 +65,7 @@ $type = \action\category::$data['type'];
                                     <?php if ($v['has_children'] == 0) { ?>| <a href="index.php?a=<?php echo $class; ?>&m=deleteCategory&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此分类删除?')">删除</a><?php } ?>
                                 <?php } else { ?>
                                     <?php if ($v['id'] != 1) { ?>
-                                        <a href="index.php?a=course&m=index&cat_id=<?php echo $v['id']; ?>">课程数<?php echo $v['num']; ?></a>
+                                        <a href="index.php?a=course&m=index&cat_id=<?php echo $v['id']; ?>">课程数&nbsp;<?php echo $v['num']; ?></a>
                                     <?php } ?>
                                 <?php } ?>
                             </td>
@@ -76,10 +77,10 @@ $type = \action\category::$data['type'];
                 ?>
             </table>
             <!--
-            <div class="num_bar">
-                总数<b><?php echo $Total; ?></b>
-            </div>\
             -->
+            <div class="num_bar">
+                课程总数<b><?php echo $course_total; ?></b>
+            </div>\
         </div>
     </body>
 </html>

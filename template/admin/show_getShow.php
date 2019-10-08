@@ -66,6 +66,8 @@ if (is_array($image)) {
                         <?php if (!empty($enterprise_id)) { ?>
                             <input type="hidden" name="enterprise_id" value="<?php echo $enterprise_id; ?>" />
                         <?php } else { ?>
+                            <input type="hidden" name="enterprise_id" value="" />
+                            <!--
                             <div class="leftAlist" >
                                 <span>企业</span>
                             </div>
@@ -79,6 +81,7 @@ if (is_array($image)) {
                                     <?php } ?>
                                 </select>
                             </div>
+                            -->
                         <?php } ?>
                     </div>
                     <div class="leftA c_15_16 <?php echo ($cat_id == 15 || $cat_id == 16) ? "" : "hide"; ?>">

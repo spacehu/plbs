@@ -34,9 +34,6 @@
         <div id="Menu-left">
             <!-- 企业管理员模块 -->
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=department&m=index'" href="javascript:void(0);" >DEPARTMENT 部门</a>
-            </div>
-            <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=category&m=index&type=view'" href="javascript:void(0);" >CATEGORY 课程分类</a>
                 <!--<a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=course&m=index'" href="javascript:void(0);" >COURSE 课程</a>-->
             </div>
@@ -49,7 +46,36 @@
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=customer&m=index'" href="javascript:void(0);" >CUSTOMER  学员</a>
             </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=department&m=index'" href="javascript:void(0);" >DEPARTMENT 部门</a>
+            </div>
             <!-- 企业管理员模块 end -->
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >STATISTICS 统计</a>
+                <div class="sub_title">
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=customerList'" href="javascript:void(0);" >成员在线学习</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=userList'" href="javascript:void(0);" >员工信息维护</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=courseList'" href="javascript:void(0);" >在线课程学习</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=action'" href="javascript:void(0);" >ACTION 模块统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=page'" href="javascript:void(0);" >PAGE 单页统计</a>
+                    </div>
+                    <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
+                    </div>
+                </div>
+            </div>
             <?php if (\mod\common::getSession('level') <= 1) { ?>
                 <!-- 总管理员模块 -->
                 <div class="title">
@@ -84,32 +110,6 @@
                         </div>
                         <div class="title">
                             <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=enterprise&m=index'" href="javascript:void(0);" >ENTERPRISE 企业信息</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="title">
-                    <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >STATISTICS 统计</a>
-                    <div class="sub_title">
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=customerList'" href="javascript:void(0);" >成员在线学习</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=userList'" href="javascript:void(0);" >员工信息维护</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=courseList'" href="javascript:void(0);" >在线课程学习</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=action'" href="javascript:void(0);" >ACTION 模块统计</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=page'" href="javascript:void(0);" >PAGE 单页统计</a>
-                        </div>
-                        <div class="title">
-                            <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
                         </div>
                     </div>
                 </div>

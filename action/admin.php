@@ -5,6 +5,7 @@ namespace action;
 use mod\common as Common;
 use TigerDAL\Cms\UserDAL;
 use TigerDAL\Cms\RoleDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 
 class admin {
 
@@ -25,6 +26,7 @@ class admin {
         try {
             self::$data['data'] = UserDAL::getOne($id);
             self::$data['data']['role'] = RoleDAL::getOne(self::$data['data']['role_id']);
+            self::$data['data']['enterprise'] = EnterpriseDAL::getOne(self::$data['data']['enterprise_id']);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::USER_INDEX], code::USER_INDEX, json_encode($ex));
         }

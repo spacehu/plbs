@@ -13,12 +13,18 @@ class ExaminationDAL {
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and ex.name like '%" . $keywords . "%' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and (ex.enterprise_id = 0 or ex.enterprise_id is null or ex.enterprise_id='' or ex.enterprise_id = '" . $enterprise_id . "')  ";
+        }else{
+            $where .= " and (ex.enterprise_id = 0 or ex.enterprise_id is null or ex.enterprise_id='') ";
         }
-        $sql = "select *,0 as passStatus from " . $base->table_name("examination") . " where `delete`=0 " . $where . " order by edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+        $sql = "select ex.*,0 as passStatus from " . $base->table_name("examination") . " as ex "
+                . "left join " . $base->table_name("enterprise") . " as e on ex.enterprise_id=e.id "
+                . "where ex.`delete`=0 " . $where . " "
+                . "order by ex.edit_time desc "
+                . "limit " . $limit_start . "," . $limit_end . " ;";
         return $base->getFetchAll($sql);
     }
 
@@ -27,12 +33,17 @@ class ExaminationDAL {
         $base = new BaseDAL();
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and ex.name like '%" . $keywords . "%' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and enterprise_id = '" . $enterprise_id . "' ";
+            $where .= " and (ex.enterprise_id = 0 or ex.enterprise_id is null or ex.enterprise_id='' or ex.enterprise_id = '" . $enterprise_id . "')  ";
+        }else{
+            $where .= " and (ex.enterprise_id = 0 or ex.enterprise_id is null or ex.enterprise_id='') ";
         }
-        $sql = "select count(1) as total from " . $base->table_name("examination") . " where `delete`=0 " . $where . " limit 1 ;";
+        $sql = "select count(1) as total from " . $base->table_name("examination") . " as ex "
+                . "left join " . $base->table_name("enterprise") . " as e on ex.enterprise_id=e.id "
+                . "where ex.`delete`=0 " . $where . " "
+                . "limit 1 ;";
         return $base->getFetchRow($sql)['total'];
     }
 
