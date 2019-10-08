@@ -167,7 +167,7 @@ class AccountDAL {
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
                 . "left join " . $base->table_name("exam") . " as e on uc.course_id=e.course_id "
-                . "where uc.`delete`=0 and c.`delete`=0 and e.point<60 and uc.user_id=" . $user_id . " ;";
+                . "where uc.`delete`=0 and c.`delete`=0 and c.percentage>0 and c.percentage is not null and e.point<c.percentage and uc.user_id=" . $user_id . " ;";
         return $base->getFetchRow($sql)['num'];
     }
 

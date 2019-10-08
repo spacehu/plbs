@@ -378,7 +378,7 @@ class ApiAccount extends \action\RestfulApi {
                     $res = $AuthDAL->getUserInfo($this->user_id);
                     $res['subInfo']['joinCourse'] = AccountDAL::getCoursesTotal($this->user_id);
                     $res['subInfo']['passCourse'] = AccountDAL::getCoursesPass($this->user_id);
-                    $res['subInfo']['failCourse'] = (string) ($res['subInfo']['joinCourse'] - $res['subInfo']['passCourse']); //AccountDAL::getCoursesFailed($this->user_id);
+                    $res['subInfo']['failCourse'] = AccountDAL::getCoursesFailed($this->user_id);
                     break;
                 case \mod\init::$config['token']['server_id']['business']:
                     $res = EnterpriseDAL::getByUserId($this->user_id);
