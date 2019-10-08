@@ -219,6 +219,8 @@ class UserInfoDAL {
                 'edit_by' => \mod\common::getSession("id"),
                 'edit_time' => date("Y-m-d H:i:s"),
                 'delete' => '0',
+                'department_id'=>'0',
+                'position_id'=>'0',
             ];
             return self::insertEnterpriseUser($_data);
         } else if ($row['delete'] == 1) {

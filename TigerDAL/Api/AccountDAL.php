@@ -217,6 +217,8 @@ class AccountDAL {
             'edit_by' => 0,
             'edit_time' => date("Y-m-d H:i:s"),
             'delete' => 0,
+            'department_id'=>'0',
+            'position_id'=>'0',
         ];
         if (self::insertEnterpriseUser($data)) {
             return [
