@@ -6,7 +6,9 @@ use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\ArticleDAL;
 use TigerDAL\Api\AccountDAL;
-use TigerDAL\Api\ResumeDAL;
+use TigerDAL\Api\ResumeDAL;;
+use TigerDAL\Api\ExaminationDAL;
+use TigerDAL\Api\ExamDAL;
 use config\code;
 
 class ApiArticle extends \action\RestfulApi {
@@ -82,11 +84,32 @@ class ApiArticle extends \action\RestfulApi {
         try {
             //轮播列表
             $res = ArticleDAL::getOne($this->get['article_id']);
+            if(!empty($res)&&!empty($res['examination_id'])){
+                $examination=ExaminationDAL::getOne($res['examination_id']);
+                if(!empty($examination)){
+                    $exam=ExamDAL::getByExaminationId($res['examination_id']);
+                    //var_dump($exam);die;
+                    if($examination['percentage']>$exam['point']){
+                        $is_pass_exam=[
+                            "percentage"=>$examination['percentage'],
+                            "point"=>$exam['point'],
+                            "value"=>false,
+                        ];
+                    }else{
+                        $is_pass_exam=[
+                            "percentage"=>$examination['percentage'],
+                            "point"=>$exam['point'],
+                            "value"=>true,
+                        ];
+                    }
+                }
+            }
             $resF = AccountDAL::getFavorite($this->user_id, $this->get['article_id']);
             $resRA = ResumeDAL::getResumeArticle($this->user_id, $this->get['article_id']);
             self::$data['data'] = $res;
             self::$data['data']['favorites'] = (!empty($resF)) ? ($resF['delete'] == 0) ? 1 : 0 : 0;
             self::$data['data']['resume_article'] = (!empty($resRA)) ? ($resRA['delete'] == 0) ? 1 : 0 : 0;
+            self::$data['data']['is_pass_exam']=$is_pass_exam;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
