@@ -192,16 +192,16 @@ class CourseDAL {
                 if (!empty($department_id)) {
                     $and .= " and ec.course_id not in ( "
                             . " select ecs.course_id from " . $base->table_name("enterprise_course") . " as ecs "
-                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id and ed.`delete`=0 "
-                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = 0) ";
+                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id "
+                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = 0 and ed.`delete`=0 ) ";
                 }
                 //获取职位课程
                 if (!empty($position_id)) {
                     $and .= " and ec.course_id not in ( "
                             . " select course_id from " . $base->table_name("enterprise_course") . " as ecs "
-                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id and ed.`delete`=0 "
-                            . " left join ".$base->table_name("enterprise_position")." as ep on ecs.department_id=ep.id and ep.`delete`=0 "
-                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = " . $position_id . ") ";
+                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id "
+                            . " left join ".$base->table_name("enterprise_position")." as ep on ecs.department_id=ep.id "
+                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = " . $position_id . " and ed.`delete`=0 and ep.`delete`=0 ) ";
                 }
             }
         }
