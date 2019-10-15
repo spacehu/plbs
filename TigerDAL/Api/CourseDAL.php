@@ -184,23 +184,32 @@ class CourseDAL {
                 $position_id = $_ec['position_id'];
                 //获取企业课程
                 if (!empty($enterprise_id)) {
-                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
+                    $and .= " and ec.course_id not in ( "
+                            . " select ecs.course_id from " . $base->table_name("enterprise_course") . " as ecs "
+                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = 0 and ecs.position_id = 0) ";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
-                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = 0) ";
+                    $and .= " and ec.course_id not in ( "
+                            . " select ecs.course_id from " . $base->table_name("enterprise_course") . " as ecs "
+                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id and ed.`delete`=0 "
+                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = 0) ";
                 }
                 //获取职位课程
                 if (!empty($position_id)) {
-                    $and .= " and course_id not in (select course_id from " . $base->table_name("enterprise_course") . " where enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = " . $position_id . ") ";
+                    $and .= " and ec.course_id not in ( "
+                            . " select course_id from " . $base->table_name("enterprise_course") . " as ecs "
+                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id and ed.`delete`=0 "
+                            . " left join ".$base->table_name("enterprise_position")." as ep on ecs.department_id=ep.id and ep.`delete`=0 "
+                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = " . $position_id . ") ";
                 }
             }
         }
-        $sql = "select course_id "
-                . " from " . $base->table_name("enterprise_course") . " "
-                . " where `delete`=0 "
+        $sql = "select ec.course_id "
+                . " from " . $base->table_name("enterprise_course") . " as ec "
+                . " where ec.`delete`=0 "
                 . $and
-                . " group by course_id ;";
+                . " group by ec.course_id ;";
         $res = $base->getFetchAll($sql);
         if (!empty($res)) {
             $_res[] = 0;

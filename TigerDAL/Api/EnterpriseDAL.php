@@ -30,8 +30,8 @@ class EnterpriseDAL {
         $base = new BaseDAL();
         $sql = "select count(distinct(eu.user_id)) as num "
                 . "from " . $base->table_name("enterprise_user") . " as eu "
-                . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id "
-                . "inner join " . $base->table_name("enterprise_course") . " as ec on uc.course_id = ec.course_id and ec.enterprise_id = " . $id . " "
+                . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id and uc.`delete`=0 "
+                . "inner join " . $base->table_name("enterprise_course") . " as ec on uc.course_id = ec.course_id and ec.enterprise_id = " . $id . " and ec.`delete`=0 "
                 . "where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "'  limit 1 ;";
         return $base->getFetchRow($sql)['num'];
     }
