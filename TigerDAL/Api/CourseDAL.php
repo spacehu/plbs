@@ -236,21 +236,23 @@ class CourseDAL {
                 $position_id = $_ec['position_id'];
                 //获取企业课程
                 if (!empty($enterprise_id)) {
-                    $and .= " (enterprise_id = " . $enterprise_id . " and department_id = 0 and position_id = 0) ";
+                    $and .= " (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = 0 and ec.position_id = 0) ";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
-                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = 0) ";
+                    $and .= " or (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = " . $department_id . " and ec.position_id = 0 and ed.`delete`=0 ) ";
                 }
                 //获取职位课程
                 if (!empty($position_id)) {
-                    $and .= " or (enterprise_id = " . $enterprise_id . " and department_id = " . $department_id . " and position_id = " . $position_id . ") ";
+                    $and .= " or (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . " and ed.`delete`=0 and ep.`delete`=0) ";
                 }
-                $sql = "select course_id "
-                        . " from " . $base->table_name("enterprise_course") . " "
-                        . " where `delete`=0 "
+                $sql = "select ec.course_id "
+                        . " from " . $base->table_name("enterprise_course") . " as ec "
+                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
+                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
+                        . " where ec.`delete`=0 "
                         . " and (" . $and . ")"
-                        . " group by course_id ;";
+                        . " group by ec.course_id ;";
                 $res = $base->getFetchAll($sql);
                 if (!empty($res)) {
                     $_res[] = 0;
