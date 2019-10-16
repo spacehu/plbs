@@ -164,7 +164,7 @@ class statistics {
             self::$data['startTime'] = $_startTime;
             self::$data['class'] = $this->class;
 
-            if($_GET['export']=2){
+            if($_GET['export']==2){
                 $headlist=[
                     "姓名",
                     "最后登录时间",
