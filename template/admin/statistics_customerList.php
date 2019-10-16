@@ -70,10 +70,9 @@ $class = \action\statistics::$data['class'];
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >姓名</td>
                     <td class="td1" width="20%">最后登录时间</td>
-                    <td class="td1" width="8%">必修课数</td>
-                    <td class="td1" width="8%">选修课数</td>
-                    <td class="td1" width="10%">总学习课程</td>
-                    <td class="td1" width="8%">完成课程</td>
+                    <td class="td1" width="8%">参与课程</td>
+                    <td class="td1" width="8%">通过考试</td>
+                    <td class="td1" width="10%">学习总进度</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -81,12 +80,11 @@ $class = \action\statistics::$data['class'];
                     foreach ($data as $v) {
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
-                            <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><?php echo $v['NAME']; ?></td>
                             <td class="td1"><?php echo $v['last_login_time']; ?></td>
-                            <td class="td1"><?php echo $v['necessary']; ?></td>
-                            <td class="td1"><?php echo $v['unnecessary']; ?></td>
-                            <td class="td1"><?php echo $v['learned']; ?></td>
-                            <td class="td1"><?php echo $v['finished']; ?></td>
+                            <td class="td1"><?php echo $v['joinCourseCount']; ?></td>
+                            <td class="td1"><?php echo $v['passExamCount']; ?></td>
+                            <td class="td1"><?php echo $v['progress']; ?></td>
                         </tr>
                         <?php
                         $sum_i++;

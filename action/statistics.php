@@ -8,6 +8,8 @@ use TigerDAL\Cms\StatisticsDAL;
 use config\code;
 use mod\common as Common;
 
+use TigerDAL\Api\EnterpriseDAL as apiEnterpriseDAL;
+
 class statistics {
 
     private $class;
@@ -107,7 +109,7 @@ class statistics {
             self::$data['total'] = StatisticsDAL::getBonusTotal($_startTime, $_endTime, $_source);
             self::$data['sources'] = StatisticsDAL::getSource();
 
-//            Common::pr(self::$data);
+        // Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
@@ -127,7 +129,7 @@ class statistics {
             self::$data['data']['age'] = StatisticsDAL::getAge();
             self::$data['data']['region'] = StatisticsDAL::getRegion();
 
-//            Common::pr(self::$data);
+            // Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
@@ -148,9 +150,10 @@ class statistics {
             $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
 
-            $data = StatisticsDAL::getCustomerList($currentPage, $pagesize, $keywords, $this->enterprise_id, $_startTime, $_endTime);
-            self::$data['data'] = $data['data'];
-            self::$data['total'] = $data['total'];
+            $data = apiEnterpriseDAL::getEnterpriseUserCourseExam($currentPage, $pagesize,  $this->enterprise_id, $keywords,$_startTime, $_endTime);
+            self::$data['data'] = $data;
+            $total=apiEnterpriseDAL::getEnterpriseUserCount($this->enterprise_id, $keywords,$_startTime, $_endTime);
+            self::$data['total'] = $total;
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;

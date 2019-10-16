@@ -18,9 +18,19 @@ class EnterpriseDAL {
     }
 
     /** 获取企业员工数 */
-    public static function getEnterpriseUserCount($id) {
+    public static function getEnterpriseUserCount($id, $keywords="", $_startTime="", $_endTime="") {
         $base = new BaseDAL();
-        $sql = "select count(id) as num from " . $base->table_name("enterprise_user") . " where `delete`=0 and `status`=1 and enterprise_id='" . $id . "'  limit 1 ;";
+        $and = "";
+        if (!empty($keywords)) {
+            $and .= " and name like '%" . $keywords . "%' ";
+        }
+        if (!empty($_startTime)) {
+            $and .= " and last_login_time >= '" . $_startTime . "' ";
+        }
+        if (!empty($_endTime)) {
+            $and .= " and last_login_time <= '" . $_endTime . "' ";
+        }
+        $sql = "select count(id) as num from " . $base->table_name("enterprise_user") . " where `delete`=0 and `status`=1 and enterprise_id='" . $id . "'  ".$and." limit 1 ;";
         //echo $sql;
         return $base->getFetchRow($sql)['num'];
     }
@@ -37,13 +47,23 @@ class EnterpriseDAL {
     }
 
     /** 获取企业员工的学习进度 */
-    public static function getEnterpriseUserCourseExam($currentPage, $pagesize, $id) {
+    public static function getEnterpriseUserCourseExam($currentPage, $pagesize, $id, $keywords="", $_startTime="", $_endTime="") {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
-        $_sql="select u.id,u.`name` as `NAME`,u.photo from " . $base->table_name("user_info") . " AS u    
+        $and = "";
+        if (!empty($keywords)) {
+            $and .= " and u.name like '%" . $keywords . "%' ";
+        }
+        if (!empty($_startTime)) {
+            $and .= " and u.last_login_time >= '" . $_startTime . "' ";
+        }
+        if (!empty($_endTime)) {
+            $and .= " and u.last_login_time <= '" . $_endTime . "' ";
+        }
+        $_sql="select u.id,u.`name` as `NAME`,u.photo,u.last_login_time from " . $base->table_name("user_info") . " AS u    
                 LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id
-                where eu.enterprise_id= ".$id." and eu.`delete`=0 and eu.`status`=1 
+                where eu.enterprise_id= ".$id." and eu.`delete`=0 and eu.`status`=1 ".$and."
                 limit " . $limit_start . "," . $limit_end . " ;";
         $_res=$base->getFetchAll($_sql);
         $result=[];
