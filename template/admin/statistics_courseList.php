@@ -75,7 +75,7 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
-                            <td class="td1"><img style="width:100px;" src="<?php echo $v['original_src']; ?>" /></td>
+                            <td class="td1"><img style="width:200px;" src="<?php echo $v['original_src']; ?>" /></td>
                             <td class="td1"><?php echo $v['progress']; ?>%</td>
                         </tr>
                         <?php
