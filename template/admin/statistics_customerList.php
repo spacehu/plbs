@@ -64,6 +64,7 @@ $class = \action\statistics::$data['class'];
             <input type="text" name="start_date" id="start_date" class="start_date" value="<?php echo isset($startTime) ? $startTime : ""; ?>" readonly /> -
             <input type="text" name="end_date" id="end_date" class="end_date" value="<?php echo isset($endTime) ? $endTime : ""; ?>" readonly />
             <a class="button_time " href="javascript:void(0);">查找</a>
+            <a class="button_export" href="index.php?a=<?php echo $class; ?>&m=customerList&startTime=<?php echo $startTime;?>&endTime=<?php echo $endTime;?>&keywords=<?php echo $keywords;?>&export=2" >导出本页</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >

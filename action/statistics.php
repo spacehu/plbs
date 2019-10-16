@@ -7,6 +7,7 @@ use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Cms\StatisticsDAL;
 use config\code;
 use mod\common as Common;
+use mod\csv as Csv;
 
 use TigerDAL\Api\EnterpriseDAL as apiEnterpriseDAL;
 use TigerDAL\Api\CourseDAL as apiCourseDAL;
@@ -163,7 +164,30 @@ class statistics {
             self::$data['startTime'] = $_startTime;
             self::$data['class'] = $this->class;
 
-
+            if($_GET['export']=2){
+                $headlist=[
+                    "姓名",
+                    "最后登录时间",
+                    "参与课程",
+                    "通过考试",
+                    "学习总进度",
+                ];
+                $_data=[];
+                if(!empty($data)){
+                    foreach($data as $k=>$v){
+                        $_data[]=[
+                            'name'=>$v['NAME'],
+                            'last_login_time'=>$v['last_login_time'],
+                            'joinCourseCount'=>$v['joinCourseCount'],
+                            'passExamCount'=>$v['passExamCount'],
+                            'progress'=>$v['progress'],
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsv($_data,$headlist,"customerList-".data());
+                exit();
+            }
             //Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
