@@ -248,6 +248,26 @@ class statistics {
             self::$data['endTime'] = $_endTime;
             self::$data['startTime'] = $_startTime;
             self::$data['class'] = $this->class;
+
+            if(!empty($_GET['export'])&&$_GET['export']==2){
+                $headlist=[
+                    "课程名",
+                    "参与度",
+                ];
+                $_data=[];
+                if(!empty($data)){
+                    foreach($data as $k=>$v){
+                        $_data[]=[
+                            'name'=>$v['name'],
+                            'progress'=>$v['progress'],
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsv($_data,$headlist,"courseList-".date("YmdHis"));
+                exit();
+            }
+
             //Common::pr(self::$data);
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
