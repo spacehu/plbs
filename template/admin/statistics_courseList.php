@@ -65,6 +65,7 @@ $class = \action\statistics::$data['class'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >课程名</td>
+                    <td class="td1" width="20%">图片</td>
                     <td class="td1" width="20%">参与度</td>
                 </tr>
                 <?php
@@ -74,6 +75,7 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
+                            <td class="td1"><img style="width:100px;" src="<?php echo $v['original_src']; ?>" /></td>
                             <td class="td1"><?php echo $v['progress']; ?>%</td>
                         </tr>
                         <?php
