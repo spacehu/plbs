@@ -65,7 +65,7 @@ $class = \action\statistics::$data['class'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >课程名</td>
-                    <td class="td1" width="20%">图片</td>
+                    <td class="td1" width="40%">图片</td>
                     <td class="td1" width="20%">参与度</td>
                 </tr>
                 <?php
