@@ -164,7 +164,7 @@ class statistics {
             self::$data['startTime'] = $_startTime;
             self::$data['class'] = $this->class;
 
-            if($_GET['export']==2){
+            if(!empty($_GET['export'])&&$_GET['export']==2){
                 $headlist=[
                     "姓名",
                     "最后登录时间",
@@ -185,7 +185,7 @@ class statistics {
                     }
                 }
                 $csv=new Csv();
-                $csv->mkcsv($_data,$headlist,"customerList-".date());
+                $csv->mkcsv($_data,$headlist,"customerList-".date("YmdHis"));
                 exit();
             }
             //Common::pr(self::$data);
