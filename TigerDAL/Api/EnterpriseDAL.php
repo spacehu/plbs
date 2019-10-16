@@ -43,7 +43,8 @@ class EnterpriseDAL {
         $limit_end = $pagesize;
         $_sql="select u.id,u.`name` as `NAME`,u.photo from " . $base->table_name("user_info") . " AS u    
                 LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id
-                where eu.enterprise_id= ".$id." and eu.`delete`=0 and eu.`status`=1 ;";
+                where eu.enterprise_id= ".$id." and eu.`delete`=0 and eu.`status`=1 
+                limit " . $limit_start . "," . $limit_end . " ;";
         $_res=$base->getFetchAll($_sql);
         $result=[];
         $_arr=[];
@@ -102,8 +103,7 @@ class EnterpriseDAL {
                 order by u.id asc
                 ) as euce
                 group by euce.id
-                order by euce.id asc
-                limit " . $limit_start . "," . $limit_end . " ;";
+                order by euce.id asc;";
             //echo $sql;die;
             // AND eu.enterprise_id = '".$id."'
             $res = $base->getFetchAll($sql);
