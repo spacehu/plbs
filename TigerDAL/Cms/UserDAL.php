@@ -89,8 +89,7 @@ class UserDAL {
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('user') . " set " . $set . "  where id=" . $id . " ;";
-            echo $sql;
-            die;
+            //echo $sql;die;
             return $base->query($sql);
         } else {
             return true;

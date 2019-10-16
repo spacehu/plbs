@@ -31,7 +31,7 @@ class login {
                 $sql = "select u.*,count(*) as num,r.level "
                         . "from " . $db->table_name('user') . " as u "
                         . "left join " . $db->table_name('role') . " as r on u.role_id=r.id "
-                        . "where u.name='" . $t_username . "' and u.password='" . $t_password . "' ";
+                        . "where u.name='" . $t_username . "' and u.password='" . $t_password . "' and u.`delete`=0 ;";
                 //Common::pr($sql);
                 $sod = $db->getFetchRow($sql);
                 //Common::pr($sod);die;
