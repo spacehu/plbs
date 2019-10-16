@@ -540,7 +540,7 @@ class ApiAccount extends \action\RestfulApi {
             //轮播列表
 
             $res = EnterpriseDAL::getEnterpriseUserExamPass($currentPage, $pagesize, $enterprise_id);
-            $resT = CourseDAL::getTotal("", "", $enterprise_id);
+            $resT = CourseDAL::getEnterpriseCoursesTotal($enterprise_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
