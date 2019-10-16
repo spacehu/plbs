@@ -185,7 +185,7 @@ class statistics {
                     }
                 }
                 $csv=new Csv();
-                $csv->mkcsv($_data,$headlist,"customerList-".data());
+                $csv->mkcsv($_data,$headlist,"customerList-".date());
                 exit();
             }
             //Common::pr(self::$data);
