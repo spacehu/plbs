@@ -158,7 +158,10 @@ class EnterpriseDAL {
                     c.id,
                     c.`name`,
                     i.original_src,
-                    eu.user_id
+                    eu.user_id,
+                    l.id as lid,
+                    t.id as tid,
+                    e.id as eid
                 from " . $base->table_name("course") . " AS c
                     LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
                     LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
@@ -166,6 +169,9 @@ class EnterpriseDAL {
                     LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND eu.user_id = uc.user_id AND uc.`delete` = 0
                     LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
                     LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = eu.position_id 
+                    left join " . $base->table_name("lesson") . " as l on l.course_id=ec.course_id and l.delete=0
+                    left join " . $base->table_name("test") . " as t on t.lesson_id=l.id and t.delete=0
+                    left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>=c.percentage 
                 WHERE
                     ec.enterprise_id = '".$id."' AND c.`delete` = 0
                     and ( ed.delete = 0 or ed.delete is null)
