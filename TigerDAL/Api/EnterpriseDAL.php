@@ -102,32 +102,31 @@ class EnterpriseDAL {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
-        $sql = "
-    SELECT 
+        $sql = "SELECT 
         eucp.*,
         eucp.original_src,
         COUNT(distinct(eucp.user_id)) AS joinPerson
-    FROM
-    (
-        SELECT 
-            c.id,
-            c.`name`,
-            i.original_src,
-            eu.user_id
-        from " . $base->table_name("course") . " AS c
-            LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
-            LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
-            LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ec.department_id and eu.position_id=ec.position_id
-            LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND eu.user_id = uc.user_id AND uc.`delete` = 0
-            LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
-            LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = eu.position_id 
-        WHERE
-            ec.enterprise_id = '".$id."' AND c.`delete` = 0
-            and ( ed.delete = 0 or ed.delete is null)
-            and ( ep.delete = 0 or ep.delete is null)
-        ) as eucp
-    GROUP BY eucp.id
-    limit " . $limit_start . "," . $limit_end . " ;";
+            FROM
+            (
+                SELECT 
+                    c.id,
+                    c.`name`,
+                    i.original_src,
+                    eu.user_id
+                from " . $base->table_name("course") . " AS c
+                    LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
+                    LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
+                    LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ec.department_id and eu.position_id=ec.position_id
+                    LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND eu.user_id = uc.user_id AND uc.`delete` = 0
+                    LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
+                    LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = eu.position_id 
+                WHERE
+                    ec.enterprise_id = '".$id."' AND c.`delete` = 0
+                    and ( ed.delete = 0 or ed.delete is null)
+                    and ( ep.delete = 0 or ep.delete is null)
+                ) as eucp
+            GROUP BY eucp.id
+            limit " . $limit_start . "," . $limit_end . " ;";
         $res = $base->getFetchAll($sql);
         $total = self::getEnterpriseUserCount($id);
         if (!empty($res)) {
