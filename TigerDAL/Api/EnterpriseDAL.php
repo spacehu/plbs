@@ -43,7 +43,7 @@ class EnterpriseDAL {
         $limit_end = $pagesize;
         $_sql="select u.id,u.`name`,u.photo from " . $base->table_name("user_info") . " AS u    
                 LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id
-                where eu.enterprise_id= ".$id." ";
+                where eu.enterprise_id= ".$id." and eu.`delete`=0 and eu.`status`=1 ;";
         $_res=$base->getFetchAll($_sql);
         $result=[];
         $_arr=[];
