@@ -43,7 +43,7 @@ class EnterpriseDAL {
         $limit_end = $pagesize;
         $sql="SELECT 
                 euce.id,
-                euce.uname as `name`,
+                euce.uname as `NAME`,
                 euce.photo,
                 COUNT(DISTINCT (euce.course_id)) AS joinCourseCount,
                 COUNT(DISTINCT (euce.eid)) AS passExamCount,
