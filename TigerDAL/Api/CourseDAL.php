@@ -269,7 +269,7 @@ class CourseDAL {
     /** 企业移动端 获取数量 */
     public static function getEnterpriseCoursesTotal($enterprise_id) {
         $base = new BaseDAL();
-        $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
+        $sql = "select count(distinct(c.id)) as total from " . $base->table_name("course") . " as c "
                 . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
                 . "where c.`delete`=0 and ec.enterprise_id = '" . $enterprise_id . "' and ec.`delete`=0 limit 1 ;";
         return $base->getFetchRow($sql)['total'];
