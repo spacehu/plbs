@@ -9,6 +9,7 @@ use config\code;
 use mod\common as Common;
 
 use TigerDAL\Api\EnterpriseDAL as apiEnterpriseDAL;
+use TigerDAL\Api\CourseDAL as apiCourseDAL;
 
 class statistics {
 
@@ -212,9 +213,10 @@ class statistics {
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
 
 
-            $data = StatisticsDAL::getCourseList($currentPage, $pagesize, $keywords, $this->enterprise_id, $_startTime, $_endTime);
-            self::$data['data'] = $data['data'];
-            self::$data['total'] = $data['total'];
+            $data = apiEnterpriseDAL::getEnterpriseUserCourseProgresses($currentPage, $pagesize, $this->enterprise_id);
+            self::$data['data'] = $data;
+            $total=apiCourseDAL::getEnterpriseCoursesTotal($this->enterprise_id);
+            self::$data['total'] = $total;
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;

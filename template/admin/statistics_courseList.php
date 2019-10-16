@@ -59,22 +59,13 @@ $class = \action\statistics::$data['class'];
 
     <body>
         <div class="menu">
-            <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" />
-            <a class="button_find " href="javascript:void(0);">查找</a>
-            <input type="text" name="start_date" id="start_date" class="start_date" value="<?php echo isset($startTime) ? $startTime : ""; ?>" readonly /> -
-            <input type="text" name="end_date" id="end_date" class="end_date" value="<?php echo isset($endTime) ? $endTime : ""; ?>" readonly />
-            <a class="button_time " href="javascript:void(0);">查找</a>
+            
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >课程名</td>
-                    <td class="td1" width="20%">图片</td>
-                    <td class="td1" width="20%">添加时间</td>
-                    <td class="td1" width="8%">分类名</td>
-                    <td class="td1" width="8%">学习人数</td>
-                    <td class="td1" width="8%">完成人数</td>
-                    <td class="td1" width="10%">完课率</td>
+                    <td class="td1" width="20%">参与度</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -83,12 +74,7 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
-                            <td class="td1"><img style="width:100px;" src="<?php echo $v['original_src']; ?>" /></td>
-                            <td class="td1"><?php echo $v['add_time']; ?></td>
-                            <td class="td1"><?php echo $v['catName']; ?></td>
-                            <td class="td1"><?php echo $v['userCount']; ?></td>
-                            <td class="td1"><?php echo $v['userPassCount']; ?></td>
-                            <td class="td1"><?php echo $v['userPassPercent']; ?>%</td>
+                            <td class="td1"><?php echo $v['progress']; ?>%</td>
                         </tr>
                         <?php
                         $sum_i++;
