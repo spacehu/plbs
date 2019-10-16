@@ -114,11 +114,11 @@ class EnterpriseDAL {
                 }
             }
             foreach($result as $k=>$v){
-                $result[$k]['joinCourseCount']=!empty($res[$v['id']])?$res[$v['id']]['joinCourseCount']:'0';
-                $result[$k]['passExamCount']=!empty($res[$v['id']])?$res[$v['id']]['passExamCount']:'0';
-                $result[$k]['userLessonTotal']=!empty($res[$v['id']])?$res[$v['id']]['userLessonTotal']:'0';
-                $result[$k]['lessonCount']=!empty($res[$v['id']])?$res[$v['id']]['lessonCount']:'0';
-                $result[$k]['progress']=!empty($res[$v['id']])?$res[$v['id']]['progress']:'0';
+                $result[$k]['joinCourseCount']=!empty($resB[$v['id']])?$resB[$v['id']]['joinCourseCount']:'0';
+                $result[$k]['passExamCount']=!empty($resB[$v['id']])?$resB[$v['id']]['passExamCount']:'0';
+                $result[$k]['userLessonTotal']=!empty($resB[$v['id']])?$resB[$v['id']]['userLessonTotal']:'0';
+                $result[$k]['lessonCount']=!empty($resB[$v['id']])?$resB[$v['id']]['lessonCount']:'0';
+                $result[$k]['progress']=!empty($resB[$v['id']])?$resB[$v['id']]['progress']:'0';
             }
         }
         return $result;
