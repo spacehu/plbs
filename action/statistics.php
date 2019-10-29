@@ -167,20 +167,26 @@ class statistics {
             if(!empty($_GET['export'])&&$_GET['export']==2){
                 $headlist=[
                     "姓名",
-                    "最后登录时间",
-                    "参与课程",
-                    "通过考试",
-                    "学习总进度",
+                    "部门",
+                    "职位",
+                    "企业必修课程数",
+                    "学习进度",
+                    "总学习时间",
+                    "通过考试数",
+                    "参与课程数",
                 ];
                 $_data=[];
                 if(!empty($data)){
                     foreach($data as $k=>$v){
                         $_data[]=[
                             'name'=>$v['NAME'],
-                            'last_login_time'=>$v['last_login_time'],
-                            'joinCourseCount'=>$v['joinCourseCount'],
-                            'passExamCount'=>$v['passExamCount'],
+                            'edname'=>$v['edname'],
+                            'epname'=>$v['epname'],
+                            'enterpriseCourseCount'=>$v['enterpriseCourseCount'],
                             'progress'=>$v['progress'],
+                            'hours'=>$v['hours'],
+                            'passExamCount'=>$v['passExamCount'],
+                            'joinCourseCount'=>$v['joinCourseCount'],
                         ];
                     }
                 }
@@ -195,6 +201,76 @@ class statistics {
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
+    /** 成员在线学习 详细页 */
+    function getStatisticsCustomer(){
+        Common::isset_cookie();
+        try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $id = $_GET['id'];
+
+            // 获取用户独立信息：工号 姓名 部门 职位 联系方式（电话） 必修课数 选修课程数 学习进度 总学习时长（暂无） 考试通过数
+            $data['info']=StatisticsDAL::getCustomerInfo($id);
+            // Common::pr($data);die;
+            // 获取用户课程列表信息：名称 是否企业必修课 学习进度 考试通过
+            $data['courseList']=StatisticsDAL::getCustomerCourseList($id);
+            self::$data['data'] = $data;
+            self::$data['class'] = $this->class;
+
+            if(!empty($_GET['export'])&&$_GET['export']==2){
+                $headlist=[
+                    [
+                        "姓名",
+                        "部门",
+                        "职位",
+                        "联系方式",
+                        "企业必修课程数",
+                        "学习进度",
+                        "总学习时间",
+                        "通过考试数",
+                        "参与课程数",
+                    ],
+                    [
+                        $data['info']['name'],
+                        $data['info']['edname'],
+                        $data['info']['epname'],
+                        $data['info']['phone'],
+                        $data['info']['enterpriseCourseCount'],
+                        $data['info']['progress'],
+                        $data['info']['hours'],
+                        $data['info']['passExamCount'],
+                        $data['info']['joinCourseCount'],
+                    ],
+                    [
+                        "课程",
+                        "类别",
+                        "学习进度",
+                        "考试通过",
+                    ],
+                ];
+                $_data=[];
+                if(!empty($data['courseList'])){
+                    foreach($data['courseList'] as $k=>$v){
+                        $_data[]=[
+                            $v['name'],
+                            !empty($v['eccid'])?"企业必修课程":"选修课",
+                            $v['progress'],
+                            !empty($v['passExamCount'])?"通过考试":"",
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsvMore($_data,$headlist,"getCustomer-".$id."-".$data['info']['name']."-".date("YmdHis"));
+                exit();
+            }
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
     /** 员工信息维护 */
     function userList() {
         Common::isset_cookie();
@@ -251,15 +327,19 @@ class statistics {
 
             if(!empty($_GET['export'])&&$_GET['export']==2){
                 $headlist=[
-                    "课程名",
-                    "参与度",
+                    "课程名称",
+                    "参与人数",
+                    "学习进度",
+                    "考试通过率",
                 ];
                 $_data=[];
                 if(!empty($data)){
                     foreach($data as $k=>$v){
                         $_data[]=[
-                            'name'=>$v['name'],
-                            'progress'=>$v['progress'],
+                            $v['name'],
+                            $v['joinPerson'],
+                            $v['progressLesson'],
+                            $v['progressExam'],
                         ];
                     }
                 }
@@ -275,4 +355,66 @@ class statistics {
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
+    /** 在线课程学习 详细页 */
+    function getStatisticsCourse(){
+        Common::isset_cookie();
+        try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $id = $_GET['id'];
+
+            // 获取用户独立信息：工号 姓名 部门 职位 联系方式（电话） 必修课数 选修课程数 学习进度 总学习时长（暂无） 考试通过数
+            $data['info']=StatisticsDAL::getCourseInfo($id);
+            // Common::pr($data);die;
+            // 获取用户课程列表信息：名称 是否企业必修课 学习进度 考试通过
+            $data['courseList']=StatisticsDAL::getCourseCustomerList($id);
+            self::$data['data'] = $data;
+            self::$data['class'] = $this->class;
+
+            if(!empty($_GET['export'])&&$_GET['export']==2){
+                $headlist=[
+                    [
+                        "课程名称",
+                        "参与人数",
+                        "学习进度",
+                        "考试通过率",
+                    ],
+                    [
+                        $data['info']['name'],
+                        $data['info']['joinPerson'],
+                        $data['info']['progressLesson'],
+                        $data['info']['progressExam'],
+                    ],
+                    [
+                        "姓名",
+                        "部门",
+                        "职位",
+                        "学习进度",
+                        "考试通过",
+                    ],
+                ];
+                $_data=[];
+                if(!empty($data['courseList'])){
+                    foreach($data['courseList'] as $k=>$v){
+                        $_data[]=[
+                            $v['name'],
+                            $v['edname'],
+                            $v['epname'],
+                            $v['progressLesson'],
+                            !empty($v['totalE'])?"YES":"NO",
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsvMore($_data,$headlist,"getCourse-".$id."-".$data['info']['name']."-".date("YmdHis"));
+                exit();
+            }
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
 }

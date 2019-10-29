@@ -64,9 +64,11 @@ $class = \action\statistics::$data['class'];
         <div class="content">
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
-                    <td class="td1" >课程名</td>
-                    <td class="td1" width="40%">图片</td>
-                    <td class="td1" width="20%">参与度</td>
+                    <td class="td1" >课程名称</td>
+                    <td class="td1" >参与人数</td>
+                    <td class="td1" >学习进度</td>
+                    <td class="td1" >考试通过率</td>
+                    <td class="td1" width="8%">操作</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -75,8 +77,13 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
-                            <td class="td1"><img style="width:200px;" src="<?php echo $v['original_src']; ?>" /></td>
-                            <td class="td1"><?php echo $v['progress']; ?>%</td>
+                            <td class="td1"><?php echo $v['joinPerson']; ?></td>
+                            <td class="td1"><?php echo $v['progressLesson']; ?></td>
+                            <td class="td1"><?php echo $v['progressExam']; ?>%</td>
+                            <td class="td1">
+                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>">详细</a>
+                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>&export=2">导出本条</a>
+                            </td>
                         </tr>
                         <?php
                         $sum_i++;

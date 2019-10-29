@@ -51,7 +51,7 @@
             </div>
             <!-- 企业管理员模块 end -->
             <div class="title">
-                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >STATISTICS 统计</a>
+                <a class="first"  href="javascript:void(0);" >STATISTICS 统计</a>
                 <div class="sub_title">
                     <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=customerList'" href="javascript:void(0);" >成员在线学习</a>

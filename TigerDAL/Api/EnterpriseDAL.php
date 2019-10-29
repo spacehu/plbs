@@ -78,13 +78,17 @@ class EnterpriseDAL {
                     euce.id,
                     euce.uname as `NAME`,
                     euce.photo,
+                    euce.edname,
+                    euce.epname,
+                    count(DISTINCT (euce.eccid)) as enterpriseCourseCount,
                     COUNT(DISTINCT (euce.course_id)) AS joinCourseCount,
                     COUNT(DISTINCT (euce.eid)) AS passExamCount,
                     COUNT( (euce.ulid)) AS userLessonTotal,
                     COUNT( (euce.lid)) AS lessonCount,
                     IF(COUNT(euce.lid) <> 0,
                         COUNT(euce.ulid) / COUNT(euce.lid) * 100,
-                        0) AS progress
+                        0) AS progress,
+                    null as `hours`
                         from 
                 (
                 SELECT 
@@ -93,7 +97,10 @@ class EnterpriseDAL {
                     u.photo,
                     uc.course_id,
                     eu.department_id as eudid,
+                    ed.`name` as edname,
                     eu.position_id as eupid,
+                    ep.`name` as epname,
+                    ec.course_id as eccid,
                     ec.department_id as ecdid,
                     ec.position_id as ecpid,
                     ed.`delete` as edd,
@@ -134,6 +141,10 @@ class EnterpriseDAL {
                 }
             }
             foreach($result as $k=>$v){
+                $result[$k]['edname']=!empty($resB[$v['id']])?$resB[$v['id']]['edname']:'';
+                $result[$k]['epname']=!empty($resB[$v['id']])?$resB[$v['id']]['epname']:'';
+                $result[$k]['enterpriseCourseCount']=!empty($resB[$v['id']])?$resB[$v['id']]['enterpriseCourseCount']:'0';
+                $result[$k]['hours']=!empty($resB[$v['id']])?$resB[$v['id']]['hours']:null;
                 $result[$k]['joinCourseCount']=!empty($resB[$v['id']])?$resB[$v['id']]['joinCourseCount']:'0';
                 $result[$k]['passExamCount']=!empty($resB[$v['id']])?$resB[$v['id']]['passExamCount']:'0';
                 $result[$k]['userLessonTotal']=!empty($resB[$v['id']])?$resB[$v['id']]['userLessonTotal']:'0';
@@ -150,30 +161,44 @@ class EnterpriseDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $sql = "SELECT 
-        eucp.*,
+        eucp.id,eucp.name,eucp.ecid,eucp.user_id,
         eucp.original_src,
-        COUNT(distinct(eucp.user_id)) AS joinPerson
+        COUNT(distinct(eucp.user_id)) AS joinPerson,
+        avg(case when eucp.totalL>0 then eucp.totalUl/eucp.totalL else 0 end ) as progressLesson,
+        avg(case when eucp.totalE>0 then eucp.totalEU/eucp.totalE else 0 end ) as progressExam
             FROM
             (
                 SELECT 
-                    c.id,
-                    c.`name`,
-                    i.original_src,
-                    eu.user_id
+                c.id, c.`name`, i.original_src, ec.id as ecid,eu.user_id as user_id,
+                case when eu.user_id=uc.user_id then count(distinct(l.id)) else 0 end as totalL,
+                case when eu.user_id=uc.user_id then count(distinct(ul.id)) else 0 end as totalUL,
+                count(distinct(eu.user_id)) as totalEU,
+                count(distinct(e.user_id)) as totalE
                 from " . $base->table_name("course") . " AS c
-                    LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
-                    LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
-                    LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ec.department_id and eu.position_id=ec.position_id
-                    LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND eu.user_id = uc.user_id AND uc.`delete` = 0
-                    LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
-                    LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = eu.position_id 
+                    LEFT JOIN " . $base->table_name("enterprise_course")." AS ec ON c.id = ec.course_id AND ec.`delete` = 0
+                    LEFT JOIN " . $base->table_name("image")." AS i ON i.id = c.media_id
+                    LEFT JOIN " . $base->table_name("user_course")." AS uc ON uc.course_id = c.id
+                        AND uc.`delete` = 0
+                    LEFT JOIN " . $base->table_name("enterprise_user")." AS eu ON eu.enterprise_id = ec.enterprise_id
+                        AND eu.`delete` = 0
+                        AND eu.`status` = 1
+                        AND eu.user_id = uc.user_id
+                        AND (eu.department_id = ec.department_id or (ec.department_id=0))
+                        AND (eu.position_id = ec.position_id or (ec.position_id=0)) 
+                    LEFT JOIN " . $base->table_name("enterprise_department")." AS ed ON ed.id = eu.department_id
+                    LEFT JOIN " . $base->table_name("enterprise_position")." AS ep ON ep.id = eu.position_id
+                    left join " . $base->table_name("lesson")." as l on c.id=l.course_id and l.delete=0
+                    left join " . $base->table_name("user_lesson")." as ul on ul.user_id=uc.user_id and ul.lesson_id=l.id and ul.delete=0
+                    left join " . $base->table_name("exam")." as e on e.user_id=eu.user_id and e.course_id=c.id and e.delete=0 and e.point>= c.percentage 
                 WHERE
                     ec.enterprise_id = '".$id."' AND c.`delete` = 0
                     and ( ed.delete = 0 or ed.delete is null)
                     and ( ep.delete = 0 or ep.delete is null)
+                    group by ec.id
                 ) as eucp
             GROUP BY eucp.id
             limit " . $limit_start . "," . $limit_end . " ;";
+        // echo $sql;die;
         $res = $base->getFetchAll($sql);
         $total = self::getEnterpriseUserCount($id);
         if (!empty($res)) {

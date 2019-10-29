@@ -224,6 +224,7 @@ class CourseDAL {
     /** 根据uid获取可以使用的课程id */
     public static function getCourseIdByUserId($user_id) {
         $base = new BaseDAL();
+        $where ="";
         $and = "  ";
         if (!empty($user_id)) {
             //普通用户id enterprise_user里面没有数据
@@ -236,21 +237,23 @@ class CourseDAL {
                 $position_id = $_ec['position_id'];
                 //获取企业课程
                 if (!empty($enterprise_id)) {
-                    $and .= " (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = 0 and ec.position_id = 0) ";
+                    $where .=" and ec.enterprise_id = " . $enterprise_id . " ";
+                    $and .= " (ec.department_id = 0 and ec.position_id = 0) ";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
-                    $and .= " or (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = " . $department_id . " and ec.position_id = 0 and ed.`delete`=0 ) ";
+                    $and .= " or (ec.department_id = " . $department_id . " and ec.position_id = 0 ) ";
                 }
                 //获取职位课程
                 if (!empty($position_id)) {
-                    $and .= " or (ec.enterprise_id = " . $enterprise_id . " and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . " and ed.`delete`=0 and ep.`delete`=0) ";
+                    $and .= " or (and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . " ) ";
                 }
                 $sql = "select ec.course_id "
                         . " from " . $base->table_name("enterprise_course") . " as ec "
-                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
-                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
+                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id and ed.`delete`=0 "
+                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id and ep.`delete`=0 "
                         . " where ec.`delete`=0 "
+                        . " ".$where ." "
                         . " and (" . $and . ")"
                         . " group by ec.course_id ;";
                 $res = $base->getFetchAll($sql);

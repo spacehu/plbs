@@ -70,10 +70,14 @@ $class = \action\statistics::$data['class'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >姓名</td>
-                    <td class="td1" width="20%">最后登录时间</td>
-                    <td class="td1" width="8%">参与课程</td>
-                    <td class="td1" width="8%">通过考试</td>
-                    <td class="td1" width="10%">学习总进度</td>
+                    <td class="td1" >部门</td>
+                    <td class="td1" >职位</td>
+                    <td class="td1" >企业必修课程数</td>
+                    <td class="td1" width="10%">学习进度</td>
+                    <td class="td1" width="10%">总学习时间</td>
+                    <td class="td1" width="8%">通过考试数</td>
+                    <td class="td1" width="8%">参与课程数</td>
+                    <td class="td1" width="8%">操作</td>
                 </tr>
                 <?php
                 $sum_i = 1;
@@ -82,10 +86,17 @@ $class = \action\statistics::$data['class'];
                         ?>
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['NAME']; ?></td>
-                            <td class="td1"><?php echo $v['last_login_time']; ?></td>
-                            <td class="td1"><?php echo $v['joinCourseCount']; ?></td>
-                            <td class="td1"><?php echo $v['passExamCount']; ?></td>
+                            <td class="td1"><?php echo $v['edname']; ?></td>
+                            <td class="td1"><?php echo $v['epname']; ?></td>
+                            <td class="td1"><?php echo $v['enterpriseCourseCount']; ?></td>
                             <td class="td1"><?php echo $v['progress']; ?></td>
+                            <td class="td1"><?php echo $v['hours']; ?></td>
+                            <td class="td1"><?php echo $v['passExamCount']; ?></td>
+                            <td class="td1"><?php echo $v['joinCourseCount']; ?></td>
+                            <td class="td1">
+                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCustomer&id=<?php echo $v['id'];?>">详细</a>
+                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCustomer&id=<?php echo $v['id'];?>&export=2">导出本条</a>
+                            </td>
                         </tr>
                         <?php
                         $sum_i++;
