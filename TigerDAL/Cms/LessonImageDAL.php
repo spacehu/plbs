@@ -61,6 +61,11 @@ class LessonImageDAL {
 
     /** 保存最新值 其他直接删除 */
     public static function save($_data, $aid, $_sourseData) {
+        // 先删除
+        $base = new BaseDAL();
+        $sql = "delete from " . $base->table_name('lesson_image') . " where `lesson_id`='" . $aid . "';";
+        $base->query($sql);
+        // 如果有数据 插入image表
         if (empty($_data)) {
             return true;
         }
@@ -80,10 +85,6 @@ class LessonImageDAL {
             ];
             $_arr[] = ImageDAL::insert_return_id($_imageData);
         }
-        $base = new BaseDAL();
-        $sql = "delete from " . $base->table_name('lesson_image') . " where `lesson_id`='" . $aid . "';";
-        $base->query($sql);
-
         foreach ($_arr as $v) {
             if ($v != 0) {
                 $os = $_sourseData;

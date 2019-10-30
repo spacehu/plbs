@@ -122,8 +122,9 @@ class lesson {
                     'delete' => 0,
                 ];
                 if (!empty($_POST['lesson_image'])) {
-                    LessonImageDAL::save(array_unique($_POST['lesson_image']), $id, $_data);
+                    $_POST['lesson_image']=array_unique($_POST['lesson_image']);
                 }
+                LessonImageDAL::save($_POST['lesson_image'], $id, $_data);
                 //Common::pr(Common::getSession($this->class));die;
                 Common::js_redir(Common::getSession($this->class));
             } else {
