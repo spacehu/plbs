@@ -75,7 +75,7 @@ if (is_array($image)) {
                             </select>
                         </div>
                         <div class="leftAlist" >
-                            <span>MEDIA 媒体资料</span>
+                            <span>MEDIA 媒体资料</span> <a href="javascript:void(0);" class="remove_media">DELETE</a>
                         </div>
                         <div class="leftAlist" >
                             <div class="r_row">
@@ -140,6 +140,9 @@ if (is_array($image)) {
         </div>
         <script type="text/javascript">
             $(function () {
+                $(".remove_media").live('click',function(){
+                    $("#edit_doc").attr("value",0);
+                });
                 $(".add_image").click(function () {
                     $(".mod_image").children().clone().appendTo('.list_image');
                 });

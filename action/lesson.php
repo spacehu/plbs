@@ -78,6 +78,9 @@ class lesson {
                 $material = new material();
                 $media_id = $material->_saveMedia($_POST['edit_doc'], $_POST['type']);
             }
+            if($_POST['edit_doc'] === 0){
+                $media_id=0;
+            }
             if (LessonDAL::getByName($_POST['name'], $_POST['course_id'], $id)) {
                 Common::js_alert(code::ALREADY_EXISTING_DATA);
                 TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
