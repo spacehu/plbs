@@ -142,6 +142,7 @@ if (is_array($image)) {
             $(function () {
                 $(".remove_media").live('click',function(){
                     $("#edit_doc").attr("value",0);
+                    $(".r_row_img").attr("src", "");
                 });
                 $(".add_image").click(function () {
                     $(".mod_image").children().clone().appendTo('.list_image');
