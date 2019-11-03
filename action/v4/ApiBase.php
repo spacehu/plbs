@@ -5,6 +5,7 @@ namespace action\v4;
 use mod\common as Common;
 use TigerDAL\Api\ImageDAL;
 use TigerDAL\Cms\CategoryDAL;
+use TigerDAL\Cms\SystemDAL;
 use TigerDAL\Api\ArticleDAL;
 use config\code;
 
@@ -68,7 +69,7 @@ class ApiBase extends \action\RestfulApi {
     }
 
 
-    /** 简历 城市 信息 */
+    /** 机遇 城市 信息 */
     function citys() {
         try {
             //轮播列表
@@ -79,12 +80,28 @@ class ApiBase extends \action\RestfulApi {
         }
         return self::$data;
     }
-    /** 简历 类型 信息 */
+    /** 机遇 类型 信息 */
     function types() {
         try {
             //轮播列表
             $res = ArticleDAL::getTypes();
             self::$data['data']['list'] = $res;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
+
+    /** 机遇 检查是否开启 */
+    function checkSystem(){
+        try {
+            //轮播列表
+            $obj="0";
+            $res = SystemDAL::getConfig('changes');
+            if(!empty($res)){
+                $obj=$res['value'];
+            }
+            self::$data['data']['info'] = $obj;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }

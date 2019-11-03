@@ -118,6 +118,7 @@ if (is_array($image)) {
                             <span>工作类型</span>
                         </div>
                         <div class="leftAlist" >
+                        <!--
                             <select name="type">
                                 <option value="">请选择</option>
                                 <?php if (is_array($typeList)) { ?>
@@ -126,6 +127,10 @@ if (is_array($image)) {
                                     <?php } ?>
                                 <?php } ?>
                             </select>
+                            -->
+                            <div class="">
+                                <input class="text" name="type" type="text" value="<?php echo isset($data['type']) ? $data['type'] : ''; ?>" />
+                            </div>
                         </div>
                         <div class="leftAlist" >
                             <span>薪水</span>
