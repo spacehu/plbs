@@ -45,6 +45,8 @@ class CourseDAL {
             $where .= " AND (ec.enterprise_id = ".$enterprise_id." or ec.enterprise_id is null) "
                     . " AND (((ec.department_id = ".$department_id." AND (ec.position_id = ".$position_id." OR ec.position_id = 0)) "
                     . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
 
         $sql = "select c.*,i.original_src,if(uc.status,uc.status,0) as ucStatus "
@@ -56,7 +58,7 @@ class CourseDAL {
                 . " group by c.id "
                 . " order by c.order_by asc, c.edit_time desc "
                 . " limit " . $limit_start . "," . $limit_end . " ;";
-        //echo $sql;die;
+        echo $sql;die;
         return $base->getFetchAll($sql);
     }
 
