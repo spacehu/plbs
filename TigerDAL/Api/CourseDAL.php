@@ -250,10 +250,10 @@ class CourseDAL {
                 }
                 $sql = "select ec.course_id "
                         . " from " . $base->table_name("enterprise_course") . " as ec "
-                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id and ed.`delete`=0 "
-                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id and ep.`delete`=0 "
-                        . " left join ".$base->table_name("course")." as c on c.id=ec.course_id and c.delete=0 "
-                        . " where ec.`delete`=0 "
+                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
+                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
+                        . " left join ".$base->table_name("course")." as c on c.id=ec.course_id "
+                        . " where ec.`delete`=0 and c.delete=0 "
                         . " ".$where ." "
                         . " and (" . $and . ")"
                         . " group by ec.course_id ;";
