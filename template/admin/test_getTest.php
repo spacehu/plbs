@@ -70,8 +70,10 @@ $categorys = \action\test::$data['categorys'];
                         <div class="leftAlist <?php echo $data['type'] == "text" ? 'hide' : ''; ?> list_type list_image" >
                             <?php if (is_array($option)) { ?>
                                 <?php foreach ($option as $k => $v) { ?>
-                                    <?php if ($k != "A") { ?><br /><?php } ?>
-                                    <span><?php echo $k; ?>: </span><input class="text" name="overview[]" type="text" value="<?php echo $v; ?>" />
+                                    <div class="option">
+                                        <span><?php echo $k; ?>: </span><input class="text" name="overview[]" type="text" value="<?php echo $v; ?>" />
+                                        <a href="javascript:void(0);" class="option_remove">delete</a>
+                                    </div>
                                 <?php } ?>
                             <?php } ?>
                         </div>
@@ -97,16 +99,23 @@ $categorys = \action\test::$data['categorys'];
             </form>	
         </div>
         <div class="leftAlist hide mod_image">
-            <br />
-            <span></span><input class="text" name="overview[]" type="text" value="" />
+            <div class="option">
+                <span></span><input class="text" name="overview[]" type="text" value="" />
+                <a href="javascript:void(0);" class="option_remove">delete</a>
+            </div>
         </div>
         <script type="text/javascript">
+            var key = <?php echo json_encode($select); ?>;
             $(function () {
-                var key = <?php echo json_encode($select); ?>;
                 $(".add_image").on("click", function () {
-                    console.log(key[$(".list_image > input").size()]);
-                    $(".mod_image > span").html(key[$(".list_image > input").size()] + ": ");
+                    //console.log(key[$(".list_image > .option").size()]);
+                    //$(".mod_image > .option > span").html(key[$(".list_image > .option").size()] + ": ");
                     $(".mod_image").children().clone().appendTo('.list_image');
+                    resetKey();
+                });
+                $(".option_remove").live("click",function (){
+                    $(this).parent().remove();
+                    resetKey();
                 });
                 $(".select_type").change(function () {
                     if ($(this).val() === "text") {
@@ -116,6 +125,11 @@ $categorys = \action\test::$data['categorys'];
                     }
                 });
             });
+            var resetKey=function (){
+                $(".list_image > .option > span").each(function(i){
+                    $(this).html(key[i]+": ");
+                });
+            }
             var ue = UE.getEditor('container');
         </script>
     </body>
