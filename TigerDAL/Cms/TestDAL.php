@@ -22,7 +22,7 @@ class TestDAL {
             $where .= " and t.cat_id = '" . $category . "' ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
+            //$where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
         }
         $sql = "select t.*,e.name as eName from " . $base->table_name("test") . " as t "
                 . "left join " . $base->table_name("enterprise") . " as e on t.enterprise_id=e.id "
@@ -45,7 +45,7 @@ class TestDAL {
             $where .= " and t.cat_id = '" . $category . "' and t.lesson_id=0 ";
         }
         if (!empty($enterprise_id)) {
-            $where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
+            //$where .= " and t.enterprise_id = '" . $enterprise_id . "' ";
         }
         $sql = "select count(1) as total from " . $base->table_name("test") . " as t "
                 . "left join " . $base->table_name("enterprise") . " as e on t.enterprise_id=e.id "
