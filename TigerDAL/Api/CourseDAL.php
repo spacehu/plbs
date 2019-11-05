@@ -238,7 +238,7 @@ class CourseDAL {
                 //获取企业课程
                 if (!empty($enterprise_id)) {
                     $where .=" and ec.enterprise_id = " . $enterprise_id . " ";
-                    $and .= " (ec.department_id = 0 and ec.position_id = 0) ";
+                    $and .= " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id<>0 and ed.delete=1)";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
@@ -252,6 +252,7 @@ class CourseDAL {
                         . " from " . $base->table_name("enterprise_course") . " as ec "
                         . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id and ed.`delete`=0 "
                         . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id and ep.`delete`=0 "
+                        . " left join ".$base->table_name("course")." as c on c.id=ec.course_id and c.delete=0 "
                         . " where ec.`delete`=0 "
                         . " ".$where ." "
                         . " and (" . $and . ")"
