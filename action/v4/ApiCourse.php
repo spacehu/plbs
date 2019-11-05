@@ -150,6 +150,7 @@ class ApiCourse extends \action\RestfulApi {
             return self::$data;
         }
         try {
+            $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
             //轮播列表
             $_obj = CourseDAL::getOne($this->get['course_id'], $this->user_id);
             $res = TestDAL::getRand($this->get['course_id'], $_obj['text_max']);

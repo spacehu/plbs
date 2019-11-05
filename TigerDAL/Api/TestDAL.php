@@ -28,7 +28,7 @@ class TestDAL {
     }
 
     /** 随机出题 */
-    public static function getRand($course_id, $limit) {
+    public static function getRand($course_id, $limit,$enterprise_id) {
         $base = new BaseDAL();
         $sql = "select id from " . $base->table_name("lesson") . " where `delete`=0 and course_id=" . $course_id . " ;";
         $_arr = $base->getFetchAll($sql);
@@ -37,7 +37,7 @@ class TestDAL {
                 $_rows[] = $v['id'];
             }
             $_ids = implode(",", $_rows);
-            $_sql = "select * from " . $base->table_name("test") . " where lesson_id in (" . $_ids . ") and `delete`=0 order by RAND() LIMIT " . $limit . " ;";
+            $_sql = "select * from " . $base->table_name("test") . " where lesson_id in (" . $_ids . ") and `delete`=0 and enterprise_id=".$enterprise_id." order by RAND() LIMIT " . $limit . " ;";
             $_res = $base->getFetchAll($_sql);
             if (!empty($_res)) {
                 foreach ($_res as $k => $v) {
