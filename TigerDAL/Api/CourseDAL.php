@@ -238,15 +238,15 @@ class CourseDAL {
                 //获取企业课程
                 if (!empty($enterprise_id)) {
                     $where .=" and ec.enterprise_id = " . $enterprise_id . " ";
-                    $and .= " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id<>0 and ed.delete=1)";
+                    $and = " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id<>0 and ed.delete=1)";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
-                    $and .= " or (ec.department_id = " . $department_id . " and ec.position_id = 0 ) ";
+                    $and = " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id = " . $department_id . " and ec.position_id = 0 ) ";
                 }
                 //获取职位课程
                 if (!empty($position_id)) {
-                    $and .= " or (and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . " ) ";
+                    $and = " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id = " . $department_id . " and ec.position_id = 0 ) or (and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . " ) ";
                 }
                 $sql = "select ec.course_id "
                         . " from " . $base->table_name("enterprise_course") . " as ec "
