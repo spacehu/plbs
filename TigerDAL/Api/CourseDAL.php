@@ -5,6 +5,8 @@ namespace TigerDAL\Api;
 use TigerDAL\BaseDAL;
 use TigerDAL\Cms\CourseDAL as cmsCourseDAL;
 use TigerDAL\Cms\EnterpriseCourseDAL as cmsEnterpriseCourseDAL;
+use TigerDAL\Cms\DepartmentDAL as cmsDepartmentDAL;
+use TigerDAL\Cms\PositionDAL as cmsPositionDAL;
 
 class CourseDAL {
 
@@ -234,11 +236,17 @@ class CourseDAL {
             if (!empty($_ec)) {
                 $enterprise_id = $_ec['enterprise_id'];
                 $department_id = $_ec['department_id'];
+                if(!cmsDepartmentDAL::getOne($department_id)){
+                    $department_id=0;
+                }
                 $position_id = $_ec['position_id'];
+                if(!cmsPositionDAL::getOne($position_id)){
+                    $position_id=0;
+                }
                 //获取企业课程
                 if (!empty($enterprise_id)) {
                     $where .=" and ec.enterprise_id = " . $enterprise_id . " ";
-                    $and = " (ec.department_id = 0 and ec.position_id = 0) or (ec.department_id<>0 and ed.delete=1)";
+                    $and = " (ec.department_id = 0 and ec.position_id = 0)";
                 }
                 //获取部门课程
                 if (!empty($department_id)) {
@@ -250,8 +258,8 @@ class CourseDAL {
                 }
                 $sql = "select ec.course_id "
                         . " from " . $base->table_name("enterprise_course") . " as ec "
-                        . " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
-                        . " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
+                        //. " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
+                        //. " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
                         . " left join ".$base->table_name("course")." as c on c.id=ec.course_id "
                         . " where ec.`delete`=0 and c.delete=0 "
                         . " ".$where ." "
