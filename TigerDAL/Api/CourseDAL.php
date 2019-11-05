@@ -96,7 +96,7 @@ class CourseDAL {
                     . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
         }
 
-        $sql = "select count(1) as total from " . $base->table_name("course") . " as c "
+        $sql = "select count(distinct(c.id)) as total from " . $base->table_name("course") . " as c "
                 . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.delete=0 "
                 . " where c.`delete`=0 " . $where . " limit 1 ;";
         return $base->getFetchRow($sql)['total'];
