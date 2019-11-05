@@ -58,7 +58,7 @@ class CourseDAL {
                 . " group by c.id "
                 . " order by c.order_by asc, c.edit_time desc "
                 . " limit " . $limit_start . "," . $limit_end . " ;";
-        echo $sql;die;
+        // echo $sql;die;
         return $base->getFetchAll($sql);
     }
 
