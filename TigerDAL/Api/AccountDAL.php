@@ -5,6 +5,8 @@ namespace TigerDAL\Api;
 use TigerDAL\BaseDAL;
 use TigerDAL\Cms\UserDAL;
 use TigerDAL\Api\CourseDAL;
+use TigerDAL\Cms\DepartmentDAL as cmsDepartmentDAL;
+use TigerDAL\Cms\PositionDAL as cmsPositionDAL;
 
 /*
  * 用来返回生成首页需要的数据
@@ -121,20 +123,38 @@ class AccountDAL {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
-        $_notin_ids = CourseDAL::getIdByUserId($user_id);
-        $where = " and c.id not in (" . $_notin_ids . ") ";
+        $where = "";
+        //普通用户id enterprise_user里面没有数据
+        $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+        $_ec = $base->getFetchRow($_sql);
+        //企业用户id enterprise_user有数据
+        if (!empty($_ec)) {
+            $enterprise_id = $_ec['enterprise_id'];
+            $department_id = $_ec['department_id'];
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department_id=0;
+            }
+            $position_id = $_ec['position_id'];
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position_id=0;
+            }
+            $where .= " AND (ec.enterprise_id = ".$enterprise_id." or ec.enterprise_id is null) "
+                    . " AND (((ec.department_id = ".$department_id." AND (ec.position_id = ".$position_id." OR ec.position_id = 0)) "
+                    . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
+        }
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
-                . "if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
-                . "from " . $base->table_name("course") . " as c "
-                . "left join " . $base->table_name("user_course") . " as uc on c.id=uc.course_id "
-                . "left join " . $base->table_name("image") . " as i on i.id=c.media_id "
-                . "LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
-                . "LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id and ul.user_id= uc.user_id AND ul.`delete` = 0 "
-                . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
+                . " if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
+                . " from " . $base->table_name("course") . " as c "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.delete=0 "
+                . " left join " . $base->table_name("user_course") . " as uc on c.id=uc.course_id "
+                . " left join " . $base->table_name("image") . " as i on i.id=c.media_id "
+                . " LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0 "
+                . " LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.lesson_id = l.id and ul.user_id= uc.user_id AND ul.`delete` = 0 "
+                . " where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
                 . $where
-                . "GROUP BY c.id "
-                . "order by uc.id desc "
-                . "limit " . $limit_start . "," . $limit_end . " ;";
+                . " GROUP BY c.id "
+                . " order by uc.id desc "
+                . " limit " . $limit_start . "," . $limit_end . " ;";
         //echo $sql;
         return $base->getFetchAll($sql);
     }
@@ -142,13 +162,32 @@ class AccountDAL {
     /** 获取已读课程信息列表 total */
     public static function getCoursesTotal($user_id) {
         $base = new BaseDAL();
-        $_notin_ids = CourseDAL::getIdByUserId($user_id);
-        $where = " and c.id not in (" . $_notin_ids . ") ";
-        $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
-                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
-                . "where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
+        $where = "";
+        //普通用户id enterprise_user里面没有数据
+        $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+        $_ec = $base->getFetchRow($_sql);
+        //企业用户id enterprise_user有数据
+        if (!empty($_ec)) {
+            $enterprise_id = $_ec['enterprise_id'];
+            $department_id = $_ec['department_id'];
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department_id=0;
+            }
+            $position_id = $_ec['position_id'];
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position_id=0;
+            }
+            $where .= " AND (ec.enterprise_id = ".$enterprise_id." or ec.enterprise_id is null) "
+                    . " AND (((ec.department_id = ".$department_id." AND (ec.position_id = ".$position_id." OR ec.position_id = 0)) "
+                    . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
+        }
+        $sql = " select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
+                . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.delete=0 "
+                . " where uc.`delete`=0 and c.`delete`=0 and uc.user_id=" . $user_id . " "
                 . $where
                 . " ;";
+        // echo $sql;die;
         return $base->getFetchRow($sql)['num'];
     }
 
