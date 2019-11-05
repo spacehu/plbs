@@ -37,7 +37,7 @@ class TestDAL {
                 $_rows[] = $v['id'];
             }
             $_ids = implode(",", $_rows);
-            $_sql = "select * from " . $base->table_name("test") . " where lesson_id in (" . $_ids . ") order by RAND() LIMIT " . $limit . " ;";
+            $_sql = "select * from " . $base->table_name("test") . " where lesson_id in (" . $_ids . ") and `delete`=0 order by RAND() LIMIT " . $limit . " ;";
             $_res = $base->getFetchAll($_sql);
             if (!empty($_res)) {
                 foreach ($_res as $k => $v) {
