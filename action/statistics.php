@@ -338,8 +338,8 @@ class statistics {
                         $_data[]=[
                             $v['name'],
                             $v['joinPerson'],
-                            $v['progressLesson'],
-                            $v['progressExam'],
+                            $v['progressLesson']*100,
+                            $v['progressExam']*100,
                         ];
                     }
                 }
@@ -384,8 +384,8 @@ class statistics {
                     [
                         $data['info']['name'],
                         $data['info']['joinPerson'],
-                        $data['info']['progressLesson'],
-                        $data['info']['progressExam'],
+                        $data['info']['progressLesson']*100,
+                        $data['info']['progressExam']*100,
                     ],
                     [
                         "姓名",
@@ -402,7 +402,7 @@ class statistics {
                             $v['name'],
                             $v['edname'],
                             $v['epname'],
-                            $v['progressLesson'],
+                            $v['progressLesson']*100,
                             !empty($v['totalE'])?"YES":"NO",
                         ];
                     }

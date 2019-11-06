@@ -22,8 +22,8 @@ $class = \action\statistics::$data['class'];
                 <tr>
                     <td class="td1"><?php echo $data['info']['name']; ?></td>
                     <td class="td1"><?php echo $data['info']['joinPerson']; ?></td>
-                    <td class="td1"><?php echo $data['info']['progressLesson']; ?></td>
-                    <td class="td1"><?php echo $data['info']['progressExam']; ?></td>
+                    <td class="td1"><?php echo $data['info']['progressLesson']*100; ?></td>
+                    <td class="td1"><?php echo $data['info']['progressExam']*100; ?></td>
                 </tr>
             </table>
         </div>
@@ -45,7 +45,7 @@ $class = \action\statistics::$data['class'];
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['edname']; ?></td>
                             <td class="td1"><?php echo $v['epname']; ?></td>
-                            <td class="td1"><?php echo $v['progressLesson']; ?></td>
+                            <td class="td1"><?php echo $v['progressLesson']*100; ?></td>
                             <td class="td1"><?php echo !empty($v['totalE'])?"YES":"NO"; ?></td>
                         </tr>
                         <?php

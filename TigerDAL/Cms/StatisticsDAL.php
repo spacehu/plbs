@@ -379,12 +379,12 @@ class StatisticsDAL {
             left join " . $base->table_name("user_course")." as uc on ui.id=uc.user_id and uc.delete=0 
             left join " . $base->table_name("course")." as c on uc.course_id=c.id and c.delete=0
             left join " . $base->table_name("enterprise_user")." as eu on ui.id=eu.user_id and eu.delete=0 and eu.status=1
-            LEFT JOIN mrhu_enterprise_department AS edu ON edu.id = eu.department_id
-            LEFT JOIN mrhu_enterprise_position AS epu ON epu.id = eu.position_id
+            LEFT JOIN " . $base->table_name("enterprise_department")." AS edu ON edu.id = eu.department_id
+            LEFT JOIN " . $base->table_name("enterprise_position")." AS epu ON epu.id = eu.position_id
             left join " . $base->table_name("enterprise_course")." as ec on eu.enterprise_id=ec.enterprise_id
                 and uc.course_id=ec.course_id
-                LEFT JOIN mrhu_enterprise_department AS edc ON edc.id = ec.department_id
-                LEFT JOIN mrhu_enterprise_position AS epc ON epc.id = ec.position_id
+                LEFT JOIN " . $base->table_name("enterprise_department")." AS edc ON edc.id = ec.department_id
+                LEFT JOIN " . $base->table_name("enterprise_position")." AS epc ON epc.id = ec.position_id
             left join " . $base->table_name("enterprise_department")." as ed on ed.id = eu.department_id 
             left join " . $base->table_name("enterprise_position")." as ep on ep.id = eu.position_id 
             LEFT JOIN " . $base->table_name("lesson")." AS l ON c.id = l.course_id AND l.delete = 0
