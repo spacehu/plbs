@@ -16,7 +16,7 @@ $class = \action\statistics::$data['class'];
         <script>
             $(function () {
                 $('.button_find').click(function () {
-                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=courseList&keywords=' + $('.keywords').val();
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=examinationList&keywords=' + $('.keywords').val();
                 });
             });
         </script>
@@ -24,7 +24,7 @@ $class = \action\statistics::$data['class'];
 
     <body>
         <div class="menu">
-            <a class="button_export" href="index.php?a=<?php echo $class; ?>&m=courseList&export=2" >导出本页</a>
+            <a class="button_export" href="index.php?a=<?php echo $class; ?>&m=examinationList&export=2" >导出本页</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
