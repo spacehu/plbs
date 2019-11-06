@@ -404,6 +404,43 @@ class StatisticsDAL {
         return $res;
     }
 
+    /** 试卷统计列表 */
+    public static function getExaminationList($currentPage, $pagesize, $id){
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $sql=" 
+            select 
+                es.id,
+                es.name,
+                count(distinct(es.exid)) as totalEx,
+                count(distinct(if(es.pass=1,es.exid,null))) as totalExPass,
+                count(distinct(es.user_id)) as totalEu,
+                count(distinct(if(es.pass=1,es.user_id,null))) as totalEuPass
+            from (
+                select 
+                    e.id,e.name,e.percentage,ex.id as exid,ex.point,eu.user_id,
+                    case when e.percentage<=ex.point then 1 else 0 end as pass 
+                from ".$base->table_name("examination")." as e 
+                left join ".$base->table_name("exam")." as ex on e.id=ex.examination_id and ex.delete=0
+                left join ".$base->table_name("enterprise_user")." as eu on ex.user_id=eu.user_id and eu.delete=0 and eu.status=1
+                where e.enterprise_id=".$id." and e.delete=0 
+            ) as es
+            group by es.id
+            limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
+        $res=$base->getFetchAll($sql);
+        return $res;
+    }
+
+    /** 试卷统计列表 */
+    public static function getExaminationListTotal($id){
+        $base = new BaseDAL();
+        $sql=" select count(1) as total from ".$base->table_name("examination")." as e where e.enterprise_id=".$id."  ;";
+        $res=$base->getFetchRow($sql);
+        return $res['total'];
+    }
+
 
     /******* 暂废弃 **********************************************/
     /** 成员在线学习 */

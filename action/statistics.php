@@ -417,4 +417,57 @@ class statistics {
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
+
+    /** getCustomerList */
+    function examinationList(){
+        Common::isset_cookie();
+        try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
+
+
+            $data = StatisticsDAL::getExaminationList($currentPage, $pagesize, $this->enterprise_id);
+            self::$data['data'] = $data;
+            $total=StatisticsDAL::getExaminationListTotal($this->enterprise_id);
+            self::$data['total'] = $total;
+            //Common::pr(self::$data);die;
+            self::$data['currentPage'] = $currentPage;
+            self::$data['pagesize'] = $pagesize;
+            self::$data['keywords'] = $keywords;
+            self::$data['class'] = $this->class;
+
+            if(!empty($_GET['export'])&&$_GET['export']==2){
+                $headlist=[
+                    "课程名称",
+                    "参与人数",
+                    "学习进度",
+                    "考试通过率",
+                ];
+                $_data=[];
+                if(!empty($data)){
+                    foreach($data as $k=>$v){
+                        $_data[]=[
+                            $v['name'],
+                            $v['joinPerson'],
+                            $v['progressLesson'],
+                            $v['progressExam'],
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsv($_data,$headlist,"examinationList-".date("YmdHis"));
+                exit();
+            }
+
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
 }

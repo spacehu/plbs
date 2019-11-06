@@ -63,6 +63,9 @@
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=courseList'" href="javascript:void(0);" >在线课程学习</a>
                     </div>
                     <div class="title">
+                        <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=examinationList'" href="javascript:void(0);" >试卷统计</a>
+                    </div>
+                    <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
                     </div>
                     <div class="title">
