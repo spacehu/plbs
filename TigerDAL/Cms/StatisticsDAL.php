@@ -338,7 +338,7 @@ class StatisticsDAL {
                         AND uc.`delete` = 0
                     LEFT JOIN " . $base->table_name("enterprise_user")." AS eu ON eu.enterprise_id = ec.enterprise_id
                         AND eu.`delete` = 0
-                        AND eu.`status` = 1
+                        AND eu.`status` = 1 and eu.user_id=uc.user_id
                         LEFT JOIN " . $base->table_name("enterprise_department")." AS edu ON edu.id = eu.department_id
                         LEFT JOIN " . $base->table_name("enterprise_position")." AS epu ON epu.id = eu.position_id
                     left join " . $base->table_name("lesson")." as l on c.id=l.course_id and l.delete=0
