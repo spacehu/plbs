@@ -436,7 +436,7 @@ class StatisticsDAL {
     /** 试卷统计列表 */
     public static function getExaminationListTotal($id){
         $base = new BaseDAL();
-        $sql=" select count(1) as total from ".$base->table_name("examination")." as e where e.enterprise_id=".$id."  ;";
+        $sql=" select count(1) as total from ".$base->table_name("examination")." as e where e.enterprise_id=".$id." and e.delete=0  ;";
         $res=$base->getFetchRow($sql);
         return $res['total'];
     }
