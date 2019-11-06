@@ -350,7 +350,7 @@ class StatisticsDAL {
                     group by ec.id, uc.user_id
                 ) as eucp
             GROUP BY eucp.id;";
-            echo $sql;die;
+            //echo $sql;die;
             // AND eu.enterprise_id = '".$id."'
         $res = $base->getFetchRow($sql);
         //var_dump($res);die;
