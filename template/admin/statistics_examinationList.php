@@ -47,10 +47,10 @@ $class = \action\statistics::$data['class'];
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['totalEuPass']; ?></td>
                             <td class="td1"><?php echo $v['totalEu']; ?></td>
-                            <td class="td1"><?php echo ceil($v['totalEu']>0?($v['totalEuPass']/$v['totalEu'])*100:0); ?>%</td>
+                            <td class="td1"><?php echo $v['totalEu']>0?($v['totalEuPass']/$v['totalEu'])*100:0; ?>%</td>
                             <td class="td1"><?php echo $v['totalExPass']; ?></td>
                             <td class="td1"><?php echo $v['totalEx']; ?></td>
-                            <td class="td1"><?php echo ceil($v['totalEx']>0?($v['totalExPass']/$v['totalEx'])*100:0); ?>%</td>
+                            <td class="td1"><?php echo $v['totalEx']>0?($v['totalExPass']/$v['totalEx'])*100:0; ?>%</td>
                             <td class="td1">
                             <!--
                                 <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>">详细</a>

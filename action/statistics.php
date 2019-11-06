@@ -443,19 +443,25 @@ class statistics {
 
             if(!empty($_GET['export'])&&$_GET['export']==2){
                 $headlist=[
-                    "课程名称",
+                    "试卷名",
+                    "通过人数",
                     "参与人数",
-                    "学习进度",
-                    "考试通过率",
+                    "考试通过率（人）",
+                    "通过次数",
+                    "参与次数",
+                    "考试通过率（人）",
                 ];
                 $_data=[];
                 if(!empty($data)){
                     foreach($data as $k=>$v){
                         $_data[]=[
                             $v['name'],
-                            $v['joinPerson'],
-                            $v['progressLesson'],
-                            $v['progressExam'],
+                            $v['totalEuPass'],
+                            $v['totalEu'],
+                            $v['totalEu']>0?($v['totalEuPass']/$v['totalEu'])*100:0,
+                            $v['totalExPass'],
+                            $v['totalEx'],
+                            $v['totalEx']>0?($v['totalExPass']/$v['totalEx'])*100:0,
                         ];
                     }
                 }

@@ -441,6 +441,26 @@ class StatisticsDAL {
         return $res['total'];
     }
 
+    /** 试卷统计列表 详细 */
+    public static function getExaminationOne($id){
+        $base = new BaseDAL();
+        $limit_start = ($currentPage - 1) * $pagesize;
+        $limit_end = $pagesize;
+        $sql=" 
+                select 
+                    e.id,e.name,e.percentage,ex.id as exid,ex.point,eu.user_id,
+                    case when e.percentage<=ex.point then 1 else 0 end as pass,
+                    ui.name as uname
+                from ".$base->table_name("examination")." as e 
+                left join ".$base->table_name("exam")." as ex on e.id=ex.examination_id and ex.delete=0
+                left join ".$base->table_name("enterprise_user")." as eu on ex.user_id=eu.user_id and eu.delete=0 and eu.status=1
+                left join ".$base->table_name("user_info")." as ui on eu.user_id=ui.id 
+                where e.id=".$id." and e.delete=0 
+            limit " . $limit_start . "," . $limit_end . " ;";
+        //echo $sql;
+        $res=$base->getFetchAll($sql);
+        return $res;
+    }
 
     /******* 暂废弃 **********************************************/
     /** 成员在线学习 */
