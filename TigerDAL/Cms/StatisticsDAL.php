@@ -313,8 +313,8 @@ class StatisticsDAL {
         eucp.id,eucp.name,eucp.ecid,eucp.user_id,
         eucp.original_src,
         COUNT(distinct(eucp.uuid)) AS joinPerson,
-        avg(case when eucp.totalL>0 then eucp.totalUl/eucp.totalL else 0 end ) as progressLesson,
-        avg(case WHEN eucp.totalEU > 0 THEN eucp.totalE / eucp.totalEU else 0 end ) as progressExam
+        avg(distinct(case when eucp.totalL>0 then eucp.totalUl/eucp.totalL else 0 end )) as progressLesson,
+        avg(distinct(case WHEN eucp.totalEU > 0 THEN eucp.totalE / eucp.totalEU else 0 end )) as progressExam
             FROM
             (
                 SELECT 
