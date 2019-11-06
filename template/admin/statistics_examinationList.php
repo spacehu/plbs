@@ -30,10 +30,10 @@ $class = \action\statistics::$data['class'];
             <table class="mytable" cellspacing="0" >
                 <tr bgcolor="#656565" style=" font-weight:bold; color:#FFFFFF;">
                     <td class="td1" >试卷名</td>
-                    <td class="td1" >参与人数</td>
+                    <td class="td1" >通过人数</td>
                     <td class="td1" >参与人数</td>
                     <td class="td1" >考试通过率（人）</td>
-                    <td class="td1" >参与次数</td>
+                    <td class="td1" >通过次数</td>
                     <td class="td1" >参与次数</td>
                     <td class="td1" >考试通过率（次）</td>
                     <td class="td1" width="8%">操作</td>
