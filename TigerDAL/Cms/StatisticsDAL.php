@@ -313,14 +313,20 @@ class StatisticsDAL {
         eucp.id,eucp.name,eucp.ecid,eucp.user_id,
         eucp.original_src,
         COUNT(distinct(eucp.uuid)) AS joinPerson,
-        avg(distinct(case when eucp.totalL>0 then eucp.totalUl/eucp.totalL else 0 end )) as progressLesson,
-        avg(distinct(case WHEN eucp.totalEU > 0 THEN eucp.totalE / eucp.totalEU else 0 end )) as progressExam
+        CASE
+            WHEN sum(eucp.totalL) > 0 THEN sum(eucp.totalUl) / sum(eucp.totalL)
+            ELSE 0
+        END AS progressLesson,
+        case
+            WHEN sum(eucp.totalEU) > 0 THEN sum(eucp.totalE) / sum(eucp.totalEU)
+            ELSE 0
+        END AS progressExam
             FROM
             (
                 SELECT 
                 c.id, c.`name`, i.original_src, ec.id as ecid,eu.user_id as user_id,uc.user_id as uuid,
-                case when eu.user_id=uc.user_id then count(distinct(l.id)) else 0 end as totalL,
-                case when eu.user_id=uc.user_id then count(distinct(ul.id)) else 0 end as totalUL,
+                COUNT(DISTINCT (if(eu.user_id = uc.user_id,l.id,null))) AS totalL,
+                COUNT(DISTINCT (if(eu.user_id = uc.user_id,ul.id,null))) AS totalUL,
                 count(distinct(uc.user_id)) as totalEU,
                 count(distinct(e.user_id)) as totalE
                 from " . $base->table_name("course") . " AS c
