@@ -52,10 +52,8 @@ $class = \action\statistics::$data['class'];
                             <td class="td1"><?php echo $v['totalEx']; ?></td>
                             <td class="td1"><?php echo $v['totalEx']>0?($v['totalExPass']/$v['totalEx'])*100:0; ?>%</td>
                             <td class="td1">
-                            <!--
-                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>">详细</a>
-                                <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>&export=2">导出本条</a>
-                            -->
+                                <a href="index.php?a=<?php echo $class;?>&m=getExamination&id=<?php echo $v['id'];?>">详细</a>
+                                <a href="index.php?a=<?php echo $class;?>&m=getExamination&id=<?php echo $v['id'];?>&export=2">导出本条</a>
                             </td>
                         </tr>
                         <?php

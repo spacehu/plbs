@@ -476,4 +476,48 @@ class statistics {
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
+    
+    /** getCustomerList */
+    function getExamination(){
+        Common::isset_cookie();
+        try {
+            if ($this->enterprise_id == '') {
+                Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
+                exit;
+            }
+            $id=$_GET['id'];
+            $data = StatisticsDAL::getExaminationOne($id);
+            self::$data['data'] = $data;
+            
+            self::$data['class'] = $this->class;
+
+            if(!empty($_GET['export'])&&$_GET['export']==2){
+                $headlist=[
+                    "学员名",
+                    "得分",
+                    "是否通过",
+                    "考试时间",
+                ];
+                $_data=[];
+                if(!empty($data)){
+                    foreach($data as $k=>$v){
+                        $_data[]=[
+                            $v['uname'],
+                            $v['point'],
+                            $v['pass']==1?"通过":"未通过",
+                            $v['add_time'],
+                        ];
+                    }
+                }
+                $csv=new Csv();
+                $csv->mkcsv($_data,$headlist,"getExamination-id-".$id."-".date("YmdHis"));
+                exit();
+            }
+
+            //Common::pr(self::$data);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+        }
+        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
 }
