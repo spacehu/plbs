@@ -35,14 +35,18 @@ class CourseDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
         }else{
             $where .= " and ec.enterprise_id is null ";
         }
@@ -82,14 +86,20 @@ class CourseDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
 
         $sql = "select count(distinct(c.id)) as total from " . $base->table_name("course") . " as c "
@@ -200,64 +210,6 @@ class CourseDAL {
         return false;
     }
 
-    /** 需要排除的其他课程 delete */
-    public static function getIdByUserId($user_id) {
-        $base = new BaseDAL();
-        $and = "  ";
-        if (!empty($user_id)) {
-            //普通用户id enterprise_user里面没有数据
-            $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
-            $_ec = $base->getFetchRow($_sql);
-            //企业用户id enterprise_user有数据
-            if (!empty($_ec)) {
-                $enterprise_id = $_ec['enterprise_id'];
-                $department_id = $_ec['department_id'];
-                if(!cmsDepartmentDAL::getOne($department_id)){
-                    $department_id=0;
-                }
-                $position_id = $_ec['position_id'];
-                if(!cmsPositionDAL::getOne($position_id)){
-                    $position_id=0;
-                }
-                //获取企业课程 课程不属于该企业的课程
-                if (!empty($enterprise_id)) {
-                    $and .= " and ec.course_id not in ( "
-                            . " select ecs.course_id from " . $base->table_name("enterprise_course") . " as ecs "
-                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = 0 and ecs.position_id = 0) ";
-                }
-                //获取部门课程 不属于该企业的该部门课程
-                if (!empty($department_id)) {
-                    $and .= " and ec.course_id not in ( "
-                            . " select ecs.course_id from " . $base->table_name("enterprise_course") . " as ecs "
-                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id "
-                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = 0 and ed.`delete`=0 ) ";
-                }
-                //获取职位课程 不属于该企业 该部门 该职位的课程
-                if (!empty($position_id)) {
-                    $and .= " and ec.course_id not in ( "
-                            . " select course_id from " . $base->table_name("enterprise_course") . " as ecs "
-                            . " left join ".$base->table_name("enterprise_department")." as ed on ecs.department_id=ed.id "
-                            . " left join ".$base->table_name("enterprise_position")." as ep on ecs.department_id=ep.id "
-                            . " where ecs.enterprise_id = " . $enterprise_id . " and ecs.department_id = " . $department_id . " and ecs.position_id = " . $position_id . " and ed.`delete`=0 and ep.`delete`=0 ) ";
-                }
-            }
-        }
-        $sql = "select ec.course_id "
-                . " from " . $base->table_name("enterprise_course") . " as ec "
-                . " where ec.`delete`=0 "
-                . $and
-                . " group by ec.course_id ;";
-        $res = $base->getFetchAll($sql);
-        if (!empty($res)) {
-            $_res[] = 0;
-            foreach ($res as $v) {
-                $_res[] = $v['course_id'];
-            }
-            return implode(',', $_res);
-        }
-        return 0;
-    }
-
     /** 根据uid获取可以使用的课程id */
     public static function getCourseIdByUserId($user_id) {
         $base = new BaseDAL();
@@ -272,17 +224,19 @@ class CourseDAL {
                 $department_id = $_ec['department_id'];
                 $position_id = $_ec['position_id'];
                 if(!cmsDepartmentDAL::getOne($department_id)){
-                    $department_id=0;
+                    $department=" ec.department_id is null ";
+                }else{
+                    $department=" ec.department_id =".$department_id." ";
                 }
                 if(!cmsPositionDAL::getOne($position_id)){
-                    $position_id=0;
+                    $position=" ec.position_id is null ";
+                }else{
+                    $position=" ec.position_id =".$position_id." ";
                 }
                 //获取企业课程
-                $where .=" and ec.enterprise_id = " . $enterprise_id . " and ec.department_id = " . $department_id . " and ec.position_id = " . $position_id . "  ";
+                $where .=" and ec.enterprise_id = " . $enterprise_id . " and " . $department . " and " . $position . "  ";
                 $sql = "select ec.course_id "
                         . " from " . $base->table_name("enterprise_course") . " as ec "
-                        //. " left join ".$base->table_name("enterprise_department")." as ed on ec.department_id=ed.id "
-                        //. " left join ".$base->table_name("enterprise_position")." as ep on ec.department_id=ep.id "
                         . " left join ".$base->table_name("course")." as c on c.id=ec.course_id "
                         . " where ec.`delete`=0 and c.delete=0 "
                         . " ".$where ." "

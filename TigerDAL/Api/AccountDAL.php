@@ -131,14 +131,20 @@ class AccountDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
                 . " if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
@@ -168,14 +174,20 @@ class AccountDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
         $sql = " select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
@@ -198,14 +210,20 @@ class AccountDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
@@ -227,14 +245,20 @@ class AccountDAL {
         if (!empty($_ec)) {
             $enterprise_id = $_ec['enterprise_id'];
             $department_id = $_ec['department_id'];
-            if(!cmsDepartmentDAL::getOne($department_id)){
-                $department_id=0;
-            }
             $position_id = $_ec['position_id'];
-            if(!cmsPositionDAL::getOne($position_id)){
-                $position_id=0;
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department=" ec.department_id is null ";
+            }else{
+                $department=" ec.department_id =".$department_id." ";
             }
-            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position=" ec.position_id is null ";
+            }else{
+                $position=" ec.position_id =".$position_id." ";
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ".$department." and ".$position." ) or ec.enterprise_id is null) ";
+        }else{
+            $where .= " and ec.enterprise_id is null ";
         }
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
