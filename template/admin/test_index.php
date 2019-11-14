@@ -21,6 +21,9 @@ $categorys = \action\test::$data['categorys'];
                 $('.list_select').on("change", function () {
                     window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&cat_id=' + $('.list_select').val();
                 });
+                $('.button_find').click(function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&lesson_id=<?php echo $lesson_id;?>&keywords=' + $('.keywords').val();
+                });
             });
         </script>
     </head>
@@ -28,6 +31,8 @@ $categorys = \action\test::$data['categorys'];
     <body>
 
         <div class="menu">
+            <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" placeholder="请输入关键字" />
+            <a class="button_find " href="javascript:void(0);">查找</a>
             <?php if (!empty($categorys)) { ?>
                 <select class="listSelect list_select" >
                     <option value="">请选择</option>
@@ -75,7 +80,7 @@ $categorys = \action\test::$data['categorys'];
                 总数<b><?php echo $Total; ?></b>
             </div>
             <?php
-            $url = 'index.php?a=' . $class . '&m=index&lesson_id=' . $lesson_id . '&keywords=' . $keywords;
+            $url = 'index.php?a=' . $class . '&m=index&cat_id='.$category.'&lesson_id=' . $lesson_id . '&keywords=' . $keywords;
             $Totalpage = ceil($Total / mod\init::$config['page_width']);
             include_once 'page.php';
             ?>

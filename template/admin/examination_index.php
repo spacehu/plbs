@@ -11,12 +11,22 @@ $class = \action\examination::$data['class'];
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="js/jquery.js" ></script>
         <title>无标题文档</title>
+        <script>
+            $(function () {
+                $('.button_find').click(function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&keywords=' + $('.keywords').val();
+                });
+            });
+        </script>
     </head>
 
     <body>
 
         <div class="menu">
+            <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" placeholder="请输入关键字" />
+            <a class="button_find " href="javascript:void(0);">查找</a>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getExamination'">添加新课时</a>
         </div>
         <div class="content">

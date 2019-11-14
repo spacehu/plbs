@@ -12,12 +12,22 @@ $cat_id = \action\course::$data['cat_id'];
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="js/jquery.js" ></script>
         <title>无标题文档</title>
+        <script>
+            $(function () {
+                $('.button_find').click(function () {
+                    window.location.href = 'index.php?a=<?php echo $class; ?>&m=index&cat_id=<?php echo $cat_id;?>&keywords=' + $('.keywords').val();
+                });
+            });
+        </script>
     </head>
 
     <body>
 
         <div class="menu">
+            <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" placeholder="请输入关键字" />
+            <a class="button_find " href="javascript:void(0);">查找</a>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getCourse&cat_id=<?php echo $cat_id; ?>'">添加新课程</a>
         </div>
         <div class="content">
