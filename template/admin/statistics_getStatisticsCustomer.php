@@ -30,7 +30,7 @@ $class = \action\statistics::$data['class'];
                     <td class="td1"><?php echo $data['info']['epname']; ?></td>
                     <td class="td1"><?php echo $data['info']['phone']; ?></td>
                     <td class="td1"><?php echo $data['info']['enterpriseCourseCount']; ?></td>
-                    <td class="td1"><?php echo $data['info']['progress']; ?></td>
+                    <td class="td1"><?php echo round($data['info']['progress']); ?>%</td>
                     <td class="td1"><?php echo $data['info']['hours']; ?></td>
                     <td class="td1"><?php echo $data['info']['passExamCount']; ?></td>
                     <td class="td1"><?php echo $data['info']['joinCourseCount']; ?></td>
@@ -53,7 +53,7 @@ $class = \action\statistics::$data['class'];
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo !empty($v['enterpriseCourse'])?"企业必修课程":"选修课"; ?></td>
-                            <td class="td1"><?php echo $v['progress']; ?></td>
+                            <td class="td1"><?php echo round($v['progress']); ?>%</td>
                             <td class="td1"><?php echo !empty($v['passExamCount'])?"通过考试":""; ?></td>
                         </tr>
                         <?php

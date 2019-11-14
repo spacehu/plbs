@@ -78,8 +78,8 @@ $class = \action\statistics::$data['class'];
                         <tr<?php if ($sum_i % 2 != 1) { ?>  class="tr2"<?php } ?>>
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo $v['joinPerson']; ?></td>
-                            <td class="td1"><?php echo $v['progressLesson']*100; ?></td>
-                            <td class="td1"><?php echo $v['progressExam']*100; ?>%</td>
+                            <td class="td1"><?php echo ($v['progressLesson']*100); ?>%</td>
+                            <td class="td1"><?php echo ($v['progressExam']*100); ?>%</td>
                             <td class="td1">
                                 <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>">详细</a>
                                 <a href="index.php?a=<?php echo $class;?>&m=getStatisticsCourse&id=<?php echo $v['id'];?>&export=2">导出本条</a>

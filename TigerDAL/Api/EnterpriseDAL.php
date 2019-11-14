@@ -38,11 +38,14 @@ class EnterpriseDAL {
     /** 获取参与企业课程的企业员工数 */
     public static function getJoinCourseUserCount($id) {
         $base = new BaseDAL();
-        $sql = "select count(distinct(eu.user_id)) as num "
-                . "from " . $base->table_name("enterprise_user") . " as eu "
-                . "left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id and uc.`delete`=0 "
-                . "inner join " . $base->table_name("enterprise_course") . " as ec on uc.course_id = ec.course_id and ec.enterprise_id = " . $id . " and ec.`delete`=0 "
-                . "where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "'  limit 1 ;";
+        $sql = " select count(distinct(if(uc.course_id is not null ,eu.user_id,null))) as num "
+                . " from " . $base->table_name("enterprise_user") . " as eu "
+                . " left join " . $base->table_name("enterprise_department") . " as ed on eu.department_id=ed.id and ed.delete=0"
+                . " left join " . $base->table_name("enterprise_position") . " as ep on eu.position_id=ep.id and ep.delete=0 "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on ed.id = ec.department_id and ep.id = ec.position_id and ec.`delete`=0 "
+                . " left join " . $base->table_name("user_course") . " as uc on uc.user_id = eu.user_id and uc.course_id=ec.course_id and uc.`delete`=0 "
+                . " where eu.`delete`=0 and eu.status=1 and eu.enterprise_id='" . $id . "'  limit 1 ;";
+            //    echo $sql;die;
         return $base->getFetchRow($sql)['num'];
     }
 
@@ -80,10 +83,8 @@ class EnterpriseDAL {
                     euce.photo,
                     euce.edname,
                     euce.epname,
-                    count(DISTINCT (euce.eccid)) as enterpriseCourseCount,
-                    COUNT(DISTINCT (case when (euce.eccid = euce.course_id
-                        AND euce.enterpriseCourseJoinCourseId IS NOT NULL)
-                        OR (euce.eccid <> euce.course_id AND euce.enterpriseCourseJoinCourseId IS  NULL) then euce.course_id else null end )) AS joinCourseCount,
+                    count(DISTINCT (if(euce.eccid is not null,euce.eccid, null))) as enterpriseCourseCount,
+                    COUNT(DISTINCT (euce.course_id)) AS joinCourseCount,
                     COUNT(DISTINCT (euce.eid)) AS passExamCount,
                     COUNT( (euce.ulid)) AS userLessonTotal,
                     COUNT( (euce.lid)) AS lessonCount,
@@ -94,44 +95,33 @@ class EnterpriseDAL {
                         from 
                 (
                 SELECT 
-                    u.id,
+                u.id,
                     u.`NAME` as uname,
                     u.photo,
                     uc.course_id,
-                    eu.department_id as eudid,
                     ed.`name` as edname,
-                    eu.position_id as eupid,
                     ep.`name` as epname,
-                    ec.course_id as eccid,
-                    ec.department_id as ecdid,
-                    ec.position_id as ecpid,
-                    ed.`delete` as edd,
-                    ep.`delete` as epd,
+					ec.course_id as eccid,
                     e.id as eid,e.`point` as epoint,
                     c.percentage,
                     l.id as lid,
-                    ul.id as ulid,
-                    ecS.course_id as enterpriseCourseJoinCourseId
+                    ul.id as ulid
                 
                 FROM
                 " . $base->table_name("user_info") . " AS u    
                     LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON u.id = eu.user_id
-                        LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = eu.user_id AND uc.`delete` = 0 
-                        left join " . $base->table_name("course") . " as c on uc.course_id=c.id and c.`delete` =0 
-                        left join " . $base->table_name("enterprise_course") . " as ec on ec.enterprise_id=eu.enterprise_id and ec.`delete`=0 
-                        LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
-                        LEFT JOIN " . $base->table_name("enterprise_position") . " AS ep ON ep.id = eu.position_id 
-                        
-                        LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` > c.percentage
-                        LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
-                        LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
-                        LEFT JOIN " . $base->table_name("enterprise_course") . " AS ecS ON ecS.enterprise_id = eu.enterprise_id
-                            AND ecS.`delete` = 0 and ecS.course_id=c.id
+					LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id and ed.delete=0
+					LEFT JOIN " . $base->table_name("enterprise_position") . " AS ep ON ep.id = eu.position_id  and ep.delete=0 
+					LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = u.id AND uc.`delete` = 0 
+					left join " . $base->table_name("enterprise_course") . " as ec on ec.`delete`=0 and uc.course_id=ec.course_id 
+					left join " . $base->table_name("course") . " as c on uc.course_id=c.id and c.`delete` =0 
+					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` > c.percentage
+					LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
+					LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
                 WHERE
                     eu.`delete` = 0 AND eu.`STATUS` = 1
                         and u.id in (".$_udis.")
-                        and (ec.department_id is null  or (ec.department_id is not null and ed.delete = 0 and (ec.department_id=eu.department_id or ec.department_id=0)))
-                        and (ec.position_id is null  or (ec.position_id is not null and ep.delete = 0 and (ec.position_id=eu.position_id or ec.position_id=0)))
+                        and (ec.course_id is null or (ec.enterprise_id=eu.enterprise_id and ec.department_id=ed.id and ec.position_id=ep.id))
                 order by u.id asc
                 ) as euce
                 group by euce.id
@@ -172,15 +162,9 @@ class EnterpriseDAL {
             eucp.ecid,
             eucp.user_id,
             eucp.original_src,
-            COUNT(DISTINCT (eucp.uuid)) AS joinPerson,
-            AVG(CASE
-                WHEN eucp.totalL > 0 THEN eucp.totalUl / eucp.totalL
-                ELSE 0
-            END) AS progressLesson,
-            AVG(CASE
-                WHEN eucp.totalEU > 0 THEN eucp.totalE / eucp.totalEU
-                ELSE 0
-            END) AS progressExam
+            COUNT(DISTINCT (eucp.user_id)) AS joinPerson,
+            if(sum(eucp.totalL)>0,sum(eucp.totalUl)/sum(eucp.totalL),0) as progressLesson,
+            if(sum(eucp.totalEU)>0,sum(eucp.totalE)/sum(eucp.totalEU),0) as progressExam
             FROM
             (
                 select
@@ -189,46 +173,27 @@ class EnterpriseDAL {
                 i.original_src,
                 ec.id AS ecid,
                 eu.user_id AS user_id,
-                uc.user_id as uuid,
-                CASE
-                    WHEN eu.user_id = uc.user_id THEN COUNT(DISTINCT (l.id))
-                    ELSE 0
-                END AS totalL,
-                CASE
-                    WHEN eu.user_id = uc.user_id THEN COUNT(DISTINCT (ul.id))
-                    ELSE 0
-                END AS totalUL,
+                COUNT(DISTINCT (l.id)) AS totalL,
+                COUNT(DISTINCT (ul.id)) AS totalUL,
                 COUNT(DISTINCT (uc.user_id)) AS totalEU,
                 COUNT(DISTINCT (e.user_id)) AS totalE
                 from " . $base->table_name("course") . " AS c
-                LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id AND ec.`delete` = 0
-                LEFT JOIN " . $base->table_name("enterprise_department") . " AS edc ON edc.id = ec.department_id
-                LEFT JOIN " . $base->table_name("enterprise_position") . " AS epc ON epc.id = ec.position_id
                 LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
-                LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND uc.`delete` = 0
-                LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id
-                    AND eu.`delete` = 0
-                    AND eu.`status` = 1
-                    AND eu.user_id = uc.user_id
-                LEFT JOIN " . $base->table_name("enterprise_department") . " AS edu ON edu.id = eu.department_id
-                LEFT JOIN " . $base->table_name("enterprise_position") . " AS epu ON epu.id = eu.position_id
-                LEFT JOIN " . $base->table_name("lesson") . " AS l ON c.id = l.course_id AND l.delete = 0
+                LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id AND ec.`delete` = 0
+                LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = ec.department_id and ed.delete=0
+                LEFT JOIN " . $base->table_name("enterprise_position") . " AS ep ON ep.id = ec.position_id and ep.delete=0
+                LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ed.id and eu.position_id=ep.id
+                LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND uc.`delete` = 0 and uc.user_id=eu.user_id
+                LEFT JOIN " . $base->table_name("lesson") . " AS l ON uc.course_id = l.course_id AND l.delete = 0
                 LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON ul.user_id = uc.user_id
                     AND ul.lesson_id = l.id
                     AND ul.delete = 0
-                LEFT JOIN " . $base->table_name("exam") . " AS e ON e.user_id = eu.user_id
-                    AND e.course_id = c.id
+                LEFT JOIN " . $base->table_name("exam") . " AS e ON e.user_id = uc.user_id
+                    AND e.course_id = uc.course_id
                     AND e.delete = 0
                     AND e.point >= c.percentage
                 WHERE
                     ec.enterprise_id = '".$id."' AND c.`delete` = 0
-                    AND ((ec.department_id = 0
-                    AND ec.position_id = 0)
-                    OR (edc.delete = 0 AND edu.delete = 0
-                    AND ec.department_id = eu.department_id
-                    AND (ec.position_id = 0
-                    OR (epc.delete = 0 AND epu.delete = 0
-                    AND ec.position_id = eu.position_id))))
                     group by ec.id, eu.user_id
                 ) as eucp
             GROUP BY eucp.id
@@ -245,6 +210,7 @@ class EnterpriseDAL {
                     $_res[$k]['progress'] = 0;
                 }
             }
+            //var_dump($_res);die;
             return $_res;
         }
         return false;
@@ -270,23 +236,21 @@ class EnterpriseDAL {
                     t.id as tid,
                     e.id as eid
                 from " . $base->table_name("course") . " AS c
-                    LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
                     LEFT JOIN " . $base->table_name("image") . " AS i ON i.id = c.media_id
-                    LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ec.department_id and eu.position_id=ec.position_id
-                    LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = c.id AND eu.user_id = uc.user_id AND uc.`delete` = 0
-                    LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = eu.department_id 
-                    LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = eu.position_id 
+                    LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON c.id = ec.course_id and ec.`delete`=0
+                    LEFT JOIN " . $base->table_name("enterprise_department") . " AS ed ON ed.id = ec.department_id and ed.delete=0
+                    LEFT JOIN " . $base->table_name("enterprise_position") . "  AS ep ON ep.id = ec.position_id and ep.delete=0
+                    LEFT JOIN " . $base->table_name("enterprise_user") . " AS eu ON eu.enterprise_id = ec.enterprise_id AND eu.`delete` = 0 AND eu.`status` = 1 and eu.department_id=ed.id and eu.position_id=ep.id
+                    LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.course_id = ec.course_id AND eu.user_id = uc.user_id AND uc.`delete` = 0
                     left join " . $base->table_name("lesson") . " as l on l.course_id=ec.course_id and l.delete=0
                     left join " . $base->table_name("test") . " as t on t.lesson_id=l.id and t.delete=0
-                    left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and c.id=e.course_id and e.point>=c.percentage 
+                    left join " . $base->table_name("exam") . " as e on uc.user_id=e.user_id and uc.course_id=e.course_id and e.point>=c.percentage 
                 WHERE
                     ec.enterprise_id = '".$id."' AND c.`delete` = 0
-                    and ( ed.delete = 0 or ed.delete is null)
-                    and ( ep.delete = 0 or ep.delete is null)
                 ) as eucp
             GROUP BY eucp.id
             limit " . $limit_start . "," . $limit_end . " ;";
-        
+        // echo $sql;die;
         $res = $base->getFetchAll($sql);
         $total = self::getEnterpriseUserCount($id);
         if (!empty($res)) {

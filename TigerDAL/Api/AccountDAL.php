@@ -138,9 +138,7 @@ class AccountDAL {
             if(!cmsPositionDAL::getOne($position_id)){
                 $position_id=0;
             }
-            $where .= " AND (ec.enterprise_id = ".$enterprise_id." or ec.enterprise_id is null) "
-                    . " AND (((ec.department_id = ".$department_id." AND (ec.position_id = ".$position_id." OR ec.position_id = 0)) "
-                    . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
         }
         $sql = "select c.*,uc.status as ucStatus,i.original_src,count(l.id) as ls,count(ul.id) as uls, "
                 . " if(count(l.id)<>0,count(ul.id)/count(l.id)*100,0) as progress "
@@ -177,9 +175,7 @@ class AccountDAL {
             if(!cmsPositionDAL::getOne($position_id)){
                 $position_id=0;
             }
-            $where .= " AND (ec.enterprise_id = ".$enterprise_id." or ec.enterprise_id is null) "
-                    . " AND (((ec.department_id = ".$department_id." AND (ec.position_id = ".$position_id." OR ec.position_id = 0)) "
-                    . " OR (ec.department_id = 0 AND ec.position_id = 0)) or (ec.department_id is null and ec.position_id is null)) ";
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
         }
         $sql = " select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
                 . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
@@ -194,19 +190,59 @@ class AccountDAL {
     /** 获取完成课程信息列表 total */
     public static function getCoursesPass($user_id) {
         $base = new BaseDAL();
+        $where = "";
+        //普通用户id enterprise_user里面没有数据
+        $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+        $_ec = $base->getFetchRow($_sql);
+        //企业用户id enterprise_user有数据
+        if (!empty($_ec)) {
+            $enterprise_id = $_ec['enterprise_id'];
+            $department_id = $_ec['department_id'];
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department_id=0;
+            }
+            $position_id = $_ec['position_id'];
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position_id=0;
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+        }
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
-                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
-                . "where uc.`delete`=0 and c.`delete`=0 and uc.status=2 and uc.user_id=" . $user_id . " ;";
+                . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.delete=0 "
+                . " where uc.`delete`=0 and c.`delete`=0 and uc.status=2 and uc.user_id=" . $user_id . " "
+                . $where
+                . " ;";
         return $base->getFetchRow($sql)['num'];
     }
 
     /** 获取失败课程信息列表 total */
     public static function getCoursesFailed($user_id) {
         $base = new BaseDAL();
+        $where = "";
+        //普通用户id enterprise_user里面没有数据
+        $_sql = "select * from " . $base->table_name("enterprise_user") . " where user_id= " . $user_id . " and `delete`=0 and `status` = 1 ";
+        $_ec = $base->getFetchRow($_sql);
+        //企业用户id enterprise_user有数据
+        if (!empty($_ec)) {
+            $enterprise_id = $_ec['enterprise_id'];
+            $department_id = $_ec['department_id'];
+            if(!cmsDepartmentDAL::getOne($department_id)){
+                $department_id=0;
+            }
+            $position_id = $_ec['position_id'];
+            if(!cmsPositionDAL::getOne($position_id)){
+                $position_id=0;
+            }
+            $where .= " and ((ec.enterprise_id = ".$enterprise_id." and ec.department_id = ".$department_id." and ec.position_id = ".$position_id." ) or ec.enterprise_id is null) ";
+        }
         $sql = "select count(uc.id) as num from " . $base->table_name("user_course") . " as uc "
-                . "left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
-                . "left join " . $base->table_name("exam") . " as e on uc.course_id=e.course_id and uc.user_id=e.user_id "
-                . "where uc.`delete`=0 and c.`delete`=0 and c.percentage>0 and c.percentage is not null and e.point<c.percentage and uc.user_id=" . $user_id . " ;";
+                . " left join " . $base->table_name("course") . " as c on c.id=uc.course_id "
+                . " left join " . $base->table_name("exam") . " as e on uc.course_id=e.course_id and uc.user_id=e.user_id "
+                . " left join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id and ec.delete=0 "
+                . " where uc.`delete`=0 and c.`delete`=0 and c.percentage>0 and c.percentage is not null and e.point<c.percentage and uc.user_id=" . $user_id . " "
+                . $where
+                . " ;";
         return $base->getFetchRow($sql)['num'];
     }
 
