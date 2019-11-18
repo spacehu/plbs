@@ -415,8 +415,9 @@ class StatisticsDAL {
         $base = new BaseDAL();
         $sql=" 
                 select 
-                    e.id,e.name,e.percentage,ex.id as exid,ex.point,eu.user_id,
-                    case when e.percentage<=ex.point then 1 else 0 end as pass,
+                    e.id,e.name,e.percentage,ex.id as exid,
+                    max(ex.point) as point,eu.user_id,
+                    case when e.percentage<=max(ex.point) then 1 else 0 end as pass,
                     ui.name as uname,ex.add_time
                 from ".$base->table_name("examination")." as e 
                 left join ".$base->table_name("exam")." as ex on e.id=ex.examination_id and ex.delete=0
@@ -424,8 +425,8 @@ class StatisticsDAL {
                 left join ".$base->table_name("user_info")." as ui on eu.user_id=ui.id 
                 where e.id=".$id." and e.delete=0 and eu.delete=0 and eu.status=1
                 group by eu.user_id 
-                order by e.add_time desc;";
-        //echo $sql;
+                order by ex.add_time desc;";
+        // echo $sql;
         $res=$base->getFetchAll($sql);
         return $res;
     }
