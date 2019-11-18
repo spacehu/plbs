@@ -347,21 +347,21 @@ class StatisticsDAL {
                 count(e.id) as totalE
             from 
             " . $base->table_name("course")." AS c
-    LEFT JOIN " . $base->table_name("enterprise_course")." AS ec ON c.id = ec.course_id
-    LEFT JOIN " . $base->table_name("enterprise_department")." AS ed ON ed.id = ec.department_id and ed.delete=0 
-    LEFT JOIN " . $base->table_name("enterprise_position")." AS ep ON ep.id = ec.position_id and ep.delete=0
-    LEFT JOIN " . $base->table_name("enterprise_user")." AS eu ON eu.delete = 0 AND eu.status = 1 and eu.enterprise_id=ec.enterprise_id and eu.department_id=ed.id and eu.position_id=ep.id
-    LEFT JOIN " . $base->table_name("user_info")." AS ui ON ui.id = eu.user_id 
-    LEFT JOIN " . $base->table_name("user_course")." AS uc ON ui.id = uc.user_id AND uc.delete = 0 and uc.course_id=ec.course_id
-    
-    LEFT JOIN " . $base->table_name("lesson")." AS l ON uc.course_id = l.course_id AND l.delete = 0
-    LEFT JOIN " . $base->table_name("user_lesson")." AS ul ON ul.user_id = uc.user_id
-        AND ul.lesson_id = l.id
-        AND ul.delete = 0
-    LEFT JOIN " . $base->table_name("exam")." AS e ON e.user_id = ui.id
-        AND e.course_id = uc.course_id
-        AND e.delete = 0
-        AND e.point >= c.percentage
+            LEFT JOIN " . $base->table_name("enterprise_course")." AS ec ON c.id = ec.course_id
+            LEFT JOIN " . $base->table_name("enterprise_department")." AS ed ON ed.id = ec.department_id and ed.delete=0 
+            LEFT JOIN " . $base->table_name("enterprise_position")." AS ep ON ep.id = ec.position_id and ep.delete=0
+            LEFT JOIN " . $base->table_name("enterprise_user")." AS eu ON eu.delete = 0 AND eu.status = 1 and eu.enterprise_id=ec.enterprise_id and eu.department_id=ed.id and eu.position_id=ep.id
+            LEFT JOIN " . $base->table_name("user_info")." AS ui ON ui.id = eu.user_id 
+            LEFT JOIN " . $base->table_name("user_course")." AS uc ON ui.id = uc.user_id AND uc.delete = 0 and uc.course_id=ec.course_id
+            
+            LEFT JOIN " . $base->table_name("lesson")." AS l ON uc.course_id = l.course_id AND l.delete = 0
+            LEFT JOIN " . $base->table_name("user_lesson")." AS ul ON ul.user_id = uc.user_id
+                AND ul.lesson_id = l.id
+                AND ul.delete = 0
+            LEFT JOIN " . $base->table_name("exam")." AS e ON e.user_id = ui.id
+                AND e.course_id = uc.course_id
+                AND e.delete = 0
+                AND e.point >= c.percentage
             where uc.course_id=".$id."
                 and ec.delete=0
                 
@@ -423,7 +423,8 @@ class StatisticsDAL {
                 left join ".$base->table_name("enterprise_user")." as eu on ex.user_id=eu.user_id 
                 left join ".$base->table_name("user_info")." as ui on eu.user_id=ui.id 
                 where e.id=".$id." and e.delete=0 and eu.delete=0 and eu.status=1
-                group by eu.user_id ;";
+                group by eu.user_id 
+                order by e.add_time desc;";
         //echo $sql;
         $res=$base->getFetchAll($sql);
         return $res;
