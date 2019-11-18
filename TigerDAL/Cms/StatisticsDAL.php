@@ -364,7 +364,7 @@ class StatisticsDAL {
                 AND e.point >= c.percentage
             where uc.course_id=".$id."
                 and ec.delete=0
-                
+                group by ui.id
             ) as ccl";
         // echo $sql;die;
         // AND eu.enterprise_id = '".$id."'
