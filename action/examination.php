@@ -9,6 +9,7 @@ use TigerDAL\Cms\ExaminationDAL;
 use TigerDAL\Cms\ExaminationTestDAL;
 use TigerDAL\Cms\TestDAL;
 use TigerDAL\Cms\EnterpriseDAL;
+use TigerDAL\Cms\CategoryDAL;
 use config\code;
 
 class examination {
@@ -79,7 +80,8 @@ class examination {
                 self::$data['examination_test_id'] = null;
                 $enterprise_id = $this->enterprise_id;
             }
-            self::$data['test'] = TestDAL::getExaminationTestList($enterprise_id);
+            // self::$data['test'] = TestDAL::getExaminationTestList($enterprise_id);
+            self::$data['categorys'] = CategoryDAL::getCategorys(1,99,"",1);
             self::$data['class'] = $this->class;
             self::$data['enterprise_id'] = $enterprise_id;
             //Common::pr(self::$data['list']);die;
@@ -89,6 +91,18 @@ class examination {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
         \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
+
+    function getExaminationTestList(){
+        try {
+            $enterprise_id = $_GET['enterprise_id'];
+            $cat_id = $_GET['cat_id'];
+            $data = TestDAL::getExaminationTestList($enterprise_id,$cat_id);
+            echo json_encode(['success' => true,'data'=>$data]);
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            echo json_encode(['success' => false, 'message' => '999']);
+        }
     }
 
     function updateExamination() {

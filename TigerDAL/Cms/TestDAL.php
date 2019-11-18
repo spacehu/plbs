@@ -118,7 +118,7 @@ class TestDAL {
     }
 
     /** 获取试卷使用的试题 */
-    public static function getExaminationTestList($enterprise_id) {
+    public static function getExaminationTestList($enterprise_id,$cat_id) {
         $base = new BaseDAL();
         $where = "";
         if (!empty($enterprise_id)) {
@@ -126,6 +126,9 @@ class TestDAL {
         } else {
             $where .= " and (enterprise_id = 0 or enterprise_id is null) ";
         }
+        if (!empty($cat_id)) {
+            $where .= " and cat_id = " . $cat_id . " ";
+        } 
         $sql = "select * from " . $base->table_name("test") . " where `delete`=0 and lesson_id=0 " . $where . " order by edit_time desc ;";
         return $base->getFetchAll($sql);
     }

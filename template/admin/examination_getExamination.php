@@ -1,7 +1,7 @@
 <?php
 $data = \action\examination::$data['data'];
 $class = \action\examination::$data['class'];
-$test = \action\examination::$data['test'];
+$categorys = \action\examination::$data['categorys'];
 $examination_test = \action\examination::$data['examination_test'];
 $examination_test_id = \action\examination::$data['examination_test_id'];
 $enterprise_id = \action\examination::$data['enterprise_id'];
@@ -67,17 +67,24 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
                         </div>
                         <div class="leftAlist" >
                             <span>TESTS 试题列表</span>
+                            <select id="change_category">
+                                <option value="1">筛选分类</option>
+                                <?php if (is_array($categorys)) { ?>
+                                    <?php foreach ($categorys as $k => $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                            <a href='javascript:void(0);' id='select-all'>全选</a>
+                            <a href='javascript:void(0);' id='deselect-all'>全取消</a>
+                            <!--
+                            <a href='javascript:void(0);' id='refresh'>刷新</a>
+                            -->
                         </div>
                         <div class="leftAlist" >
                             <!-- 复选框 未分配的学员 -->
-                            <a href='javascript:void(0);' id='select-all'>全选</a>
-                            <a href='javascript:void(0);' id='deselect-all'>全取消</a>
                             <select multiple="multiple" id="pre-selected-options" name="my-course[]">
-                                <?php if (is_array($test)) { ?>
-                                    <?php foreach ($test as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>" <?php echo is_array($examination_test_id) ? in_array($v['id'], $examination_test_id) ? 'selected' : '' : ''; ?>><?php echo $v['name']; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
+                                
                             </select>
                             <input class="text" name="test_add" id="test_add" type="hidden" value="" />
                             <input class="text" name="test_remove" id="test_remove" type="hidden" value="" />
@@ -92,6 +99,96 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
             </form>	
         </div>
         <script>
+            var examination_test_id=<?php echo json_encode($examination_test_id);?>;
+            $(function(){
+                getCategoryList(1);
+                $("#change_category").on('change',function(){
+                    //console.log($(this).attr("value"));
+                    getCategoryList($(this).attr("value"));
+                });
+            });
+            var getCategoryList = function (id) {
+                var regionlist;
+                $.ajax({
+                    async: false,
+                    url:'./index.php?a=<?php echo $class; ?>&m=getExaminationTestList&enterprise_id=<?php echo $enterprise_id;?>&cat_id=' +id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        regionlist = data.data;
+                    },
+                    complete: function () {
+                    }
+                    });
+                // return regionlist;
+                setSelect(regionlist);
+            };
+            // 重制select框的数据
+            var setSelect = function(list){
+                // 清除之前的选项
+                $("#pre-selected-options").empty();
+                // 清除之前的存储数据
+                users_add=[];
+                users_remove=[];
+                //console.log(list);
+                $.each(list,function(k,v){
+                    //console.log(v.id);
+                    var selected='';
+                    if($.inArray(v.id,examination_test_id)>=0){
+                        selected='selected';
+                    }
+                    var _row='<option value="'+v.id+'" '+selected+' >'+v.name+'</option>';
+                    // 将数据填充到select框
+                    $("#pre-selected-options").append(_row);
+                });
+                $('#pre-selected-options').multiSelect('refresh');
+            };
+            // select选择后调用的方法
+            var afterSelect=function(values){
+                if(values.length==0){return false;}
+                if(values.length==1){
+                    // 新增数据 在数组结构上追加
+                    if($.inArray(values[0], users_add)==-1){
+                        // 如果不存在 则追加
+                        users_add[users_add.length] = values[0]; 
+                    }// 否则不操作
+                    // 删除数据 在数组结构上抹去改值对应的key值
+                    if($.inArray(values[0], users_remove)!=-1){
+                        // 如果存在 则删除
+                        users_remove.splice($.inArray(values[0], users_remove), 1);
+                    }
+                }
+                if(values.length>1){
+                    $.each(values,function (k,v){
+                        users_add[users_add.length] = v; 
+                        if($.inArray(v, users_remove)!=-1){
+                            users_remove.splice($.inArray(v, users_remove), 1);
+                        }
+                    });
+                }
+                $("#test_add").attr("value", users_add.toString());
+                $("#test_remove").attr("value", users_remove.toString());
+            }
+            // select取消选择后调用的方法
+            var afterDeselect=function(values){
+                if(values==null||values.length==0){return false;}
+                if(values.length==1){
+                    users_remove[users_remove.length] = values[0];
+                    if($.inArray(values[0], users_add)!=-1){
+                        users_add.splice($.inArray(values[0], users_add), 1);
+                    }
+                }
+                if(values.length>1){
+                    $.each(values,function (k,v){
+                        users_remove[users_remove.length] = v;
+                        if($.inArray(v, users_add)!=-1){
+                            users_add.splice($.inArray(v, users_add), 1);
+                        }
+                    });
+                }
+                $("#test_add").attr("value", users_add.toString());
+                $("#test_remove").attr("value", users_remove.toString());
+            }
             // 定义初始数组 用来赋值到post
             // 新增
             var users_add = [];
@@ -101,48 +198,10 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
                 selectableHeader: "<div class='custom-header'>题库</div>",
                 selectionHeader: "<div class='custom-header'>已选题目</div>",
                 afterSelect: function (values) {
-                    if(values.length==0){return false;}
-                    if(values.length==1){
-                        // 新增数据 在数组结构上追加
-                        if($.inArray(values[0], users_add)==-1){
-                            // 如果不存在 则追加
-                            users_add[users_add.length] = values[0]; 
-                        }// 否则不操作
-                        // 删除数据 在数组结构上抹去改值对应的key值
-                        if($.inArray(values[0], users_remove)!=-1){
-                            // 如果存在 则删除
-                            users_remove.splice($.inArray(values[0], users_remove), 1);
-                        }
-                    }
-                    if(values.length>1){
-                        $.each(values,function (k,v){
-                            users_add[users_add.length] = v; 
-                            if($.inArray(v, users_remove)!=-1){
-                                users_remove.splice($.inArray(v, users_remove), 1);
-                            }
-                        });
-                    }
-                    $("#test_add").attr("value", users_add.toString());
-                    $("#test_remove").attr("value", users_remove.toString());
+                    afterSelect(values);
                 },
                 afterDeselect: function (values) {
-                    if(values==null||values.length==0){return false;}
-                    if(values.length==1){
-                        users_remove[users_remove.length] = values[0];
-                        if($.inArray(values[0], users_add)!=-1){
-                            users_add.splice($.inArray(values[0], users_add), 1);
-                        }
-                    }
-                    if(values.length>1){
-                        $.each(values,function (k,v){
-                            users_remove[users_remove.length] = v;
-                            if($.inArray(v, users_add)!=-1){
-                                users_add.splice($.inArray(v, users_add), 1);
-                            }
-                        });
-                    }
-                    $("#test_add").attr("value", users_add.toString());
-                    $("#test_remove").attr("value", users_remove.toString());
+                    afterDeselect(values);
                 }
             });
             $('#select-all').click(function(){
