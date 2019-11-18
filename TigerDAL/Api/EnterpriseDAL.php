@@ -114,12 +114,12 @@ class EnterpriseDAL {
 					LEFT JOIN " . $base->table_name("enterprise_position") . " AS ep ON ep.id = eu.position_id  and ep.delete=0 
 					LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = u.id AND uc.`delete` = 0 
 					left join " . $base->table_name("enterprise_course") . " as ec on ec.`delete`=0 and uc.course_id=ec.course_id 
-					left join " . $base->table_name("course") . " as c on uc.course_id=c.id and c.`delete` =0 
+					left join " . $base->table_name("course") . " as c on uc.course_id=c.id
 					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` > c.percentage
 					LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
 					LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
                 WHERE
-                    eu.`delete` = 0 AND eu.`STATUS` = 1
+                    eu.`delete` = 0 AND eu.`STATUS` = 1 and c.`delete` =0 
                         and u.id in (".$_udis.")
                         and (ec.course_id is null or (ec.enterprise_id=eu.enterprise_id and ec.department_id=ed.id and ec.position_id=ep.id))
                 order by u.id asc

@@ -70,6 +70,8 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
                         </div>
                         <div class="leftAlist" >
                             <!-- 复选框 未分配的学员 -->
+                            <a href='javascript:void(0);' id='select-all'>全选</a>
+                            <a href='javascript:void(0);' id='deselect-all'>全取消</a>
                             <select multiple="multiple" id="pre-selected-options" name="my-course[]">
                                 <?php if (is_array($test)) { ?>
                                     <?php foreach ($test as $k => $v) { ?>
@@ -90,27 +92,66 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
             </form>	
         </div>
         <script>
+            // 定义初始数组 用来赋值到post
+            // 新增
             var users_add = [];
+            // 删除
             var users_remove = [];
             $('#pre-selected-options').multiSelect({
                 selectableHeader: "<div class='custom-header'>题库</div>",
                 selectionHeader: "<div class='custom-header'>已选题目</div>",
                 afterSelect: function (values) {
-                    users_add[users_add.length] = values;
-                    users_remove.splice($.inArray(values, users_add), 1);
-                    console.log(users_add.toString());
-                    console.log(users_remove.toString());
+                    if(values.length==0){return false;}
+                    if(values.length==1){
+                        // 新增数据 在数组结构上追加
+                        if($.inArray(values[0], users_add)==-1){
+                            // 如果不存在 则追加
+                            users_add[users_add.length] = values[0]; 
+                        }// 否则不操作
+                        // 删除数据 在数组结构上抹去改值对应的key值
+                        if($.inArray(values[0], users_remove)!=-1){
+                            // 如果存在 则删除
+                            users_remove.splice($.inArray(values[0], users_remove), 1);
+                        }
+                    }
+                    if(values.length>1){
+                        $.each(values,function (k,v){
+                            users_add[users_add.length] = v; 
+                            if($.inArray(v, users_remove)!=-1){
+                                users_remove.splice($.inArray(v, users_remove), 1);
+                            }
+                        });
+                    }
                     $("#test_add").attr("value", users_add.toString());
                     $("#test_remove").attr("value", users_remove.toString());
                 },
                 afterDeselect: function (values) {
-                    users_remove[users_remove.length] = values;
-                    users_add.splice($.inArray(values, users_add), 1);
-                    console.log(users_add.toString());
-                    console.log(users_remove.toString());
+                    if(values==null||values.length==0){return false;}
+                    if(values.length==1){
+                        users_remove[users_remove.length] = values[0];
+                        if($.inArray(values[0], users_add)!=-1){
+                            users_add.splice($.inArray(values[0], users_add), 1);
+                        }
+                    }
+                    if(values.length>1){
+                        $.each(values,function (k,v){
+                            users_remove[users_remove.length] = v;
+                            if($.inArray(v, users_add)!=-1){
+                                users_add.splice($.inArray(v, users_add), 1);
+                            }
+                        });
+                    }
                     $("#test_add").attr("value", users_add.toString());
                     $("#test_remove").attr("value", users_remove.toString());
                 }
+            });
+            $('#select-all').click(function(){
+                $('#pre-selected-options').multiSelect('select_all');
+                return false;
+            });
+            $('#deselect-all').click(function(){
+                $('#pre-selected-options').multiSelect('deselect_all');
+                return false;
             });
         </script>
     </body>

@@ -82,16 +82,16 @@ $enterpriseCourse = \action\position::$data['enterpriseCourse'];
                 selectableHeader: "<div class='custom-header'>部门员工/学员</div>",
                 selectionHeader: "<div class='custom-header'>职位员工/学员</div>",
                 afterSelect: function (values) {
-                    users_add[users_add.length] = values;
-                    users_remove.splice($.inArray(values, users_add), 1);
+                    users_add[users_add.length] = values[0];
+                    users_remove.splice($.inArray(values[0], users_remove), 1);
                     console.log(users_add.toString());
                     console.log(users_remove.toString());
                     $("#departmentadd").attr("value", users_add.toString());
                     $("#departmentremove").attr("value", users_remove.toString());
                 },
                 afterDeselect: function (values) {
-                    users_remove[users_remove.length] = values;
-                    users_add.splice($.inArray(values, users_add), 1);
+                    users_remove[users_remove.length] = values[0];
+                    users_add.splice($.inArray(values[0], users_add), 1);
                     console.log(users_add.toString());
                     console.log(users_remove.toString());
                     $("#departmentadd").attr("value", users_add.toString());
@@ -104,16 +104,16 @@ $enterpriseCourse = \action\position::$data['enterpriseCourse'];
                 selectableHeader: "<div class='custom-header'>部门课程</div>",
                 selectionHeader: "<div class='custom-header'>职位课程</div>",
                 afterSelect: function (values) {
-                    courses_add[courses_add.length] = values;
-                    courses_remove.splice($.inArray(values, courses_add), 1);
+                    courses_add[courses_add.length] = values[0];
+                    courses_remove.splice($.inArray(values[0], courses_remove), 1);
                     console.log(courses_add.toString());
                     console.log(courses_remove.toString());
                     $("#courses_add").attr("value", courses_add.toString());
                     $("#courses_remove").attr("value", courses_remove.toString());
                 },
                 afterDeselect: function (values) {
-                    courses_remove[courses_remove.length] = values;
-                    courses_add.splice($.inArray(values, courses_add), 1);
+                    courses_remove[courses_remove.length] = values[0];
+                    courses_add.splice($.inArray(values[0], courses_add), 1);
                     console.log(courses_add.toString());
                     console.log(courses_remove.toString());
                     $("#courses_add").attr("value", courses_add.toString());

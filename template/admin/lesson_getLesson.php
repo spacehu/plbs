@@ -83,11 +83,11 @@ if (is_array($image)) {
                                 <input type="hidden" name="edit_doc" id="edit_doc" value="<?php echo isset($original_src) ? $original_src : ''; ?>" />
                             </div>
                             <div class="r_row music <?php echo $data['type'] == "music" ? "" : "hide"; ?>">
-                                <audio class="r_row_img" src="<?php echo isset($original_src) ? $original_src : ''; ?>" controls >
+                                <audio class="r_row_img" id="r_row_media" src="<?php echo isset($original_src) ? $original_src : ''; ?>" controls >
                                 </audio>
                             </div>
                             <div class="r_row video <?php echo $data['type'] == "video" ? "" : "hide"; ?>">
-                                <video class="r_row_img" src="<?php echo isset($original_src) ? $original_src : ''; ?>" controls >
+                                <video class="r_row_img" id="r_row_media" src="<?php echo isset($original_src) ? $original_src : ''; ?>" controls >
                                 </video>
                             </div>
                         </div>
@@ -142,7 +142,7 @@ if (is_array($image)) {
             $(function () {
                 $(".remove_media").live('click',function(){
                     $("#edit_doc").attr("value",0);
-                    $(".r_row_img").attr("src", "");
+                    $("#r_row_media").attr("src", "");
                 });
                 $(".add_image").click(function () {
                     $(".mod_image").children().clone().appendTo('.list_image');
@@ -174,7 +174,7 @@ if (is_array($image)) {
                     if (!file)
                         return;
                     var fileExtension = file.name.split('.').pop();
-                    var _file = config.mediaPath + "/" + config.filename + "." + fileExtension;
+                    var _file = config.mediaPath + "/" + (new Date()).valueOf() + "." + fileExtension;
                     cos.putObject({
                         Bucket: config.Bucket, /* 必须 */
                         Region: config.Region, /* 必须 */
@@ -194,7 +194,7 @@ if (is_array($image)) {
                     if (!file)
                         return;
                     var fileExtension = file.name.split('.').pop();
-                    var _file = config.imagePath + "/" + config.filename + "." + fileExtension;
+                    var _file = config.imagePath + "/" +  (new Date()).valueOf() + "." + fileExtension;
                     cos.putObject({
                         Bucket: config.Bucket, /* 必须 */
                         Region: config.Region, /* 必须 */

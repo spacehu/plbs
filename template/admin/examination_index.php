@@ -27,7 +27,7 @@ $class = \action\examination::$data['class'];
         <div class="menu">
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" placeholder="请输入关键字" />
             <a class="button_find " href="javascript:void(0);">查找</a>
-            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getExamination'">添加新课时</a>
+            <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getExamination'">添加新试卷</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >

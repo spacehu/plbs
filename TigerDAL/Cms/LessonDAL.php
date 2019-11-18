@@ -64,7 +64,9 @@ class LessonDAL {
             foreach ($data as $v) {
                 if (is_numeric($v)) {
                     $_data[] = " " . $v . " ";
-                } else {
+                } else if (empty($v)){
+                    $_data[]= " null ";
+                }else {
                     $_data[] = " '" . $v . "' ";
                 }
             }
@@ -84,12 +86,15 @@ class LessonDAL {
             foreach ($data as $k => $v) {
                 if (is_numeric($v)) {
                     $_data[] = " `" . $k . "`=" . $v . " ";
+                } else if (empty($v)){
+                    $_data[]= " `" . $k . "`=null ";
                 } else {
                     $_data[] = " `" . $k . "`='" . $v . "' ";
                 }
             }
             $set = implode(',', $_data);
             $sql = "update " . $base->table_name('lesson') . " set " . $set . "  where id=" . $id . " ;";
+            //echo $sql;die;
             return $base->query($sql);
         } else {
             return true;
