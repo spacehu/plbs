@@ -72,7 +72,6 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
                             <!-- 复选框 未分配的学员 -->
                             <a href='javascript:void(0);' id='select-all'>全选</a>
                             <a href='javascript:void(0);' id='deselect-all'>全取消</a>
-                            <a href='javascript:void(0);' id='refresh'>刷新</a>
                             <select multiple="multiple" id="pre-selected-options" name="my-course[]">
                                 <?php if (is_array($test)) { ?>
                                     <?php foreach ($test as $k => $v) { ?>
