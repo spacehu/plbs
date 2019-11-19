@@ -118,7 +118,7 @@ class TestDAL {
     }
 
     /** 获取试卷使用的试题 */
-    public static function getExaminationTestList($enterprise_id,$cat_id) {
+    public static function getExaminationTestList($enterprise_id,$cat_id=null) {
         $base = new BaseDAL();
         $where = "";
         if (!empty($enterprise_id)) {

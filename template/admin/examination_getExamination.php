@@ -2,6 +2,7 @@
 $data = \action\examination::$data['data'];
 $class = \action\examination::$data['class'];
 $categorys = \action\examination::$data['categorys'];
+$category = \action\examination::$data['category'];
 $examination_test = \action\examination::$data['examination_test'];
 $examination_test_id = \action\examination::$data['examination_test_id'];
 $enterprise_id = \action\examination::$data['enterprise_id'];
@@ -71,7 +72,7 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
                                 <option value="1">筛选分类</option>
                                 <?php if (is_array($categorys)) { ?>
                                     <?php foreach ($categorys as $k => $v) { ?>
-                                        <option value="<?php echo $v['id']; ?>" ><?php echo $v['name']; ?></option>
+                                        <option value="<?php echo $v['id']; ?>" <?php echo $category==$v['id']?' selected="selected" ':'';?> ><?php echo $v['name']; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>
@@ -101,7 +102,8 @@ $enterprise_id = \action\examination::$data['enterprise_id'];
         <script>
             var examination_test_id=<?php echo json_encode($examination_test_id);?>;
             $(function(){
-                getCategoryList(1);
+                var cat_id=$("#change_category").attr("value");
+                getCategoryList(cat_id);
                 $("#change_category").on('change',function(){
                     //console.log($(this).attr("value"));
                     getCategoryList($(this).attr("value"));

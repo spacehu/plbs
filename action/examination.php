@@ -80,7 +80,12 @@ class examination {
                 self::$data['examination_test_id'] = null;
                 $enterprise_id = $this->enterprise_id;
             }
-            // self::$data['test'] = TestDAL::getExaminationTestList($enterprise_id);
+            $cat_id=1;
+            $tests = TestDAL::getExaminationTestList($enterprise_id);
+            if(!empty($tests)){
+                $cat_id=$tests[0]['cat_id'];
+            }
+            self::$data['category']=$cat_id;
             self::$data['categorys'] = CategoryDAL::getCategorys(1,99,"",1);
             self::$data['class'] = $this->class;
             self::$data['enterprise_id'] = $enterprise_id;
