@@ -107,4 +107,20 @@ class ApiBase extends \action\RestfulApi {
         }
         return self::$data;
     }
+
+    /** 获取系统配置的400电话 */
+    function getPhone(){
+        try {
+            //轮播列表
+            $obj="0";
+            $res = SystemDAL::getConfig('company_phone');
+            if(!empty($res)){
+                $obj=$res['value'];
+            }
+            self::$data['data']['info'] = $obj;
+        } catch (Exception $ex) {
+            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
 }

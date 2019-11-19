@@ -111,6 +111,7 @@ return $config = [
             'GET /v4/ApiBase-citys.htm' => 'v4-ApiBase-citys', //获取城市列表
             'GET /v4/ApiBase-types.htm' => 'v4-ApiBase-types', //获取类型列表
             'GET /v4/ApiBase-checkSystem.htm' => 'v4-ApiBase-checkSystem', //获取机会开启状态
+            'GET /v4/ApiBase-phone.htm' => 'v4-ApiBase-getPhone', //获取获取电话号码内容
             'GET /v4/ApiCourse-courses.htm' => 'v4-ApiCourse-courses', //获取课程列表
             'GET /v4/ApiCourse-course.htm' => 'v4-ApiCourse-course', //获取课程详情
             'GET /v4/ApiCourse-lessons.htm' => 'v4-ApiCourse-lessons', //获取课时列表
