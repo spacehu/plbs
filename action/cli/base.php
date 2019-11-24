@@ -8,7 +8,7 @@ use TigerDAL\MailDAL;
 use TigerDAL\cli\LogDAL;
 use config\code;
 
-class base {
+class base extends \action\RestfulApi {
 
     /**
      * 主方法引入父类的基类
@@ -39,12 +39,15 @@ class base {
                         "user_email" => $v['email'],
                         "user_name" => $v['name'],
                     ];
-                    $_mail->mailTo($fromInfo, $maildetail);
+                    $os[]=$_mail->mailTo($fromInfo, $maildetail);
                 }
+                self::$data['data'] = $os;
+                LogDAL::save(date("Y-m-d H:i:s") . "-".json_encode($os), "cli");
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
+        return self::$data;
     }
 
 }

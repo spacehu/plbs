@@ -126,6 +126,7 @@ return $config = [
             'GET /v4/ApiWeChatMinProgram-getWeChatInfo.htm' => 'v4-ApiWeChatMinProgram-getWeChatInfo', //微信小程序获取用户openid的方法 （区别v2：切割了配置信息）
             'GET /v4/ApiExamination-examinations.htm' => 'v4-ApiExamination-examinations', //获取考卷列表
             'GET /v4/ApiExamination-examination.htm' => 'v4-ApiExamination-examination', //获取考卷详情
+            'GET /cli/base-userEmail.htm'=>'cli-base-userEmail',//执行邮件服务
         ]
     ],
     'debug' => false, //调试器
