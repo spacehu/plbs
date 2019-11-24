@@ -35,19 +35,19 @@ class base extends \action\RestfulApi {
                     //$maildetail = UserDAL::getData($v['id']);
                     $maildetail = [
                         "subject" => "Dear " . $v['name'] . ". ",
-                        "body" => $v['mail_content'],
+                        "body" => !empty($v['mail_content'])?$v['mail_content']:\mod\init::$config['mail']['detail'],
                         "user_email" => $v['email'],
                         "user_name" => $v['name'],
                     ];
+                    $os_base[]=$maildetail;
                     $os[]=$_mail->mailTo($fromInfo, $maildetail);
                 }
-                self::$data['data'] = $os;
-                LogDAL::save(date("Y-m-d H:i:s") . "-".json_encode($os), "cli");
+                LogDAL::save(date("Y-m-d H:i:s") . "-base-".json_encode($os_base), "cli");
+                LogDAL::save(date("Y-m-d H:i:s") . "-res-".json_encode($os), "cli");
             }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
-        return self::$data;
     }
 
 }

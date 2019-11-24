@@ -164,6 +164,9 @@ return $config = [
     'plbs' => [
         'percentage' => 60,
     ],
+    'mail'=>[
+        'detail'=>'尊敬的用户，请进入系统查看报表信息。',
+    ],
 ];
 
 

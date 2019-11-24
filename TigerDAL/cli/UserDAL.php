@@ -47,7 +47,7 @@ class UserDAL {
         }
         return $fromInfo;
     }
-
+    // 获取学习报告的接口 暂时不用
     public static function getData() {
         $base = new BaseDAL("cli");
     }
