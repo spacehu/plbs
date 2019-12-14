@@ -299,7 +299,7 @@ class UserInfoDAL {
                 . "left join " . $base->table_name("enterprise") . " as e on e.id=eu.enterprise_id "
                 . "left join " . $base->table_name("enterprise_department") . " as ed ON ed.id = eu.department_id "
                 . "left join " . $base->table_name("enterprise_position") . " as ep ON ep.id = eu.position_id "
-                . " where (eu.status=0 or eu.status=1) and eu.`delete`=0 and e.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
+                . " where (eu.status=1) and eu.`delete`=0 and e.`delete`=0 and eu.enterprise_id=" . $enterprise_id . "  " . $where . " "
                 . "order by ui.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);
