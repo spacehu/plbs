@@ -49,6 +49,7 @@ class test {
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
             $category = isset($_GET['cat_id']) ? $_GET['cat_id'] : "";
+            $course_id=isset($_GET['course_id']) ? $_GET['course_id'] : "";
 
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
@@ -58,6 +59,7 @@ class test {
             self::$data['data'] = TestDAL::getAll($currentPage, $pagesize, $keywords, $this->lesson_id, $category, $this->enterprise_id);
             self::$data['class'] = $this->class;
             self::$data['lesson_id'] = $this->lesson_id;
+            self::$data['course_id'] = $course_id;
             self::$data['category'] = $category;
             self::$data['categorys'] = "";
             if (empty($this->lesson_id)) {

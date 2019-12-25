@@ -6,6 +6,7 @@ $pagesize = \action\test::$data['pagesize'];
 $keywords = \action\test::$data['keywords'];
 $class = \action\test::$data['class'];
 $lesson_id = \action\test::$data['lesson_id'];
+$course_id = \action\test::$data['course_id'];
 $category = \action\test::$data['category'];
 $categorys = \action\test::$data['categorys'];
 ?>
@@ -42,6 +43,9 @@ $categorys = \action\test::$data['categorys'];
                 </select>
             <?php } ?>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getTest&lesson_id=<?php echo $lesson_id; ?>'">添加新试题</a>
+            <?php if(!empty($lesson_id)){?>
+            <a href="index.php?a=lesson&m=index&course_id=<?php echo $course_id;?>&cat_id=<?php echo $category;?>" class="backButton">返回上一级</a>
+            <?php }?>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
