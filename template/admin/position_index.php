@@ -20,6 +20,7 @@ $department_id = \action\position::$data['department_id'];
 
         <div class="menu">
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getPosition&enterprise_id=<?php echo $enterprise_id; ?>&department_id=<?php echo $department_id; ?>'">添加新职位</a>
+            <a href="index.php?a=department&m=index" class="backButton">返回上一级</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >

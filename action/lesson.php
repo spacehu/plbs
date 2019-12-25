@@ -16,10 +16,12 @@ class lesson {
     private $class;
     public static $data;
     private $course_id;
+    private $cat_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
         $this->course_id = !empty($_GET['course_id']) ? $_GET['course_id'] : '';
+        $this->cat_id = !empty($_GET['cat_id']) ? $_GET['cat_id'] : '';
     }
 
     function index() {
@@ -38,6 +40,7 @@ class lesson {
             self::$data['data'] = LessonDAL::getAll($currentPage, $pagesize, $keywords, $this->course_id);
             self::$data['class'] = $this->class;
             self::$data['course_id'] = $this->course_id;
+            self::$data['cat_id'] = $this->cat_id;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }

@@ -6,6 +6,7 @@ $pagesize = \action\lesson::$data['pagesize'];
 $keywords = \action\lesson::$data['keywords'];
 $class = \action\lesson::$data['class'];
 $course_id = \action\lesson::$data['course_id'];
+$cat_id = \action\lesson::$data['cat_id'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,6 +30,7 @@ $course_id = \action\lesson::$data['course_id'];
             <input type="text" name="keywords" class="keywords" value="<?php echo isset($keywords) ? $keywords : ""; ?>" placeholder="请输入关键字" />
             <a class="button_find " href="javascript:void(0);">查找</a>
             <a href="javascript:void(0);" class="updateButton"  onclick="javascript:parent.mainFrame.location.href = 'index.php?a=<?php echo $class; ?>&m=getLesson&course_id=<?php echo $course_id; ?>'">添加新课时</a>
+            <a href="index.php?a=course&m=index&cat_id=<?php echo $cat_id; ?>" class="backButton">返回上一级</a>
         </div>
         <div class="content">
             <table class="mytable" cellspacing="0" >
