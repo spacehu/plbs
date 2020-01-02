@@ -42,7 +42,7 @@ class TestDAL {
         if (is_int($lesson_id)) {
             $where .= " and t.lesson_id = " . $lesson_id . " ";
         }
-        if (!empty($category)) {
+        if (!empty($category)&&empty($lesson_id)) {
             $where .= " and t.cat_id = '" . $category . "' and t.lesson_id=0 ";
         }
         if (!empty($enterprise_id)) {
