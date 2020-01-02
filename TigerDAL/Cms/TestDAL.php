@@ -18,7 +18,7 @@ class TestDAL {
         if (is_int($lesson_id)) {
             $where .= " and t.lesson_id = " . $lesson_id . " ";
         }
-        if (!empty($category)) {
+        if (!empty($category)&&empty($lesson_id)) {
             $where .= " and t.cat_id = '" . $category . "' ";
         }
         if (!empty($enterprise_id)) {
@@ -28,6 +28,7 @@ class TestDAL {
                 . "left join " . $base->table_name("enterprise") . " as e on t.enterprise_id=e.id "
                 . "where t.`delete`=0 " . $where . " "
                 . "order by t.edit_time desc limit " . $limit_start . "," . $limit_end . " ;";
+                //echo $sql;
         return $base->getFetchAll($sql);
     }
 
@@ -119,6 +120,22 @@ class TestDAL {
 
     /** 获取试卷使用的试题 */
     public static function getExaminationTestList($enterprise_id,$cat_id=null) {
+        $base = new BaseDAL();
+        $where = "";
+        if (!empty($enterprise_id)) {
+            $where .= " and enterprise_id = " . $enterprise_id . " ";
+        } else {
+            $where .= " and (enterprise_id = 0 or enterprise_id is null) ";
+        }
+        if (!empty($cat_id)) {
+            $where .= " and cat_id = " . $cat_id . " ";
+        } 
+        $sql = "select * from " . $base->table_name("test") . " where `delete`=0 and lesson_id=0 " . $where . " order by edit_time desc ;";
+        return $base->getFetchAll($sql);
+    }
+    
+    /** 获取问卷使用的试题 */
+    public static function getQuestionnaireTestList($enterprise_id,$cat_id=null) {
         $base = new BaseDAL();
         $where = "";
         if (!empty($enterprise_id)) {

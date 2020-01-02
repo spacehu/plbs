@@ -66,6 +66,7 @@ class test {
                 self::$data['categorys'] = CategoryDAL::tree($this->cat_id);
                 unset(self::$data['categorys'][$this->cat_id]);
             }
+            //Common::pr(self::$data['data']);die;
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
