@@ -37,14 +37,17 @@ class category {
 
     function index() {
         Common::isset_cookie();
+        echo 1;
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
+        echo 2;
         $type = isset($_GET['type']) ? $_GET['type'] : null;
         $cat_id = ($type == "view") ? 1 : 0;
         try {
             self::$data['total'] = CategoryDAL::getTotal("");
+            echo 3;
             $_data = CategoryDAL::tree($cat_id, 0, false);
+            echo 4;die;
             $_total = 0;
-            echo 1;die;
             if (!empty($_data)) {
                 foreach ($_data as $k => $v) {
                     $cat_ids[] = $v['id'];
