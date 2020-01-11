@@ -36,6 +36,7 @@ class category {
     }
 
     function index() {
+        echo 1;die;
         Common::isset_cookie();
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
         $type = isset($_GET['type']) ? $_GET['type'] : null;
