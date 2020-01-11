@@ -37,9 +37,8 @@ class category {
 
     function index() {
         Common::isset_cookie();
-        echo 1;die;
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
-        echo 2;
+        echo 2;die;
         $type = isset($_GET['type']) ? $_GET['type'] : null;
         $cat_id = ($type == "view") ? 1 : 0;
         try {
