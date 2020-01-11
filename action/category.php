@@ -42,9 +42,7 @@ class category {
         $cat_id = ($type == "view") ? 1 : 0;
         try {
             self::$data['total'] = CategoryDAL::getTotal("");
-            echo 3;die;
             $_data = CategoryDAL::tree($cat_id, 0, false);
-            echo 4;
             $_total = 0;
             if (!empty($_data)) {
                 foreach ($_data as $k => $v) {
