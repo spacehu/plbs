@@ -37,6 +37,7 @@ class ApiWeChat extends \action\RestfulApi {
         $this->appid = \mod\init::$config['env']['wechat']['appid'];                   //微信APPID，公众平台获取  
         $this->appsecret = \mod\init::$config['env']['wechat']['secret'];              //微信APPSECREC，公众平台获取  
         //$this->index_url = urlencode("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);           //微信回调地址，要跟公众平台的配置域名相同  
+        // 校验token
         $TokenDAL = new TokenDAL();
         $_token = $TokenDAL->checkToken();
         //Common::pr($_token);die;
@@ -49,12 +50,15 @@ class ApiWeChat extends \action\RestfulApi {
         }
         if (!empty($path)) {
             $_path = explode("-", $path);
-            $actEval = "\$res = \$this ->" . $_path['2'] . "();";
-            eval($actEval);
+            $mod= $_path['2'];
+            $res=$this->$mod();
             exit(json_encode($res));
         }
     }
 
+    /**
+     * 结束的魔术方法
+     */
     function __destruct() {
         parent::__destruct();
     }
@@ -123,7 +127,11 @@ class ApiWeChat extends \action\RestfulApi {
     function getWeChatInfo() {
         try {
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->get));
-            $this->beforeWeb();
+            if($this->get['cmod']=='sign'){
+                $this->beforeSign();
+            }else{
+                $this->beforeWeb();
+            }
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
@@ -208,6 +216,55 @@ class ApiWeChat extends \action\RestfulApi {
         // 积分
         $_point = $PointDAL->getUserPoint($result['id']);
         $result['point'] = !empty($_point) ? $_point : 0;
+        self::$data['success'] = true;
+        self::$data['data'] = $result;
+        LogDAL::save(json_encode($openid));
+    }
+    
+    /** 
+     * 获取sign模式下授权微信的方法
+     * 
+     */
+    public function beforeSign() {
+        /** 初始化本地数据 */
+        if (empty($this->header['openid'])) {                             //如果$_SESSION中没有openid，说明用户刚刚登陆，就执行getCode、getOpenId、getUserInfo获取他的信息  
+            // 获取get里面的code
+            $this->code = $this->getCode();
+            LogDAL::saveLog("DEBUG", "INFO", json_encode($this->code));
+            if (self::$data['success'] == false) {
+                return false;
+            }
+            // 根据code获取openid
+            $this->access_token = $this->getOpenId();
+            LogDAL::saveLog("DEBUG", "INFO", json_encode($this->access_token));
+            if ($this->access_token['errcode'] == 40029) {
+                self::$data['success'] = false;
+                self::$data['data'] = $this->access_token;
+                return false;
+            }
+            // 根据openid获取用户信息 非静默授权时使用
+            $userInfo = $this->getUserInfo();
+            LogDAL::saveLog("DEBUG", "INFO", json_encode($userInfo));
+            if (!empty($userInfo) && !empty($userInfo['openid'])) {
+                // 成功后 校验该企业发布的该问卷 该openid是否参与过进行签到确认
+                
+                // 如果不存在则返回openid信息并告知完成了授权 该用户并未签到
+
+                // 否则返回openid信息 并告知 该用户完成了签到
+                
+                
+                $openid = $userInfo['openid'];
+            } else {
+                /** 微信返回错误 */
+                self::$data['success'] = false;
+                self::$data['data']['code'] = $this->access_token;
+                self::$data['data']['userError'] = $userInfo;
+                return false;
+            }
+        } else {
+            $openid = $this->header['openid'];
+        }
+
         self::$data['success'] = true;
         self::$data['data'] = $result;
         LogDAL::save(json_encode($openid));

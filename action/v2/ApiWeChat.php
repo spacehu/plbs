@@ -25,7 +25,6 @@ class ApiWeChat extends \action\RestfulApi {
     public $index_url;               //微信回调地址，要跟公众平台的配置域名相同  
     public $code;
     public $openid;
-    private $get;
 
     /**
      * 主方法引入父类的基类

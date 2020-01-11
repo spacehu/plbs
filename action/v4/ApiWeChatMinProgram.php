@@ -49,8 +49,8 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
         }
         if (!empty($path)) {
             $_path = explode("-", $path);
-            $actEval = "\$res = \$this ->" . $_path['2'] . "();";
-            eval($actEval);
+            $mod= $_path['2'];
+            $res=$this->$mod();
             exit(json_encode($res));
         }
     }

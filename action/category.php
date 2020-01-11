@@ -9,6 +9,7 @@ use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
+use TigerDAL\Api\LogDAL;
 
 class category {
 
@@ -29,6 +30,9 @@ class category {
         } catch (Exception $ex) {
             TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
+    }
+    function __destruct() {
+        LogDAL::_saveLog();
     }
 
     function index() {

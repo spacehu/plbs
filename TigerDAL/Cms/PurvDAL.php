@@ -39,9 +39,9 @@ class PurvDAL {
     }
 
     /** 获取用户信息 */
-    public static function getByName($name) {
+    public static function getByName($code) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("purv") . " where 1=1 and name='" . $name . "'  limit 1 ;";
+        $sql = "select * from " . $base->table_name("purv") . " where 1=1 and code='" . $code . "'  limit 1 ;";
         return $base->getFetchRow($sql);
     }
 
@@ -49,12 +49,7 @@ class PurvDAL {
     public static function insert($data) {
         $base = new BaseDAL();
         if (is_array($data)) {
-            foreach ($data as $v) {
-                $_data[] = " '" . $v . "' ";
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('purv') . " values (null," . $set . ");";
-            return $base->query($sql);
+            return $base->insert($data,'purv');
         } else {
             return true;
         }
@@ -64,12 +59,7 @@ class PurvDAL {
     public static function update($id, $data) {
         $base = new BaseDAL();
         if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                $_data[] = " `" . $k . "`='" . $v . "' ";
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('purv') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
+            return $base->update($id,$data,'purv');
         } else {
             return true;
         }

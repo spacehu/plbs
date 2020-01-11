@@ -49,6 +49,9 @@
             <div class="title">
                 <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=department&m=index'" href="javascript:void(0);" >DEPARTMENT 部门</a>
             </div>
+            <div class="title">
+                <a class="first" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=questionnaire&m=index'" href="javascript:void(0);" >QUESTIONNAIRE 问卷</a>
+            </div>
             <!-- 企业管理员模块 end -->
             <div class="title">
                 <a class="first"  href="javascript:void(0);" >STATISTICS 统计</a>

@@ -81,6 +81,29 @@ class TestDAL {
         return null;
     }
 
+    /** 取出试题 问卷 */
+    public static function getQuestionnaire($questionnaire_id, $limit=999) {
+        $base = new BaseDAL();
+        $_sql = "select t.* "
+                ." from " . $base->table_name("test") . " as t "
+                ." left join " . $base->table_name("questionnaire_test") . " as qt on t.id=qt.test_id "
+                ." where qt.questionnaire_id= ".$questionnaire_id." and t.delete=0 "
+                ." order by qt.id asc "
+                ." LIMIT " . $limit . " ;";
+        $_res = $base->getFetchAll($_sql);
+        if (!empty($_res)) {
+            foreach ($_res as $k => $v) {
+                $res[$k] = $v;
+                if ($v['type'] == 'select' || $v['type'] == "selects") {
+                    $res[$k]['select'] = json_decode($v['overview']);
+                }
+            }
+        } else {
+            $res = $_res;
+        }
+        return $res;
+    }
+
     /** 答题 */
     public static function joinTest($_data) {
         //分数 是否合格
