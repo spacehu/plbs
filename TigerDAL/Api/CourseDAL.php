@@ -168,7 +168,7 @@ class CourseDAL {
     /** 参与课程 */
     public static function joinCourse($data) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name('user_course') . " where user_id=" . $data['user_id'] . " and course_id=" . $data['course_id'] . " ";
+        $sql = "select * from " . $base->table_name('user_course') . " where user_id=" . $data['user_id'] . " and course_id=" . $data['course_id'] . " and `delete`=0 and `status`=1 ";
         if (!empty($base->getFetchRow($sql))) {
             return false;
         }

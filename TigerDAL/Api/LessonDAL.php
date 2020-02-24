@@ -4,6 +4,7 @@ namespace TigerDAL\Api;
 
 use TigerDAL\BaseDAL;
 use TigerDAL\Cms\LessonDAL as cmsLessonDAL;
+use TigerDAL\Api\CourseDAL as apiCourseDAL;
 
 class LessonDAL {
 
@@ -51,7 +52,24 @@ class LessonDAL {
     /** 参与课时 */
     public static function joinLesson($data) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name('user_lesson') . " where user_id=" . $data['user_id'] . " and lesson_id=" . $data['lesson_id'] . " ";
+        // 判断是否进入了课程 如果进入了继续 否则安排进入课程
+        $sql="select l.course_id from ".$base->table_name("lesson")." as l where l.id=".$data['lesson_id']."  ;";
+        $lesson=$base->getFetchRow($sql);
+        if(!empty($lesson['course_id'])){
+            $_data = [
+                'user_id' => $data['user_id'],
+                'course_id' => $lesson['course_id'],
+                'status' => 1,
+                'add_time' => $data['add_time'],
+                'edit_time' => $data['edit_time'],
+                'delete' => 0,
+            ];
+            apiCourseDAL::joinCourse($_data);
+        }else{
+            return false;
+        }
+        // 判断是否已经加入了课时 如果进入了 则退出
+        $sql = "select * from " . $base->table_name('user_lesson') . " where user_id=" . $data['user_id'] . " and lesson_id=" . $data['lesson_id'] . " and `delete`=0 and `status`=1 ";
         if (!empty($base->getFetchRow($sql))) {
             return false;
         }

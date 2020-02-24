@@ -40,13 +40,17 @@ class ApiQuestionnaire extends \action\RestfulApi {
      *
      */
     function questionnaire() {
+        // 校验 是否参与过问卷 条件需要确认是已经签到还是参与答卷
         if (empty($this->get['questionnaire_id'])) {
-            // 校验
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
             self::$data['msg'] = code::$code['emptyparameter'];
             return self::$data;
         }
+        // 
+        $signed="是否签到";
+        $signed_q="是否参与了问卷";
+
         try {
             // 获取问卷详细 和 问卷的试题
             $_obj = QuestionnaireDAL::getOne($this->get['questionnaire_id']);
