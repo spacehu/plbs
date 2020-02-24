@@ -206,7 +206,7 @@ class StatisticsDAL {
 					LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = u.id AND uc.`delete` = 0 
 					left join " . $base->table_name("enterprise_course") . " as ec on ec.`delete`=0 and uc.course_id=ec.course_id 
 					left join " . $base->table_name("course") . " as c on uc.course_id=c.id
-					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` > c.percentage
+					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` >= c.percentage and e.`delete`=0
 					LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
 					LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
                 WHERE
@@ -261,7 +261,7 @@ class StatisticsDAL {
                     LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = eu.user_id AND uc.`delete` = 0
                     LEFT JOIN " . $base->table_name("enterprise_course") . " AS ec ON ec.course_id = uc.course_id AND ec.`delete` = 0
                     LEFT JOIN " . $base->table_name("course") . " AS c ON c.id=uc.course_id 
-                    LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = c.id AND e.user_id = u.id AND e.`point` > c.percentage
+                    LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = c.id AND e.user_id = u.id AND e.`point` >= c.percentage and e.`delete`=0
                     LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = c.id AND l.`delete` = 0
                     LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id AND ul.`delete` = 0 AND ul.user_id = u.id
                 WHERE
