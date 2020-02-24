@@ -251,7 +251,7 @@ class StatisticsDAL {
                 c.percentage,
                 c.`name` AS cname,
                 l.id AS lid,
-                uc.id AS ulid
+                ul.id AS ulid
                 
                 FROM
                 " . $base->table_name("user_info") . " AS u    
