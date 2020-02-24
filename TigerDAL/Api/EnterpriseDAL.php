@@ -172,7 +172,7 @@ class EnterpriseDAL {
                 c.`name`,
                 i.original_src,
                 ec.id AS ecid,
-                eu.user_id AS user_id,
+                ec.user_id AS user_id,
                 COUNT(DISTINCT (l.id)) AS totalL,
                 COUNT(DISTINCT (ul.id)) AS totalUL,
                 COUNT(DISTINCT (uc.user_id)) AS totalEU,
@@ -194,7 +194,7 @@ class EnterpriseDAL {
                     AND e.point >= c.percentage
                 WHERE
                     ec.enterprise_id = '".$id."' AND c.`delete` = 0
-                    group by ec.id, eu.user_id
+                    group by ec.id, ec.user_id
                 ) as eucp
             GROUP BY eucp.id
             limit " . $limit_start . "," . $limit_end . " ;";
