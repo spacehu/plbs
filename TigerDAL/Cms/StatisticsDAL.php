@@ -193,7 +193,8 @@ class StatisticsDAL {
                     ed.`name` as edname,
                     ep.`name` as epname,
 					ec.course_id as eccid,
-                    e.id as eid,e.`point` as epoint,
+                    e.course_id as eid,
+                    e.`point` as epoint,
                     c.percentage,
                     l.id as lid,
                     ul.id as ulid
