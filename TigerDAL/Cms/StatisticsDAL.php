@@ -286,7 +286,7 @@ class StatisticsDAL {
         SELECT 
         eucp.id,eucp.name,eucp.ecid,eucp.user_id,
         eucp.original_src,
-        COUNT(distinct(eucp.user_id)) AS joinPerson,
+        sum(eucp.totalEU) AS joinPerson,
         if(sum(eucp.totalL)>0,sum(eucp.totalUl)/sum(eucp.totalL),0) as progressLesson,
         if(sum(eucp.totalEU)>0,sum(eucp.totalE)/sum(eucp.totalEU),0) as progressExam
             FROM
