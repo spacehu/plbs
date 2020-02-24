@@ -102,7 +102,8 @@ class EnterpriseDAL {
                     ed.`name` as edname,
                     ep.`name` as epname,
 					ec.course_id as eccid,
-                    e.id as eid,e.`point` as epoint,
+                    e.id as eid,
+                    e.`point` as epoint,
                     c.percentage,
                     l.id as lid,
                     ul.id as ulid
@@ -115,7 +116,7 @@ class EnterpriseDAL {
 					LEFT JOIN " . $base->table_name("user_course") . " AS uc ON uc.user_id = u.id AND uc.`delete` = 0 
 					left join " . $base->table_name("enterprise_course") . " as ec on ec.`delete`=0 and uc.course_id=ec.course_id 
 					left join " . $base->table_name("course") . " as c on uc.course_id=c.id
-					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` > c.percentage
+					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` >= c.percentage and e.`delete`=0
 					LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
 					LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
                 WHERE
