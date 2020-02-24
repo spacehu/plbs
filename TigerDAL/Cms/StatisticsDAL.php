@@ -296,7 +296,7 @@ class StatisticsDAL {
                     c.`name`,
                     i.original_src,
                     ec.id AS ecid,
-                    eu.user_id AS user_id,
+                    ec.user_id AS user_id,
                     COUNT(DISTINCT (l.id)) AS totalL,
                     COUNT(DISTINCT (ul.id)) AS totalUL,
                     COUNT(DISTINCT (uc.user_id)) AS totalEU,
