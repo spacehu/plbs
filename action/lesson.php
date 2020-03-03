@@ -78,13 +78,15 @@ class lesson {
         try {
             $media_id = "";
             
-            if($_POST['edit_doc'] == 0){
+            if($_POST['edit_doc'] === 0){
                 $media_id="";
             }else {
                 $material = new material();
                 $media_id = $material->_saveMedia($_POST['edit_doc'], $_POST['type']);
+                //var_dump($media_id);die;
             }
-            if (LessonDAL::getByName($_POST['name'], $_POST['course_id'], $id)) {
+            //common::pr($_POST['edit_doc']);die;
+            if (LessonDAL::getByName($_POST['name'], $_POST['course_id'], ($id==null)?0:$id)) {
                 Common::js_alert(code::ALREADY_EXISTING_DATA);
                 TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                 Common::js_redir(Common::getSession($this->class));

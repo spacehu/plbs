@@ -80,7 +80,7 @@ if (is_array($image)) {
                         <div class="leftAlist" >
                             <div class="r_row">
                                 <INPUT TYPE="file" NAME="file_url" id="f1" />
-                                <input type="hidden" name="edit_doc" id="edit_doc" value="<?php echo isset($original_src) ? $original_src : ''; ?>" />
+                                <input type="hidden" name="edit_doc" id="edit_doc" value="<?php echo isset($original_src) ? $original_src : 0; ?>" />
                             </div>
                             <div class="r_row music <?php echo $data['type'] == "music" ? "" : "hide"; ?>">
                                 <audio class="r_row_img" id="r_row_media" src="<?php echo isset($original_src) ? $original_src : ''; ?>" controls >
