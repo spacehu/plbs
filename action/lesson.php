@@ -77,8 +77,7 @@ class lesson {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
             $media_id = "";
-            
-            if($_POST['edit_doc'] === 0){
+            if($_POST['edit_doc'] === "0"){
                 $media_id="";
             }else {
                 $material = new material();
