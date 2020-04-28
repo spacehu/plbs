@@ -182,9 +182,9 @@ tr{ height:50px;}
 /*login*/
 .login{overflow:hidden;margin-top: 100px; background-color:#fff;}
 .logincon{top:50px; overflow: hidden;}
-.logo2{width:280px;float:left;}
+.logo2{width:280px;float:left;display:none;}
 .logo2 img{width:200px;float:left;margin: 35px 0 0 35px;}
-.logininput{height:370px;overflow:hidden;width:430px;padding: 75px 0 0 5px;float:left;}
+.logininput{height:370px;overflow:hidden;width:430px;padding: 75px 0 0 5px;float:none;margin:0 auto;}
 .logininput .p8{font-size:30px;color:#656565;}
 .logininput .first{margin-top:50px;}
 .loginlist{overflow:hidden;margin-bottom:10px;font-size:11px;width: 340px;}
