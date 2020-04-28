@@ -12,7 +12,7 @@ $data = \action\admin::$data['data'];
     <body>
         <div class="top">
             <div class="logo1" >
-                <a href="javascript:void(0);" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=admin&m=main_right';parent.leftFrame.location.href = 'index.php?a=admin&m=main_left'" ><img src="img/logo.png" /></a>
+                <a href="javascript:void(0);" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=admin&m=main_right';parent.leftFrame.location.href = 'index.php?a=admin&m=main_left'" ><img src="img/logo.png" style="height:0px;" /></a>
             </div>
             <div class="topMap">
                 <p><?php echo $data['enterprise']['name'] . $data['name']; ?>，您好！</p>
