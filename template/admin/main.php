@@ -5,7 +5,7 @@
         <title><?php echo mod\init::$config['shop_name']; ?>-cms</title>
     </head>
 
-    <frameset rows="144,*" cols="*" frameborder="no" border="0" framespacing="0">
+    <frameset rows="100,*" cols="*" frameborder="no" border="0" framespacing="0">
         <frame src="index.php?a=admin&m=main_top" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" title="topFrame" />
         <frameset cols="240,*" name="btFrame" frameborder="NO" border="0" framespacing="0">
             <frame src="index.php?a=admin&m=main_left" name="leftFrame" scrolling="yes" noresize="noresize" id="leftFrame" title="leftFrame" />

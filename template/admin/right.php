@@ -8,5 +8,6 @@
         <div style="font-size:58px;line-height:58px;margin-bottom:20px;color:#656565;">Hello, Administrator.</div>
         <div style="font-size:24px;line-height:32px;color:#656565;">Welcome to use <?php echo mod\init::$config['shop_name']; ?>'s content management system.</div>
         <div style="font-size:24px;line-height:32px;color:#656565;">Please press the left navigation to edit <?php echo mod\init::$config['shop_name']; ?> website content.</div>
+        <div style="padding: 50px 0 0 0"><img src="/img/logo-page.png" alt=""></div>
     </body>
 </html>
