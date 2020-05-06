@@ -26,8 +26,8 @@ $data = \action\account::$data['data'];
                             <input class="text" name="password" type="password" value="" placeholder="请输入新密码" />
                         </div>
                         <div class="r_row">
-                            <span style="width: 100px;color:#666;display:inline-block;text-align:right">确认新密码:</span>
-                            <input class="text" name="password_cfn" type="password" value="" placeholder="请再次确认新密码" />
+                            <span style="width: 100px;color:#666;display:inline-block;text-align:right">确认密码:</span>
+                            <input class="text" name="password_cfn" type="password" value="" placeholder="请再次确认密码" />
                         </div>
                     </div>
                 </div>
