@@ -16,7 +16,8 @@ $data = \action\admin::$data['data'];
             </div>
             <div class="topMap">
                 <p><?php echo $data['enterprise']['name']?$data['enterprise']['name']:"" . $data['name']; ?>，您好！</p>
-                <a onclick="javascript:parent.mainFrame.location.href = '<?php echo \mod\common::url_rewrite("index.php?a=login&m=logOff"); ?>'">SIGN OFF 签出</a>
+                <!-- <p>您好！</p> -->
+                <a onclick="javascript:parent.mainFrame.location.href = '<?php echo \mod\common::url_rewrite("index.php?a=login&m=logOff"); ?>'">SIGN OUT 退出</a>
             </div>
         </div>
     </body>
