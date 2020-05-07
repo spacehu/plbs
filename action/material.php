@@ -2,9 +2,11 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
+use mod\init;
 use mod\upload as Upload;
-use TigerDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\MediaDAL;
 use config\code;
@@ -21,7 +23,7 @@ class material {
     function staticPage() {
         Common::isset_cookie();
 
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function index() {
@@ -30,7 +32,7 @@ class material {
         try {
             $type = $_GET['type'];
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             self::$data['type'] = $type;
@@ -47,11 +49,11 @@ class material {
                 self::$data['data'] = MediaDAL::getAll($currentPage, $pagesize, $keywords, $type);
                 self::$data['total'] = MediaDAL::getTotal($keywords, $type);
             } else {
-                TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($_GET));
+                CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($_GET));
             }
-            \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__ . '_' . $type);
+            init::getTemplate('admin', $this->class . '_' . __FUNCTION__ . '_' . $type);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
         }
     }
 
@@ -66,15 +68,15 @@ class material {
             }
             //Common::pr(self::$data['data']);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function updateImage() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        $path = \mod\init::$config['env']['path']['image'];
+        $path = init::$config['env']['path']['image'];
         $upload = new Upload();
         try {
             if ($id != null) {
@@ -87,7 +89,7 @@ class material {
                     $_backData = $upload->uploaded_file("image", "unique", "file_url", $path, $id);
                     if (!$_backData['success']) {
                         Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
-                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                         Common::js_redir(Common::getSession($this->class));
                     } else {
                         $data['original_src'] = $_backData['path'];
@@ -103,7 +105,7 @@ class material {
                     //Common::pr($filePath);die;
                     if (!$_backData['success']) {
                         Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
-                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                         Common::js_redir(Common::getSession($this->class));
                     } else {
                         $filePath = $_backData['path'];
@@ -125,7 +127,7 @@ class material {
                     }
                 } else {
                     Common::js_alert(code::NULL_DATA . " 原图不能为空。");
-                    TigerDAL\CatchDAL::markError(code::$code[code::NULL_DATA], code::NULL_DATA, json_encode($_POST));
+                    CatchDAL::markError(code::$code[code::NULL_DATA], code::NULL_DATA, json_encode($_POST));
                     Common::js_redir(Common::getSession($this->class));
                 }
             }
@@ -136,7 +138,7 @@ class material {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
         }
     }
 
@@ -149,7 +151,7 @@ class material {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_DELETE], code::MATERIAL_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_DELETE], code::MATERIAL_DELETE, json_encode($ex));
         }
     }
 
@@ -167,9 +169,9 @@ class material {
             }
             //Common::pr(self::$data['data']);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function updateMedia() {
@@ -192,7 +194,7 @@ class material {
                     $_backData = $upload->uploaded_file("media", "unique", "file_url", $path, $id);
                     if (!$_backData['success']) {
                         Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
-                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                         Common::js_redir(Common::getSession($this->class));
                     } else {
                         $data['src'] = $_backData['path'];
@@ -206,7 +208,7 @@ class material {
                     //Common::pr($filePath);die;
                     if (!$_backData['success']) {
                         Common::js_alert(code::ALREADY_EXISTING_DATA . " 重复素材为：" . $_backData['data']['name'] . "。");
-                        TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                        CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                         Common::js_redir(Common::getSession($this->class));
                     } else {
                         $filePath = $_backData['path'];
@@ -231,7 +233,7 @@ class material {
                     }
                 } else {
                     Common::js_alert(code::NULL_DATA . " 文件不能为空。");
-                    TigerDAL\CatchDAL::markError(code::$code[code::NULL_DATA], code::NULL_DATA, json_encode($_POST));
+                    CatchDAL::markError(code::$code[code::NULL_DATA], code::NULL_DATA, json_encode($_POST));
                     Common::js_redir(Common::getSession($this->class));
                 }
             }
@@ -242,7 +244,7 @@ class material {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
         }
     }
 
@@ -255,7 +257,7 @@ class material {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_DELETE], code::MATERIAL_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_DELETE], code::MATERIAL_DELETE, json_encode($ex));
         }
     }
 
@@ -286,7 +288,7 @@ class material {
                 echo json_encode(['success' => false, 'message' => '修改失败，请联系系统管理员']);
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
             echo json_encode(['success' => false, 'message' => '999']);
         }
     }
@@ -295,7 +297,7 @@ class material {
         //Common::isset_cookie();
         try {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             self::$data['currentPage'] = $currentPage;
@@ -306,7 +308,7 @@ class material {
             self::$data['data'] = ImageDAL::getAll($currentPage, $pagesize, $keywords);
             self::$data['total'] = ImageDAL::getTotal($keywords);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_INDEX], code::MATERIAL_INDEX, json_encode($ex));
         }
         exit(json_encode(self::$data));
     }
@@ -331,7 +333,7 @@ class material {
             ];
             return ImageDAL::insert_return_id($data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
             return false;
         }
     }
@@ -358,7 +360,7 @@ class material {
             ];
             return MediaDAL::insert_return_id($data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
             return false;
         }
     }

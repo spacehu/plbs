@@ -19,15 +19,15 @@ if (is_array($image)) {
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
-        <script type="text/javascript" src="js/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/style.css" />
+        <script type="text/javascript" src="/js/jquery.js"></script>
         <!-- 配置文件 -->
-        <script type="text/javascript" src="lib/uEditor/ueditor.config.js"></script>
+        <script type="text/javascript" src="/lib/uEditor/ueditor.config.js"></script>
         <!-- 编辑器源码文件 -->
-        <script type="text/javascript" src="lib/uEditor/ueditor.all.js"></script>
+        <script type="text/javascript" src="/lib/uEditor/ueditor.all.js"></script>
         <!-- 图片控件 -->
-        <script src="lib/cos-js-sdk-v5-master/dist/cos-js-sdk-v5.js"></script>
-        <script type="text/javascript" src="js/tencent_cos.js"></script>
+        <script src="/lib/cos-js-sdk-v5-master/dist/cos-js-sdk-v5.js"></script>
+        <script type="text/javascript" src="/js/tencent_cos.js"></script>
         <title>无标题文档</title>
     </head>
 
@@ -35,7 +35,7 @@ if (is_array($image)) {
         <div class="status r_top">
         </div>
         <div class="content">
-            <form name="theForm" id="demo" action="./index.php?a=<?php echo $class; ?>&m=updateCourse&id=<?php echo isset($data['id']) ? $data['id'] : ""; ?>" method="post" enctype='multipart/form-data'>
+            <form name="theForm" id="demo" action="/index.php?a=<?php echo $class; ?>&m=updateCourse&id=<?php echo isset($data['id']) ? $data['id'] : ""; ?>" method="post" enctype='multipart/form-data'>
                 <div class="pathA ">
                     <div class="leftA">
                         <div class="leftAlist" >

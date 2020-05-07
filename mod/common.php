@@ -2,6 +2,7 @@
 
 namespace mod;
 
+use http\Exception;
 use mod\init as Init;
 
 class common {
@@ -129,7 +130,7 @@ class common {
             } else {
                 return false;
             }
-            session_write_close();
+            //session_write_close();
         } catch (Exception $e) {
             print $e->getMessage();
             exit;

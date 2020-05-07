@@ -2,8 +2,10 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
-use TigerDAL\BaseDAL;
+use mod\init;
+use TigerDAL\Cms\AuthDAL;
 
 class login {
 
@@ -15,7 +17,7 @@ class login {
      * 用户登录界面显示
      */
     function login() {
-        \mod\init::getTemplate('./', 'login', false);
+        init::getTemplate('./', 'login', false);
     }
 
     /**
@@ -27,15 +29,13 @@ class login {
             $t_username = Common::specifyChar($_POST['t_username']);
             $t_password = md5(Common::specifyChar($_POST['t_password']));
             try {
-                $db = new BaseDAL();
-                $sql = "select u.*,count(*) as num,r.level "
-                        . "from " . $db->table_name('user') . " as u "
-                        . "left join " . $db->table_name('role') . " as r on u.role_id=r.id "
-                        . "where u.name='" . $t_username . "' and u.password='" . $t_password . "' and u.`delete`=0 ;";
-                //Common::pr($sql);
-                $sod = $db->getFetchRow($sql);
+                $sod = AuthDAL::getByName($t_username);
                 //Common::pr($sod);die;
-                if ($sod['num'] == '1') {
+                if ($sod['num'] == '0') {
+                    Common::js_alert_redir('找不到用户,请重新再试', Common::url_rewrite('index.php?a=login&m=login'));
+                    exit;
+                }
+                if ($sod['password'] == $t_password) {
                     Common::writeSession($sod['name'], "userName");
                     Common::writeSession($sod['level'], "level");
                     Common::writeSession($sod['id'], "id");

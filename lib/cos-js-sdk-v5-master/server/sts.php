@@ -1,5 +1,4 @@
 <?php
-
 include_once('../../../env.php');
 $_config = include_once('../../../config/config.php');
 // 临时密钥计算样例

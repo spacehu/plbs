@@ -5,17 +5,26 @@ namespace TigerDAL\Cms;
 use mod\common as Common;
 use TigerDAL\BaseDAL;
 
-class EnterpriseCourseDAL {
+class EnterpriseCourseDAL
+{
 
     /** 获取用户信息列表 */
-    public static function getAll($course_id) {
+    public static function getAll($course_id)
+    {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("enterprise_course") . " where `delete`=0 and course_id=" . $course_id . " order by edit_time desc ;";
         return $base->getFetchAll($sql);
     }
 
-    /** 保存最新值 其他直接删除 */
-    public static function save($_data, $aid, $_sourseData) {
+    /**
+     * 保存最新值 其他直接删除
+     * @param $_data
+     * @param $aid
+     * @param $_sourseData
+     * @return bool
+     */
+    public static function save($_data, $aid, $_sourseData)
+    {
         if (empty($_data)) {
             return true;
         }
@@ -34,54 +43,58 @@ class EnterpriseCourseDAL {
         return true;
     }
 
-    /** 新增用户信息 */
-    public static function insert($data) {
-        $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('enterprise_course') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
+    /**
+     * 如果不存在则新增 否则跳过
+     * @param $_data
+     * @param $aid
+     * @param $_sourseData
+     * @return bool
+     */
+    public static function saveOne($_data, $aid, $_sourseData)
+    {
+        if (empty($_data)) {
             return true;
         }
+        $base = new BaseDAL();
+        foreach ($_data as $v) {
+            if ($v != 0) {
+                $sql = "select id from " . $base->table_name('enterprise_course') . " where `course_id`='" . $aid . "' and `enterprise_id`='" . $v . "' and `delete`=0 ;";
+                if (!$base->getFetchRow($sql)) {
+                    $os = $_sourseData;
+                    array_unshift($os, $v, $aid);
+                    //print_r($os);
+                    self::insert($os);
+                }
+            }
+        }
+        return true;
+    }
+
+    /** 新增用户信息 */
+    public static function insert($data)
+    {
+        $base = new BaseDAL();
+        return $base->insert($data, "enterprise_course");
     }
 
     /** 更新用户信息 */
-    public static function update($id, $data) {
+    public static function update($id, $data)
+    {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('enterprise_course') . " set " . $set . "  where id=" . $id . " ;";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id, $data, "enterprise_course");
     }
 
     /** 删除用户信息 */
-    public static function delete($id) {
+    public static function delete($id)
+    {
         $base = new BaseDAL();
         $sql = "update " . $base->table_name('enterprise_course') . " set `delete`=1  where id=" . $id . " ;";
         return $base->query($sql);
     }
 
     /** 获取企业课程 */
-    public static function getEnterpriseCourse($enterprise_id, $department_id = '', $position_id = '') {
+    public static function getEnterpriseCourse($enterprise_id, $department_id = '', $position_id = '')
+    {
         $base = new BaseDAL();
         $where = "";
         if (isset($department_id) && is_numeric($department_id)) {
@@ -94,17 +107,18 @@ class EnterpriseCourseDAL {
             }
         }
         $sql = "select c.*,ec.department_id,group_concat(distinct ec.department_id) as d_ids,ec.position_id,group_concat(distinct ec.position_id) as p_ids "
-                . "from " . $base->table_name("course") . " as c "
-                . "right join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
-                . " where  ec.enterprise_id=" . $enterprise_id . " and c.`delete`=0 and ec.`delete`=0 " . $where . " "
-                . "group by c.id "
-                . "order by c.edit_time desc ;";
+            . "from " . $base->table_name("course") . " as c "
+            . "right join " . $base->table_name("enterprise_course") . " as ec on c.id=ec.course_id "
+            . " where  ec.enterprise_id=" . $enterprise_id . " and c.`delete`=0 and ec.`delete`=0 " . $where . " "
+            . "group by c.id "
+            . "order by c.edit_time desc ;";
         //echo $sql;
         return $base->getFetchAll($sql);
     }
 
     /** 更新department */
-    public static function updateDepartmentId($enterprise_id, $_courseids, $fid = 0, $tid = 0) {
+    public static function updateDepartmentId($enterprise_id, $_courseids, $fid = 0, $tid = 0)
+    {
         $base = new BaseDAL();
         if (!empty($_courseids)) {
             $_courseidsArr = explode(",", $_courseids);
@@ -156,7 +170,8 @@ class EnterpriseCourseDAL {
     }
 
     /** 更新position */
-    public static function updatePositionId($enterprise_id, $department_id, $_courseids, $fid = 0, $tid = 0) {
+    public static function updatePositionId($enterprise_id, $department_id, $_courseids, $fid = 0, $tid = 0)
+    {
         $base = new BaseDAL();
         if (!empty($_courseids)) {
             $_courseidsArr = explode(",", $_courseids);

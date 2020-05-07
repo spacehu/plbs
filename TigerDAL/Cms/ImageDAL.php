@@ -46,47 +46,21 @@ class ImageDAL {
 
     /** 新增返回id */
     public static function insert_return_id($data) {
-        self::insert($data);
         $base = new BaseDAL();
+        $base->insert($data,"image");
         return $base->last_insert_id();
     }
 
     /** 新增用户信息 */
     public static function insert($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('image') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->insert($data,"image");
     }
 
     /** 更新用户信息 */
     public static function update($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('image') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data,"image");
     }
 
     /** 删除用户信息 */
