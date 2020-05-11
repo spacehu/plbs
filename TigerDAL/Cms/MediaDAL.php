@@ -55,8 +55,8 @@ class MediaDAL {
 
     /** 新增返回id */
     public static function insert_return_id($data) {
-        self::insert($data);
         $base = new BaseDAL();
+        $base->insert($data,"media");
         return $base->last_insert_id();
     }
 

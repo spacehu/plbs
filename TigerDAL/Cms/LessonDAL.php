@@ -53,7 +53,7 @@ class LessonDAL {
     /** 插入 */
     public static function insertLesson($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data,"lesson");
         return $base->last_insert_id();
     }
 

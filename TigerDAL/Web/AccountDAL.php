@@ -71,8 +71,7 @@ class AccountDAL {
     /** 注册插入用户表 */
     public function insert($data) {
         $base = new BaseDAL();
-        $user = new UserDAL();
-        $user::insert($data);
+        $base->insert($data,"user");
         return $base->last_insert_id();
     }
 

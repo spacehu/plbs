@@ -73,7 +73,7 @@ class PointDAL {
         if ($total + $data['point'] < 0) {
             return null;
         }
-        $this->insert($data);
+        $base->insert($data,"user_point");
         return $base->last_insert_id();
     }
 

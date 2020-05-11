@@ -2,6 +2,7 @@
 
 namespace TigerDAL\Cms;
 
+use mod\common;
 use TigerDAL\BaseDAL;
 
 class CourseDAL {
@@ -77,7 +78,7 @@ class CourseDAL {
     /** 新增用户返回id */
     public static function insertById($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data,"course");
         return $base->last_insert_id();
     }
 
@@ -94,7 +95,7 @@ class CourseDAL {
             }
             $set = implode(',', $_data);
             $sql = "insert into " . $base->table_name('course') . " values (null," . $set . ");";
-            //\mod\common::pr($sql);die;
+            //Common::pr($sql);die;
             return $base->query($sql);
         } else {
             return true;

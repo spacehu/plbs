@@ -53,7 +53,7 @@ class DepartmentDAL {
     /** 返回id */
     public static function insertGetId($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data,"enterprise_department");
         return $base->last_insert_id();
     }
 

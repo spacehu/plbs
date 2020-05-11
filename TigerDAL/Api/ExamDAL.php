@@ -22,7 +22,7 @@ class ExamDAL {
     /** 插入 */
     public static function insertExam($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data, "exam");
         return $base->last_insert_id();
     }
 

@@ -60,7 +60,7 @@ class QuestionnaireDAL {
     /** 插入 */
     public static function insertQuestionnaire($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data, "questionnaire");
         return $base->last_insert_id();
     }
 

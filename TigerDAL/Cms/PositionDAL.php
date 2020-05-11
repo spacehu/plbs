@@ -59,7 +59,7 @@ class PositionDAL {
     /** 返回id */
     public static function insertGetId($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data,"enterprise_position");
         return $base->last_insert_id();
     }
 

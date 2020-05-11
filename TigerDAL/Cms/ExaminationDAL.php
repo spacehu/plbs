@@ -60,7 +60,7 @@ class ExaminationDAL {
     /** 插入 */
     public static function insertExamination($data) {
         $base = new BaseDAL();
-        self::insert($data);
+        $base->insert($data,"examination");
         return $base->last_insert_id();
     }
 

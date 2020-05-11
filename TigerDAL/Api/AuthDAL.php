@@ -81,7 +81,7 @@ class AuthDAL {
     /** 注册插入用户表 */
     public function insert($data) {
         $base = new BaseDAL();
-        self::insertUserInfo($data);
+        $base->insert($data, "user_info");
         return $base->last_insert_id();
     }
 

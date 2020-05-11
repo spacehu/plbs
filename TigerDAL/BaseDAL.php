@@ -140,6 +140,7 @@ class BaseDAL
     {
         $match = ["NOW()"];
         if (is_array($data)) {
+            $_data = [];
             foreach ($data as $v) {
                 if (is_numeric($v)) {
                     $_data[] = " " . $v . " ";
@@ -165,6 +166,7 @@ class BaseDAL
     {
         $match = ["NOW()"];
         if (is_array($data)) {
+            $_data = [];
             foreach ($data as $k => $v) {
                 if (is_numeric($v)) {
                     $_data[] = " `" . $k . "`=" . $v . " ";

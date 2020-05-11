@@ -128,6 +128,7 @@ class course {
                 ];
                 $id = self::$data = CourseDAL::insertById($data);
             }
+            //var_dump(self::$data);die;
             if (self::$data) {
                 $_data = [
                     'add_by' => Common::getSession("id"),
