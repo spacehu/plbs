@@ -4,63 +4,43 @@ namespace TigerDAL\Cms;
 
 use TigerDAL\BaseDAL;
 
-class LessonImageDAL {
+class LessonImageDAL
+{
 
     /** 获取用户信息列表 */
-    public static function getAll($aid) {
+    public static function getAll($aid)
+    {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("lesson_image") . " where `lesson_id`='" . $aid . "' and `delete`=0  order by edit_time desc;";
         return $base->getFetchAll($sql);
     }
 
     /** 新增用户信息 */
-    public static function insert($data) {
+    public static function insert($data)
+    {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('lesson_image') . " values (null," . $set . ");";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->insert($data, "lesson_image");
+
     }
 
     /** 更新用户信息 */
-    public static function update($id, $data) {
+    public static function update($id, $data)
+    {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('lesson_image') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id, $data, "lesson_image");
     }
 
     /** 删除用户信息 */
-    public static function delete($id) {
+    public static function delete($id)
+    {
         $base = new BaseDAL();
         $sql = "update " . $base->table_name('lesson_image') . " set `delete`=1  where id=" . $id . " ;";
         return $base->query($sql);
     }
 
     /** 保存最新值 其他直接删除 */
-    public static function save($_data, $aid, $_sourseData) {
+    public static function save($_data, $aid, $_sourseData)
+    {
         // 先删除
         $base = new BaseDAL();
         $sql = "delete from " . $base->table_name('lesson_image') . " where `lesson_id`='" . $aid . "';";
@@ -69,12 +49,12 @@ class LessonImageDAL {
         if (empty($_data)) {
             return true;
         }
-        $_arr = '';
+        $_arr = [];
         foreach ($_data as $v) {
             $_imageData = [
                 'name' => $v,
                 'original_src' => $v,
-                'original_link' => "",
+                'original_link' => $v,
                 'order_by' => 50,
                 'add_by' => 0,
                 'add_time' => date("Y-m-d H:i:s"),
@@ -97,12 +77,13 @@ class LessonImageDAL {
     }
 
     /**  */
-    public static function getImageList($lesson_id) {
+    public static function getImageList($lesson_id)
+    {
         $base = new BaseDAL();
         $sql = "select i.* from " . $base->table_name("lesson_image") . " as l "
-                . "left join " . $base->table_name("image") . " as i on l.image_id=i.id "
-                . "where l.`lesson_id`='" . $lesson_id . "' and l.`delete`=0  "
-                . "order by l.edit_time desc;";
+            . "left join " . $base->table_name("image") . " as i on l.image_id=i.id "
+            . "where l.`lesson_id`='" . $lesson_id . "' and l.`delete`=0  "
+            . "order by l.edit_time desc;";
         return $base->getFetchAll($sql);
     }
 

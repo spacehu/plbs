@@ -2,8 +2,10 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
-use TigerDAL;
+use mod\init;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\LessonDAL;
 use TigerDAL\Cms\LessonImageDAL;
@@ -29,7 +31,7 @@ class lesson {
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
         try {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             self::$data['currentPage'] = $currentPage;
@@ -42,9 +44,9 @@ class lesson {
             self::$data['course_id'] = $this->course_id;
             self::$data['cat_id'] = $this->cat_id;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getLesson() {
@@ -64,21 +66,20 @@ class lesson {
             //self::$data['media'] = MediaDAL::getAll(1, 99, '', self::$data['data']['type']);
             self::$data['class'] = $this->class;
             self::$data['course_id'] = $this->course_id;
-            self::$data['config'] = \mod\init::$config['env'];
+            self::$data['config'] = init::$config['env'];
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function updateLesson() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
-            $media_id = "";
             if($_POST['edit_doc'] === "0"){
-                $media_id="";
+                $media_id="0";
             }else {
                 $material = new material();
                 $media_id = $material->_saveMedia($_POST['edit_doc'], $_POST['type']);
@@ -87,7 +88,7 @@ class lesson {
             //common::pr($_POST['edit_doc']);die;
             if (LessonDAL::getByName($_POST['name'], $_POST['course_id'], ($id==null)?0:$id)) {
                 Common::js_alert(code::ALREADY_EXISTING_DATA);
-                TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                 Common::js_redir(Common::getSession($this->class));
             }
             if ($id != null) {
@@ -119,6 +120,7 @@ class lesson {
                     'type' => $_POST['type'],
                 ];
                 self::$data = $id = LessonDAL::insertLesson($data);
+                //echo $id;die;
             }
             if (self::$data) {
                 $_data = [
@@ -139,7 +141,7 @@ class lesson {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
         }
     }
 
@@ -152,7 +154,7 @@ class lesson {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
         }
     }
 
