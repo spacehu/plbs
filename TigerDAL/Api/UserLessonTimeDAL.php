@@ -7,11 +7,7 @@ use TigerDAL\Cms\LessonDAL as cmsLessonDAL;
 use TigerDAL\Api\CourseDAL as apiCourseDAL;
 
 class UserLessonTimeDAL {
-    public static $table;
-    function __construct()
-    {
-        self::$table="user_lesson_time";
-    }
+    public static $table="user_lesson_time";
 
     /** 获取用户信息列表
      * @param $currentPage

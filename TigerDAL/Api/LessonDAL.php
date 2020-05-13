@@ -117,4 +117,12 @@ class LessonDAL {
         }
     }
 
+    public static function getUserLesson($user_id,$lesson_id){
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("user_lesson") . " "
+            . "where `delete`=0 and `user_id`=" . $user_id . " and `lesson_id`=".$lesson_id."  limit 1 ;";
+        return $base->getFetchRow($sql);
+
+    }
+
 }

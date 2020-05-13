@@ -2,7 +2,10 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
+use mod\init;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\EnterpriseDAL;
@@ -13,8 +16,10 @@ use TigerDAL\Api\LessonDAL;
 use TigerDAL\Api\ResumeDAL;
 use TigerDAL\Api\LogDAL;
 use config\code;
+use TigerDAL\Api\UserLessonTimeDAL;
+use TigerDAL\CatchDAL;
 
-class ApiAccount extends \action\RestfulApi {
+class ApiAccount extends RestfulApi {
 
     public $user_id;
     public $server_id;
@@ -67,7 +72,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -89,7 +94,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -110,7 +115,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+           CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -124,7 +129,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -144,7 +149,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -157,7 +162,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -171,7 +176,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -196,9 +201,6 @@ class ApiAccount extends \action\RestfulApi {
             ];
             $resume_id = ResumeDAL::saveOne($_data);
             if (!empty($resume_id)) {
-                $_school = "";
-                $_company = "";
-                $_project = "";
                 if (!empty($this->post['school'])) {
                     foreach ($this->post['school'] as $k => $v) {
                         $v = (array) $v;
@@ -259,7 +261,7 @@ class ApiAccount extends \action\RestfulApi {
             }
             //print_r($res);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -308,7 +310,7 @@ class ApiAccount extends \action\RestfulApi {
                 //用户文件夹
                 $md5Uid = md5($this->user_id);
                 //制作绝对路径
-                $path = $_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'] . "/" . $md5Uid;
+                $path = $_SERVER['DOCUMENT_ROOT'] . init::$config['env']['user_path'] . "/" . $md5Uid;
                 //遍历删除 不是.和..的文件
                 foreach (scandir($path) as $filename) {
                     if ($filename == '.' || $filename == '..') {
@@ -338,7 +340,7 @@ class ApiAccount extends \action\RestfulApi {
             }
             //print_r($res);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -348,10 +350,10 @@ class ApiAccount extends \action\RestfulApi {
         try {
             $photo = $_FILES['photo'];
             LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($_FILES) . "", "DEBUG");
-            $path = \mod\init::$config['env']['user_path'] . '/' . md5($this->user_id);
+            $path = init::$config['env']['user_path'] . '/' . md5($this->user_id);
             $name = date("YmdHis") . ".jpg";
-            if (!is_dir($_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'])) {
-                mkdir($_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['user_path'], 0777);
+            if (!is_dir($_SERVER['DOCUMENT_ROOT'] . init::$config['env']['user_path'])) {
+                mkdir($_SERVER['DOCUMENT_ROOT'] . init::$config['env']['user_path'], 0777);
             }
             if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777);
@@ -360,11 +362,39 @@ class ApiAccount extends \action\RestfulApi {
             LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($os) . "", "DEBUG");
             self::$data['data'] = $path . '/' . $name;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
 
+    /**
+     * 记录学习课时的时长
+     * @return array
+     */
+    function saveUserLessonTime(){
+        try {
+            $userlesson=LessonDAL::getUserLesson($this->user_id,$this->post['lesson_id']);
+            if(empty($userlesson)){
+                self::$data['success'] = false;
+                self::$data['data']['error_msg'] = 'emptyuserlessonid';
+                self::$data['data']['code'] = $userlesson;
+                self::$data['msg'] = "emptyuserlessonid";
+                return self::$data;
+            }
+            $_data=[
+                'user_id'=>$this->user_id,
+                'lesson_id'=>$this->post['lesson_id'],
+                'user_lesson_id'=>$userlesson['id'],
+                'add_time'=>"NOW()",
+                'delete'=>0,
+                'duration'=>$this->post['duration'], // seconds
+            ];
+            self::$data['data']['id']=UserLessonTimeDAL::insert($_data);
+        } catch (Exception $ex) {
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+        }
+        return self::$data;
+    }
     /*  get   * ******************************************************************************* */
 
     /** 企业||用户 信息 */
@@ -372,21 +402,21 @@ class ApiAccount extends \action\RestfulApi {
         try {
             //轮播列表
             $AuthDAL = new AuthDAL();
-            $res;
+            $res=[];
             switch ($this->server_id) {
-                case \mod\init::$config['token']['server_id']['customer']:
+                case init::$config['token']['server_id']['customer']:
                     $res = $AuthDAL->getUserInfo($this->user_id);
                     $res['subInfo']['joinCourse'] = AccountDAL::getCoursesTotal($this->user_id);
                     $res['subInfo']['passCourse'] = AccountDAL::getCoursesPass($this->user_id);
                     $res['subInfo']['failCourse'] = AccountDAL::getCoursesFailed($this->user_id);
                     break;
-                case \mod\init::$config['token']['server_id']['business']:
+                case init::$config['token']['server_id']['business']:
                     $res = EnterpriseDAL::getByUserId($this->user_id);
                     $res['subInfo']['enterpriseUserCount'] = EnterpriseDAL::getEnterpriseUserCount($res['id']);
                     $res['subInfo']['joinCourseUserCount'] = EnterpriseDAL::getJoinCourseUserCount($res['id']);
                     $res['subInfo']['courseCount'] = CourseDAL::getEnterpriseCoursesTotal($res['id']);
                     break;
-                case \mod\init::$config['token']['server_id']['management']:
+                case init::$config['token']['server_id']['management']:
                     break;
                 default:
                     break;
@@ -395,7 +425,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data']['userInfo'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -404,15 +434,14 @@ class ApiAccount extends \action\RestfulApi {
     function courses() {
         try {
             //轮播列表
-            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+            if ($this->server_id != init::$config['token']['server_id']['customer']) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorType";
                 self::$data['msg'] = code::$code["errorType"];
                 return self::$data;
             }
-            $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
             $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
             $res = AccountDAL::getCourses($currentPage, $pagesize, $this->user_id);
             $resT = AccountDAL::getCoursesTotal($this->user_id);
             self::$data['data']['userType'] = $this->server_id;
@@ -420,7 +449,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -429,14 +458,14 @@ class ApiAccount extends \action\RestfulApi {
     function favorites() {
         try {
             //轮播列表
-            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+            if ($this->server_id != init::$config['token']['server_id']['customer']) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorType";
                 self::$data['msg'] = code::$code["errorType"];
                 return self::$data;
             }
             $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
             $res = AccountDAL::getFavorites($currentPage, $pagesize, $this->user_id);
             $resT = AccountDAL::getFavoritesTotal($this->user_id);
 
@@ -445,7 +474,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -453,8 +482,7 @@ class ApiAccount extends \action\RestfulApi {
     /** 员工：企业专用课程列表 */
     function enterpriseCourses() {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
-        $enterprise_id = AccountDAL::getEnterpriseUser($this->user_id)['enterprise_id'];
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         try {
             //轮播列表
 
@@ -465,7 +493,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $total;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -474,7 +502,7 @@ class ApiAccount extends \action\RestfulApi {
     function getResume() {
         try {
             //轮播列表
-            if ($this->server_id != \mod\init::$config['token']['server_id']['customer']) {
+            if ($this->server_id != init::$config['token']['server_id']['customer']) {
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "errorType";
                 self::$data['msg'] = code::$code["errorType"];
@@ -486,7 +514,7 @@ class ApiAccount extends \action\RestfulApi {
             //print_r($res);die;
             self::$data['data']['info'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -494,7 +522,7 @@ class ApiAccount extends \action\RestfulApi {
     /** 企业主：员工学习进度 */
     function personalProgresses() {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
         try {
             //轮播列表
@@ -506,7 +534,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -514,7 +542,7 @@ class ApiAccount extends \action\RestfulApi {
     /** 企业主：课程参与度 */
     function courseProgresses() {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
         try {
             //轮播列表
@@ -526,7 +554,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -534,7 +562,7 @@ class ApiAccount extends \action\RestfulApi {
     /** 企业主：考试合格率 */
     function testProgresses() {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
-        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : \mod\init::$config['page_width'];
+        $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
         try {
             //轮播列表
@@ -546,7 +574,7 @@ class ApiAccount extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $resT;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
