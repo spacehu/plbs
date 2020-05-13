@@ -2,8 +2,11 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
+use mod\init;
 use TigerDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\CourseDAL;
 use TigerDAL\Cms\ExaminationDAL;
 use TigerDAL\Cms\ExaminationTestDAL;
@@ -33,7 +36,7 @@ class examination {
                 }
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
     }
 
@@ -42,7 +45,7 @@ class examination {
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
         try {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             self::$data['currentPage'] = $currentPage;
@@ -53,15 +56,14 @@ class examination {
             self::$data['data'] = ExaminationDAL::getAll($currentPage, $pagesize, $keywords, $this->enterprise_id);
             self::$data['class'] = $this->class;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getExamination() {
         Common::isset_cookie();
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        $enterprise_id = $this->enterprise_id;
         try {
             if ($id != null) {
                 self::$data['data'] = ExaminationDAL::getOne($id);
@@ -93,9 +95,9 @@ class examination {
             //Common::pr(self::$data);die;
 
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getExaminationTestList(){
@@ -105,7 +107,7 @@ class examination {
             $data = TestDAL::getExaminationTestList($enterprise_id,$cat_id);
             echo json_encode(['success' => true,'data'=>$data]);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
             echo json_encode(['success' => false, 'message' => '999']);
         }
     }
@@ -126,12 +128,6 @@ class examination {
                 ];
                 self::$data = ExaminationDAL::update($id, $data);
             } else {
-                if (ExaminationDAL::getByName($_POST['name'])) {
-                    Common::js_alert(code::ALREADY_EXISTING_DATA);
-                    TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
-                    Common::js_redir(Common::getSession($this->class));
-                }
-                //Common::pr(UserDAL::getUser($_POST['name']));die;
                 $data = [
                     'name' => $_POST['name'],
                     'percentage' => $_POST['percentage'],
@@ -143,7 +139,7 @@ class examination {
                     'edit_by' => Common::getSession("id"),
                     'edit_time' => date("Y-m-d H:i:s"),
                     'delete' => 0,
-                    'enterprise_id' => $_POST['enterprise_id'],
+                    'enterprise_id' => !empty($_POST['enterprise_id'])?$_POST['enterprise_id']:0,
                 ];
                 self::$data = $id = ExaminationDAL::insertExamination($data);
             }
@@ -162,7 +158,7 @@ class examination {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
         }
     }
 
@@ -175,7 +171,7 @@ class examination {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
         }
     }
 

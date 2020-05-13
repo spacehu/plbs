@@ -8,7 +8,13 @@ use TigerDAL\Api\CourseDAL as apiCourseDAL;
 
 class LessonDAL {
 
-    /** 获取用户信息列表 */
+    /** 获取用户信息列表
+     * @param $currentPage
+     * @param $pagesize
+     * @param string $keywords
+     * @param string $course_id
+     * @return array|bool
+     */
     public static function getAll($currentPage, $pagesize, $keywords = '', $course_id = '') {
         $base = new BaseDAL();
         $limit_start = ($currentPage - 1) * $pagesize;
@@ -28,13 +34,20 @@ class LessonDAL {
         return $base->getFetchAll($sql);
     }
 
-    /** 获取数量 */
+    /** 获取数量
+     * @param string $keywords
+     * @param string $course_id
+     * @return int
+     */
     public static function getTotal($keywords = '', $course_id = '') {
         $cms = new cmsLessonDAL();
         return $cms->getTotal($keywords, $course_id);
     }
 
-    /** 获取用户信息 */
+    /** 获取用户信息
+     * @param $id
+     * @return array|bool
+     */
     public static function getOne($id) {
         $base = new BaseDAL();
         $sql = "select c.*,i.src from " . $base->table_name("lesson") . " as c "
@@ -43,13 +56,19 @@ class LessonDAL {
         return $base->getFetchRow($sql);
     }
 
-    /** 获取用户信息 */
+    /** 获取用户信息
+     * @param $name
+     * @return array|bool
+     */
     public static function getByName($name) {
         $cms = new cmsLessonDAL();
         return $cms->getByName($name);
     }
 
-    /** 参与课时 */
+    /** 参与课时
+     * @param $data
+     * @return bool|\mysqli_result
+     */
     public static function joinLesson($data) {
         $base = new BaseDAL();
         // 判断是否进入了课程 如果进入了继续 否则安排进入课程
@@ -76,7 +95,10 @@ class LessonDAL {
         return self::insertUserLesson($data);
     }
 
-    /** 新建参与课时 */
+    /** 新建参与课时
+     * @param $data
+     * @return bool|\mysqli_result
+     */
     public static function insertUserLesson($data) {
         $base = new BaseDAL();
         if (is_array($data)) {

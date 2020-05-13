@@ -7,7 +7,9 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
+use mod\init;
 use TigerDAL;
 use TigerDAL\Api\SmsDAL;
 use TigerDAL\AccessDAL;
@@ -38,13 +40,13 @@ class RestfulApi {
         $this->post = Common::exchangePost();
         $this->get = Common::exchangeGet();
         $this->insertStatistics($_SERVER);
-        if (\mod\init::$config['restful_api']['isopen']) {
+        if (init::$config['restful_api']['isopen']) {
             try {
                 LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . $this->_path . "", "DEBUG");
                 LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . Common::getIP() . "", "DEBUG");
                 LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($this->post) . "", "DEBUG");
-                if (!empty(\mod\init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path])) {
-                    return \mod\init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path];
+                if (!empty(init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path])) {
+                    return init::$config['restful_api']['path'][$this->_method . ' ' . $this->_path];
                 } else {
                     self::$data['success'] = false;
                     self::$data['data']['code'] = "url is wrong.";

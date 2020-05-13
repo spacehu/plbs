@@ -153,9 +153,12 @@ class init {
         }
         return $dbconfig;
     }
+
     /**
      * 发送邮件
      * $maildetail 标题内容 (收件人地址$maildetail['user_email'],收件人姓名$maildetail['user_name'],邮件台头$maildetail['subject'],邮件详细$maildetail['body'])
+     * @param $maildetail
+     * @return bool
      * @throws \phpmailerException
      */
     function for_sm($maildetail) {

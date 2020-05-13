@@ -6,6 +6,7 @@ use http\Exception;
 use mod\common;
 use mod\init;
 use mysqli;
+use mysqli_result;
 use TigerDAL\Api\LogDAL;
 use TigerDAL\cli\LogDAL as cLogDAL;
 
@@ -86,7 +87,7 @@ class BaseDAL
 
     /** 获取单个
      * @param $sql
-     * @return bool
+     * @return bool|array
      */
     public function getFetchRow($sql)
     {
@@ -125,7 +126,9 @@ class BaseDAL
         return $this->tab_name . $name;
     }
 
-    /** 获取mysql最近一条的id */
+    /**
+     * 获取mysql最近一条的id
+     */
     public function last_insert_id()
     {
         return $this->conn->insert_id;
@@ -161,7 +164,12 @@ class BaseDAL
         }
     }
 
-    /** 更新用户信息 */
+    /** 更新用户信息
+     * @param $id
+     * @param $data
+     * @param $_db
+     * @return bool|mysqli_result
+     */
     public function update($id, $data, $_db)
     {
         $match = ["NOW()"];
