@@ -45,12 +45,12 @@ if (is_array($image)) {
                             <input class="text" name="name" type="text" value="<?php echo isset($data['name']) ? $data['name'] : ""; ?>" />
                             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
                         </div>
-                        <div class="leftAlist" >
+                        <!-- <div class="leftAlist" >
                             <span>OVERVIEW 课时简述</span>
                         </div>
                         <div class="leftAlist" >
                             <input class="text" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
-                        </div>
+                        </div> -->
                         <div class="leftAlist" >
                             <span>DETAIL 课时内容</span>
                         </div>

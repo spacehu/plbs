@@ -68,7 +68,7 @@
                     <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=examinationList'" href="javascript:void(0);" >试卷统计</a>
                     </div>
-                    <div class="title">
+                    <!-- <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=index&type=visit'" href="javascript:void(0);" >VISIT 访问统计</a>
                     </div>
                     <div class="title">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="title">
                         <a class="second" onclick="javascript:parent.mainFrame.location.href = 'index.php?a=statistics&m=getStatisticsUser'" href="javascript:void(0);" >USER 用户统计</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <?php if (\mod\common::getSession('level') <= 1) { ?>

@@ -46,19 +46,21 @@ if (is_array($image)) {
                             <input class="text" name="cat_id" type="hidden" value="<?php echo $cat_id; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>OVERVIEW 课程简述</span>
+                            <span>OVERVIEW 课程简述（40字以内）</span>
                         </div>
                         <div class="leftAlist" >
-                            <input class="text" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
+                            <input class="text" maxlength="40" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
                         </div>
-                        <div class="leftAlist" >
+                        <!-- 课程内容隐藏 -->
+                        <div class="leftAlist" style="display: none">
                             <span>DETAIL 课程内容</span>
                         </div>
-                        <div class="leftAlist" >
+                        <div class="leftAlist" style="display: none">
                             <script id="container" name="detail" type="text/plain">
-<?php echo isset($data['detail']) ? $data['detail'] : ""; ?>
+                                <?php echo isset($data['detail']) ? $data['detail'] : ""; ?>
                             </script>
                         </div>
+                        <!-- /课程内容隐藏 -->
                         <div class="leftAlist" >
                             <span>ORDERBY 当前排序</span>
                         </div>
