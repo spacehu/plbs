@@ -178,20 +178,7 @@ class CourseDAL {
     /** 新建参与课程 */
     public static function insertUserCourse($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('user_course') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->insert($data, "user_course");
     }
 
     /** 获取参与的课程 */

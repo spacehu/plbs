@@ -2,7 +2,10 @@
 
 namespace TigerDAL\Api;
 
+use config\code;
+use http\Exception;
 use TigerDAL\BaseDAL;
+use TigerDAL\CatchDAL;
 
 class ArticleDAL {
 
@@ -75,55 +78,26 @@ class ArticleDAL {
     public static function insert($data) {
         try {
             $base = new BaseDAL();
-            if (is_array($data)) {
-                foreach ($data as $v) {
-                    if (is_numeric($v)) {
-                        $_data[] = " " . $v . " ";
-                    } else {
-                        $_data[] = " '" . $v . "' ";
-                    }
-                }
-                $set = implode(',', $_data);
-                $sql = "insert into " . $base->table_name('article') . " values (null," . $set . ");";
-                //echo $sql;die;
-                $res = $base->query($sql);
-                $id = $base->last_insert_id();
-                if ($res) {
-                    return $id;
-                }
-            } else {
-                return true;
-            }
+            $base->insert($data,"article");
+            return $base->last_insert_id();
         } catch (Exception $ex) {
-            \TigerDAL\CatchDAL::markError(\config\code::$code[\config\code::WORKS_UPDATE], \config\code::WORKS_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::WORKS_UPDATE], code::WORKS_UPDATE, json_encode($ex));
         }
     }
 
     /** 更新用户信息 */
     public static function update($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('article') . " set " . $set . "  where id=" . $id . " ;";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data,"article");
     }
 
     /** 删除用户信息 */
     public static function delete($id) {
         $base = new BaseDAL();
-        $sql = "update " . $base->table_name('article') . " set `delete`=1  where id=" . $id . " ;";
-        return $base->query($sql);
+        $data=[
+            'delete'=>1,
+        ];
+        return $base->update($id,$data,"article");
     }
 
     public static function getCitys(){

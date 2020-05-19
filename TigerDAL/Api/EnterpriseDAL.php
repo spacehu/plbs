@@ -86,12 +86,12 @@ class EnterpriseDAL {
                     count(DISTINCT (if(euce.eccid is not null,euce.eccid, null))) as enterpriseCourseCount,
                     COUNT(DISTINCT (euce.course_id)) AS joinCourseCount,
                     COUNT(DISTINCT (euce.eid)) AS passExamCount,
-                    COUNT( (euce.ulid)) AS userLessonTotal,
-                    COUNT( (euce.lid)) AS lessonCount,
-                    IF(COUNT(euce.lid) <> 0,
-                        COUNT(euce.ulid) / COUNT(euce.lid) * 100,
+                    COUNT(DISTINCT (euce.ulid)) AS userLessonTotal,
+                    COUNT(DISTINCT (euce.lid)) AS lessonCount,
+                    IF(COUNT(DISTINCT euce.lid) <> 0,
+                        COUNT(DISTINCT euce.ulid) / COUNT(DISTINCT euce.lid) * 100,
                         0) AS progress,
-                    null as `hours`
+                    sum(sceonds) as `hours`
                         from 
                 (
                 SELECT 
@@ -106,7 +106,8 @@ class EnterpriseDAL {
                     e.`point` as epoint,
                     c.percentage,
                     l.id as lid,
-                    ul.id as ulid
+                    ul.id as ulid,
+                    ult.duration as sceonds
                 
                 FROM
                 " . $base->table_name("user_info") . " AS u    
@@ -119,6 +120,7 @@ class EnterpriseDAL {
 					LEFT JOIN " . $base->table_name("exam") . " AS e ON e.course_id = uc.course_id and e.user_id = u.id AND e.`point` >= c.percentage and e.`delete`=0
 					LEFT JOIN " . $base->table_name("lesson") . " AS l ON l.course_id = uc.course_id and l.`delete`=0
 					LEFT JOIN " . $base->table_name("user_lesson") . " AS ul ON l.id = ul.lesson_id and ul.`delete`=0 and ul.user_id=u.id
+					LEFT JOIN " . $base->table_name("user_lesson_time") . " AS ult ON l.id = ult.lesson_id and ult.`delete`=0 and ult.user_id=u.id and ult.user_lesson_id=ul.id 
                 WHERE
                     eu.`delete` = 0 AND eu.`STATUS` = 1 and c.`delete` =0 
                         and u.id in (".$_udis.")
