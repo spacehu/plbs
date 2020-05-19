@@ -56,17 +56,8 @@ class LeaveMessageDAL {
     /** 新增用户信息 */
     public static function insert($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                $_data[] = " '" . $v . "' ";
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('leave_message') . " values (null," . $set . ");";
-            $base->query($sql);
-            return $base->last_insert_id();
-        } else {
-            return true;
-        }
+        $base->insert($data, "leave_message");
+        return $base->last_insert_id();
     }
 
     public static function getBonus($_data) {

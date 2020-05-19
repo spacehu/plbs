@@ -96,42 +96,11 @@ class AuthDAL {
         return $base->getFetchRow($sql);
     }
 
-    /** 新增用户信息 */
-    public function insertUserInfo($data) {
-        $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('user_info') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
-    }
 
     /** 更新用户信息 */
     public function updateUserInfo($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('user_info') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data, "user_info");
     }
 
     /** 获取用户积分 */

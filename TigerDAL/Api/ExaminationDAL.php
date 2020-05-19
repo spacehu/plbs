@@ -67,51 +67,19 @@ class ExaminationDAL {
         $base->insert($data, "examination");
         return $base->last_insert_id();
     }
-
-    /** 新增用户信息 */
-    public static function insert($data) {
-        $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('examination') . " values (null," . $set . ");";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
-    }
-
     /** 更新用户信息 */
     public static function update($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('examination') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id, $data, "examination");
     }
 
     /** 删除用户信息 */
     public static function delete($id) {
         $base = new BaseDAL();
-        $sql = "update " . $base->table_name('examination') . " set `delete`=1  where id=" . $id . " ;";
-        return $base->query($sql);
+        $data = [
+            'delete' => 1,
+        ];
+        return $base->update($id, $data, "examination");
     }
 
 }

@@ -2,7 +2,9 @@
 
 namespace action;
 
-use TigerDAL;
+use http\Exception;
+use mod\init;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Cms\StatisticsDAL;
 use config\code;
@@ -28,14 +30,14 @@ class statistics {
                 $this->enterprise_id = '';
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
     }
 
     function staticPage() {
         Common::isset_cookie();
 
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /**
@@ -65,7 +67,7 @@ class statistics {
             } else if ($type == 'action') {
                 $_action = isset($_GET['action']) ? $_GET['action'] : 'index';
                 self::$data['action'] = $_action;
-                self::$data['actionList'] = \mod\init::$config['actionList'];
+                self::$data['actionList'] = init::$config['actionList'];
                 self::$data['data']['pv'] = StatisticsDAL::getPageView($_startTime, $_endTime, $_action);
                 self::$data['data']['iv'] = StatisticsDAL::getIPView($_startTime, $_endTime, $_action);
                 self::$data['data']['uv'] = StatisticsDAL::getUserView($_startTime, $_endTime, $_action);
@@ -78,9 +80,9 @@ class statistics {
             }
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__ . '_' . $type);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__ . '_' . $type);
     }
 
     /**
@@ -103,7 +105,7 @@ class statistics {
             self::$data['endTime'] = $_endTime;
 
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             self::$data['currentPage'] = $currentPage;
             self::$data['pagesize'] = $pagesize;
 
@@ -113,9 +115,9 @@ class statistics {
 
         // Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /**
@@ -133,9 +135,9 @@ class statistics {
 
             // Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /** 成员在线学习 */
@@ -147,7 +149,7 @@ class statistics {
                 exit;
             }
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
             $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
@@ -196,9 +198,9 @@ class statistics {
             }
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /** 成员在线学习 详细页 */
@@ -267,9 +269,9 @@ class statistics {
             }
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
     /** 员工信息维护 */
     function userList() {
@@ -280,7 +282,7 @@ class statistics {
                 exit;
             }
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             $data = StatisticsDAL::getUserList($currentPage, $pagesize, $keywords, $this->enterprise_id);
@@ -293,9 +295,9 @@ class statistics {
             self::$data['class'] = $this->class;
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /** 在线课程学习 */
@@ -307,7 +309,7 @@ class statistics {
                 exit;
             }
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
             $_startTime = isset($_GET['startTime']) ? $_GET['startTime'] : date("Y-m-d", time());
             $_endTime = isset($_GET['endTime']) ? $_GET['endTime'] : date("Y-m-d", strtotime("+1 day"));
@@ -350,9 +352,9 @@ class statistics {
 
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /** 在线课程学习 详细页 */
@@ -413,9 +415,9 @@ class statistics {
             }
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     /** getCustomerList */
@@ -427,7 +429,7 @@ class statistics {
                 exit;
             }
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
 
@@ -472,9 +474,9 @@ class statistics {
 
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
     
     /** getCustomerList */
@@ -516,8 +518,8 @@ class statistics {
 
             //Common::pr(self::$data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::STATISTICS_INDEX], code::STATISTICS_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 }

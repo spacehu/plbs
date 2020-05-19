@@ -3,8 +3,6 @@
 namespace TigerDAL\Api;
 
 use TigerDAL\BaseDAL;
-use TigerDAL\Cms\UserDAL;
-use TigerDAL\Api\CourseDAL;
 use TigerDAL\Cms\DepartmentDAL as cmsDepartmentDAL;
 use TigerDAL\Cms\PositionDAL as cmsPositionDAL;
 
@@ -43,20 +41,7 @@ class AccountDAL {
     /** 更新收藏 */
     public static function updateUserFavorites($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('user_favorites') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data,"user_favorites");
     }
 
     /** 收藏的反复方法 */
@@ -346,39 +331,13 @@ class AccountDAL {
     /** 新建企业员工关系 */
     public static function insertEnterpriseUser($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('enterprise_user') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->insert($data,"enterprise_user");
     }
 
     /** 更新企业员工关系 */
     public static function updateEnterpriseUser($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where id=" . $id . " ;";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data,"enterprise_user");
     }
 
     /** 获取企业员工关系 */
