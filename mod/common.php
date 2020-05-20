@@ -5,12 +5,14 @@ namespace mod;
 use http\Exception;
 use mod\init as Init;
 
-class common {
+class common
+{
 
     public static $haystack = ['a', 'm'];
 
     /** 路由重写 */
-    public static function url_rewrite($url) {
+    public static function url_rewrite($url)
+    {
         if (Init::$config['url_rewrite'] == 'true') {
             //echo $url;
             $a1 = explode("?", $url);
@@ -47,67 +49,77 @@ class common {
     }
 
     /** 打印报错 */
-    static public function pr($obj) {
+    static public function pr($obj)
+    {
         echo "<pre>";
         var_dump($obj);
     }
 
     /** js 弹出错误并关闭窗口 */
-    public static function js_close($error_message) {
+    public static function js_close($error_message)
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>alert('{$error_message}');parent.window.close();</script>";
     }
 
     /** js 弹出错误并返回 */
-    public static function js_error($error_message) {
+    public static function js_error($error_message)
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>alert('{$error_message}');window.history.back();</script>";
     }
 
     /** js 弹出错误并跳转指定url */
-    public static function js_alert_redir($error_message, $url) {
+    public static function js_alert_redir($error_message, $url)
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>alert('{$error_message}');window.location.href='{$url}';</script>";
     }
 
     /** js 弹出错误 */
-    public static function js_alert($error_message) {
+    public static function js_alert($error_message)
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>alert('{$error_message}');</script>";
     }
 
     /** js 跳转指定url */
-    public static function js_redir($url) {
+    public static function js_redir($url)
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>window.location.href='{$url}';</script>";
         exit;
     }
 
     /** js 无法打开并返回 */
-    public static function no_open_error() {
+    public static function no_open_error()
+    {
         echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         echo "<script language=javascript>alert('无法打开');window.history.back();</script>";
     }
 
     /** 转义字符 */
-    public static function specifyChar($specChar) {
+    public static function specifyChar($specChar)
+    {
         return addslashes(htmlspecialchars($specChar));
     }
 
     /** 转义字符 */
-    public static function str_rewrite($arr) {
+    public static function str_rewrite($arr)
+    {
         return base64_encode(json_encode($arr));
     }
 
     /** 写入session信息 */
-    public static function writeSession($session_value, $session_name, $session_time = 0) {
+    public static function writeSession($session_value, $session_name, $session_time = 0)
+    {
         if ($session_time != 0) {
             $sessiont = $session_time;
         } else {
             $sessiont = Init::$config['cookie_life_time'];
         }
         try {
-            if(!isset($_SESSION)){
+            if (!isset($_SESSION)) {
                 session_set_cookie_params($sessiont);
             }
             @session_start();
@@ -122,7 +134,8 @@ class common {
     }
 
     /** 得到session信息 */
-    public static function getSession($session_name) {
+    public static function getSession($session_name)
+    {
         try {
             //session_start();
             if (isset($_SESSION[Init::$config['shop_name']][$session_name])) {
@@ -138,7 +151,8 @@ class common {
     }
 
     /** 删除session信息 */
-    public static function destorySession() {
+    public static function destorySession()
+    {
         try {
             //	session_start();
             session_unset();
@@ -150,7 +164,8 @@ class common {
     }
 
     /** 写入cookie信息 */
-    public static function writeCookie($cookie_value, $cookie_name) {
+    public static function writeCookie($cookie_value, $cookie_name)
+    {
         try {
             setCookie(Init::$config['shop_name'] . "[" . $cookie_name . "]", $cookie_value, Init::$config['cookie_life_time'], '/', DOMAIN_NAME);
         } catch (Exception $e) {
@@ -161,7 +176,8 @@ class common {
     }
 
     /** 判断cookie是否过期 */
-    public static function isset_cookie() {
+    public static function isset_cookie()
+    {
         if (!isset($_COOKIE[Init::$config['shop_name']]['userName']) && empty($_SESSION[Init::$config['shop_name']]['userName'])) {
             Common::js_redir(Common::url_rewrite('index.php?a=login&m=login'));
         }
@@ -209,13 +225,15 @@ class common {
     }
 
     /** 判断cookie是否过期 前台用户登录 */
-    public static function isset_cookie_account() {
+    public static function isset_cookie_account()
+    {
         if (!isset($_COOKIE[Init::$config['shop_name']]['user_id']) && empty($_SESSION[Init::$config['shop_name']]['user_id'])) {
             Common::js_redir(Common::url_rewrite('./index.php?a=home&m=index'));
         }
     }
 
-    public static function cut_str($string, $sublen, $start = 0, $code = 'UTF-8') {
+    public static function cut_str($string, $sublen, $start = 0, $code = 'UTF-8')
+    {
         if ($code == 'UTF-8') {
             $pa = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/";
             preg_match_all($pa, $string, $t_string);
@@ -223,8 +241,7 @@ class common {
             if (count($t_string[0]) - $start > $sublen)
                 return join('', array_slice($t_string[0], $start, $sublen)) . "";
             return join('', array_slice($t_string[0], $start, $sublen));
-        }
-        else {
+        } else {
             $start = $start * 2;
             $sublen = $sublen * 2;
             $strlen = strlen($string);
@@ -248,7 +265,8 @@ class common {
     }
 
     /** 增加长度 前面补零  */
-    public static function add_len($num, $len) {
+    public static function add_len($num, $len)
+    {
         if (strlen($num) >= $len) {
             return $num;
         } else {
@@ -264,7 +282,8 @@ class common {
     /**
      * 获取url 参数方法
      */
-    public static function exchangeGet() {
+    public static function exchangeGet()
+    {
         $res = "";
         $url = $_SERVER['REQUEST_URI'];
         $get = explode("?", $url);
@@ -283,7 +302,8 @@ class common {
     /**
      * 获取post 参数方法
      */
-    public static function exchangePost() {
+    public static function exchangePost()
+    {
         $res = "";
         if (!empty($_POST)) {
             $res = $_POST;
@@ -296,7 +316,8 @@ class common {
     /**
      * 获取post 参数方法
      */
-    public static function exchangeHeader() {
+    public static function exchangeHeader()
+    {
         // 忽略获取的header数据
         $ignore = array('host', 'accept', 'content-length', 'content-type');
 
@@ -317,7 +338,8 @@ class common {
         return $headers;
     }
 
-    public static function getIP() {
+    public static function getIP()
+    {
         global $_SERVER;
         if (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
@@ -333,7 +355,8 @@ class common {
 
     /*     * *********************************************** */
 
-    function StrLenW($str) {
+    function StrLenW($str)
+    {
         $count = 0;
         $len = strlen($str);
         for ($i = 0; $i < $len; $i++, $count++)
@@ -342,7 +365,8 @@ class common {
         return $count;
     }
 
-    function toCNcap($data) {
+    function toCNcap($data)
+    {
         //var_dump($data);
         $capnum = array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");
         $capdigit = array("", "拾", "佰", "仟");
@@ -386,15 +410,17 @@ class common {
         return $cncap;
     }
 
-    function week_e_c($obj) {
+    function week_e_c($obj)
+    {
         $e = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
         $c = array("星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
         $week = str_replace($e, $c, $obj);
         return $week;
     }
 
-    function Sec2Time($time){
-        if(is_numeric($time)){
+    function Sec2Time($time)
+    {
+        if (is_numeric($time)) {
             $value = [
                 "years" => 0,
                 "days" => 0,
@@ -402,28 +428,32 @@ class common {
                 "minutes" => 0,
                 "seconds" => 0,
             ];
-            if($time >= 31556926){
-                $value["years"] = floor($time/31556926);
-                $time = ($time%31556926);
+            $Y = $M = $D = $h = $m = $s = "";
+            if ($time >= 31556926) {
+                $value["years"] = floor($time / 31556926);
+                $time = ($time % 31556926);
+                $Y = $value["years"] . "年";
             }
-            if($time >= 86400){
-                $value["days"] = floor($time/86400);
-                $time = ($time%86400);
+            if ($time >= 86400) {
+                $value["days"] = floor($time / 86400);
+                $time = ($time % 86400);
+                $D = $value["days"] . "天";
             }
-            if($time >= 3600){
-                $value["hours"] = floor($time/3600);
-                $time = ($time%3600);
+            if ($time >= 3600) {
+                $value["hours"] = floor($time / 3600);
+                $time = ($time % 3600);
+                $h = $value["hours"] . "小时";
             }
-            if($time >= 60){
-                $value["minutes"] = floor($time/60);
-                $time = ($time%60);
+            if ($time >= 60) {
+                $value["minutes"] = floor($time / 60);
+                $time = ($time % 60);
+                $m = $value["minutes"] . "分";
             }
             $value["seconds"] = floor($time);
             //return (array) $value;
-            $t=$value["years"] ."年". $value["days"] ."天"." ". $value["hours"] ."小时". $value["minutes"] ."分".$value["seconds"]."秒";
-            Return $t;
-
-        }else{
+            $t = $Y . $D . " " . $h . $m . $value["seconds"] . "秒";
+            return $t;
+        } else {
             return (bool) FALSE;
         }
     }
