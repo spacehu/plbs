@@ -31,7 +31,7 @@ $class = \action\statistics::$data['class'];
                     <td class="td1"><?php echo $data['info']['phone']; ?></td>
                     <td class="td1"><?php echo $data['info']['enterpriseCourseCount']; ?></td>
                     <td class="td1"><?php echo round($data['info']['progress']); ?>%</td>
-                    <td class="td1"><?php echo $data['info']['hours']>0?date("i分s",$data['info']['hours']):0; ?>秒</td>
+                    <td class="td1"><?php echo \mod\common::Sec2Time($data['info']['hours']); ?></td>
                     <td class="td1"><?php echo $data['info']['passExamCount']; ?></td>
                     <td class="td1"><?php echo $data['info']['joinCourseCount']; ?></td>
                 </tr>
@@ -55,7 +55,7 @@ $class = \action\statistics::$data['class'];
                             <td class="td1"><?php echo $v['name']; ?></td>
                             <td class="td1"><?php echo !empty($v['enterpriseCourse'])?"企业必修课程":"选修课"; ?></td>
                             <td class="td1"><?php echo round($v['progress']); ?>%</td>
-                            <td class="td1"><?php echo $v['hours']>0?date("i分s",$v['hours']):0; ?>秒</td>
+                            <td class="td1"><?php echo \mod\common::Sec2Time($v['hours']); ?></td>
                             <td class="td1"><?php echo !empty($v['passExamCount'])?"通过考试":""; ?></td>
                         </tr>
                         <?php
