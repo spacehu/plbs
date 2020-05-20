@@ -46,10 +46,10 @@ if (is_array($image)) {
                             <input class="text" name="cat_id" type="hidden" value="<?php echo $cat_id; ?>" />
                         </div>
                         <div class="leftAlist" >
-                            <span>OVERVIEW 课程简述（35字以内）</span>
+                            <span>OVERVIEW 课程简述（30字以内）</span>
                         </div>
                         <div class="leftAlist" >
-                            <input class="text" maxlength="35" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
+                            <input class="text" maxlength="30" name="overview" type="text" value="<?php echo isset($data['overview']) ? $data['overview'] : ""; ?>" />
                         </div>
                         <!-- 课程内容隐藏 -->
                         <div class="leftAlist" style="display: none">
