@@ -19,7 +19,8 @@ use config\code;
 use TigerDAL\Api\UserLessonTimeDAL;
 use TigerDAL\CatchDAL;
 
-class ApiAccount extends RestfulApi {
+class ApiAccount extends RestfulApi
+{
 
     public $user_id;
     public $server_id;
@@ -28,7 +29,8 @@ class ApiAccount extends RestfulApi {
      * 主方法引入父类的基类
      * 责任是分担路由的工作
      */
-    function __construct() {
+    function __construct()
+    {
         $path = parent::__construct();
         $this->post = Common::exchangePost();
         $this->get = Common::exchangeGet();
@@ -47,8 +49,8 @@ class ApiAccount extends RestfulApi {
         $this->server_id = $_token['data']['server_id'];
         if (!empty($path)) {
             $_path = explode("-", $path);
-            $mod= $_path['2'];
-            $res=$this->$mod();
+            $mod = $_path['2'];
+            $res = $this->$mod();
             exit(json_encode($res));
         }
     }
@@ -56,7 +58,8 @@ class ApiAccount extends RestfulApi {
     /*  post   * ****************************************************************************** */
 
     /** 参与课程 */
-    function course() {
+    function course()
+    {
         try {
             //轮播列表
             $_data = [
@@ -78,7 +81,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 参与课时 */
-    function lesson() {
+    function lesson()
+    {
         try {
             //轮播列表
             $_data = [
@@ -100,13 +104,14 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 参与考试 */
-    function testing() {
+    function testing()
+    {
         try {
             //轮播列表
             $_data = [
                 'user_id' => $this->user_id,
                 'course_id' => !empty($this->post['course_id']) ? $this->post['course_id'] : 0,
-                'aws' => (array) $this->post['aws'],
+                'aws' => (array)$this->post['aws'],
                 'time' => date("Y-m-d H:i:s"),
                 'examination_id' => !empty($this->post['examination_id']) ? $this->post['examination_id'] : 0,
             ];
@@ -115,13 +120,14 @@ class ApiAccount extends RestfulApi {
             //print_r($res);die;
             self::$data['data'] = $res;
         } catch (Exception $ex) {
-           CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
 
     /** 收藏 */
-    function favorite() {
+    function favorite()
+    {
         try {
             //轮播列表
             $res = AccountDAL::doFavorites($this->user_id, $this->post['article_id']);
@@ -135,7 +141,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 绑定企业 */
-    function enterprise() {
+    function enterprise()
+    {
         try {
             //轮播列表
             $res = AccountDAL::doEnterpriseRelation($this->user_id, $this->post['code']);
@@ -155,7 +162,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 解绑企业 */
-    function unEnterprise() {
+    function unEnterprise()
+    {
         try {
             //轮播列表
             $res = AccountDAL::unEnterpriseRelation($this->user_id, $this->post['enterprise_id']);
@@ -168,7 +176,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 投递简历 */
-    function sendResume() {
+    function sendResume()
+    {
         try {
             //轮播列表
             $res = ResumeDAL::sendResume($this->user_id, $this->post['article_id']);
@@ -182,7 +191,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 员工：更新简历 */
-    function updateResume() {
+    function updateResume()
+    {
         try {
             $_data = [
                 'user_id' => $this->user_id,
@@ -203,7 +213,7 @@ class ApiAccount extends RestfulApi {
             if (!empty($resume_id)) {
                 if (!empty($this->post['school'])) {
                     foreach ($this->post['school'] as $k => $v) {
-                        $v = (array) $v;
+                        $v = (array)$v;
                         $_school = [
                             'id' => isset($v['id']) ? $v['id'] : 0,
                             'user_id' => $this->user_id,
@@ -221,7 +231,7 @@ class ApiAccount extends RestfulApi {
                 }
                 if (!empty($this->post['company'])) {
                     foreach ($this->post['company'] as $k => $v) {
-                        $v = (array) $v;
+                        $v = (array)$v;
                         $_company = [
                             'id' => isset($v['id']) ? $v['id'] : 0,
                             'user_id' => $this->user_id,
@@ -240,7 +250,7 @@ class ApiAccount extends RestfulApi {
                 }
                 if (!empty($this->post['project'])) {
                     foreach ($this->post['project'] as $k => $v) {
-                        $v = (array) $v;
+                        $v = (array)$v;
                         $_project = [
                             'id' => isset($v['id']) ? $v['id'] : 0,
                             'user_id' => $this->user_id,
@@ -266,19 +276,20 @@ class ApiAccount extends RestfulApi {
         return self::$data;
     }
 
-    /** 编辑用户信息 头像路径，手机号，验证码，姓名，（原密码），密码，确认密码 
+    /** 编辑用户信息 头像路径，手机号，验证码，姓名，（原密码），密码，确认密码
      * name
-     * 
+     *
      * photo
-     * 
+     *
      * password
      * new_password
      * new_password_cfn
-     * 
+     *
      * phone
      * code
      */
-    function updateInfo() {
+    function updateInfo()
+    {
         $AuthDAL = new AuthDAL();
         try {
             //密码
@@ -346,7 +357,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 提交用户图片 */
-    function uploadPhoto() {
+    function uploadPhoto()
+    {
         try {
             $photo = $_FILES['photo'];
             LogDAL::save(date("Y-m-d H:i:s") . "-------------------------------------" . json_encode($_FILES) . "", "DEBUG");
@@ -371,25 +383,26 @@ class ApiAccount extends RestfulApi {
      * 记录学习课时的时长
      * @return array
      */
-    function saveUserLessonTime(){
+    function saveUserLessonTime()
+    {
         try {
-            $userlesson=LessonDAL::getUserLesson($this->user_id,$this->post['lesson_id']);
-            if(empty($userlesson)){
+            $userlesson = LessonDAL::getUserLesson($this->user_id, $this->post['lesson_id']);
+            if (empty($userlesson)) {
                 self::$data['success'] = false;
                 self::$data['data']['error_msg'] = 'emptyuserlessonid';
                 self::$data['data']['code'] = $userlesson;
                 self::$data['msg'] = "emptyuserlessonid";
                 return self::$data;
             }
-            $_data=[
-                'user_id'=>$this->user_id,
-                'lesson_id'=>$this->post['lesson_id'],
-                'user_lesson_id'=>$userlesson['id'],
-                'add_time'=>"NOW()",
-                'delete'=>0,
-                'duration'=>$this->post['duration'], // seconds
+            $_data = [
+                'user_id' => $this->user_id,
+                'lesson_id' => $this->post['lesson_id'],
+                'user_lesson_id' => $userlesson['id'],
+                'add_time' => "NOW()",
+                'delete' => !empty($this->post['delete']) ? $this->post['delete'] : 0,
+                'duration' => $this->post['duration'], // seconds
             ];
-            self::$data['data']['id']=UserLessonTimeDAL::insert($_data);
+            self::$data['data']['id'] = UserLessonTimeDAL::insert($_data);
         } catch (Exception $ex) {
             CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
@@ -398,11 +411,12 @@ class ApiAccount extends RestfulApi {
     /*  get   * ******************************************************************************* */
 
     /** 企业||用户 信息 */
-    function info() {
+    function info()
+    {
         try {
             //轮播列表
             $AuthDAL = new AuthDAL();
-            $res=[];
+            $res = [];
             switch ($this->server_id) {
                 case init::$config['token']['server_id']['customer']:
                     $res = $AuthDAL->getUserInfo($this->user_id);
@@ -431,7 +445,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 员工：参与过的课程列表 */
-    function courses() {
+    function courses()
+    {
         try {
             //轮播列表
             if ($this->server_id != init::$config['token']['server_id']['customer']) {
@@ -455,7 +470,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 员工：收藏的文章列表 */
-    function favorites() {
+    function favorites()
+    {
         try {
             //轮播列表
             if ($this->server_id != init::$config['token']['server_id']['customer']) {
@@ -480,7 +496,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 员工：企业专用课程列表 */
-    function enterpriseCourses() {
+    function enterpriseCourses()
+    {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         try {
@@ -499,7 +516,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 员工：简历 */
-    function getResume() {
+    function getResume()
+    {
         try {
             //轮播列表
             if ($this->server_id != init::$config['token']['server_id']['customer']) {
@@ -520,7 +538,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 企业主：员工学习进度 */
-    function personalProgresses() {
+    function personalProgresses()
+    {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
@@ -540,7 +559,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 企业主：课程参与度 */
-    function courseProgresses() {
+    function courseProgresses()
+    {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
@@ -548,7 +568,7 @@ class ApiAccount extends RestfulApi {
             //轮播列表
 
             $res = EnterpriseDAL::getEnterpriseUserCourseProgresses($currentPage, $pagesize, $enterprise_id);
-            $resT = CourseDAL::getEnterpriseCoursesTotal( $enterprise_id);
+            $resT = CourseDAL::getEnterpriseCoursesTotal($enterprise_id);
 
             //print_r($res);die;
             self::$data['data']['list'] = $res;
@@ -560,7 +580,8 @@ class ApiAccount extends RestfulApi {
     }
 
     /** 企业主：考试合格率 */
-    function testProgresses() {
+    function testProgresses()
+    {
         $currentPage = isset($this->get['currentPage']) ? $this->get['currentPage'] : 1;
         $pagesize = isset($this->get['pagesize']) ? $this->get['pagesize'] : init::$config['page_width'];
         $enterprise_id = EnterpriseDAL::getByUserId($this->user_id)['id'];
