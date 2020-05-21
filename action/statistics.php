@@ -251,6 +251,7 @@ class statistics {
                         "课程",
                         "类别",
                         "学习进度",
+                        "学习时间",
                         "考试通过",
                     ],
                 ];
@@ -261,6 +262,7 @@ class statistics {
                             $v['name'],
                             !empty($v['eccid'])?"企业必修课程":"选修课",
                             $v['progress']."%",
+                            common::Sec2Time($v['hours']),
                             !empty($v['passExamCount'])?"通过考试":"",
                         ];
                     }
