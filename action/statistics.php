@@ -3,12 +3,12 @@
 namespace action;
 
 use http\Exception;
+use mod\common;
 use mod\init;
 use TigerDAL\CatchDAL;
 use TigerDAL\Cms\EnterpriseDAL;
 use TigerDAL\Cms\StatisticsDAL;
 use config\code;
-use mod\common as Common;
 use mod\csv as Csv;
 
 use TigerDAL\Api\EnterpriseDAL as apiEnterpriseDAL;
@@ -176,6 +176,8 @@ class statistics {
                     "总学习时间",
                     "通过考试数",
                     "参与课程数",
+                    $_startTime,
+                    $_endTime,
                 ];
                 $_data=[];
                 if(!empty($data)){
@@ -185,8 +187,8 @@ class statistics {
                             'edname'=>$v['edname'],
                             'epname'=>$v['epname'],
                             'enterpriseCourseCount'=>$v['enterpriseCourseCount'],
-                            'progress'=>$v['progress'],
-                            'hours'=>$v['hours'],
+                            'progress'=>$v['progress']."%",
+                            'hours'=>common::Sec2Time($v['hours']),
                             'passExamCount'=>$v['passExamCount'],
                             'joinCourseCount'=>$v['joinCourseCount'],
                         ];
@@ -240,8 +242,8 @@ class statistics {
                         $data['info']['epname'],
                         $data['info']['phone'],
                         $data['info']['enterpriseCourseCount'],
-                        $data['info']['progress'],
-                        $data['info']['hours'],
+                        $data['info']['progress']."%",
+                        common::Sec2Time($data['info']['hours']),
                         $data['info']['passExamCount'],
                         $data['info']['joinCourseCount'],
                     ],
@@ -258,7 +260,7 @@ class statistics {
                         $_data[]=[
                             $v['name'],
                             !empty($v['eccid'])?"企业必修课程":"选修课",
-                            $v['progress'],
+                            $v['progress']."%",
                             !empty($v['passExamCount'])?"通过考试":"",
                         ];
                     }
