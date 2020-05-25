@@ -429,16 +429,16 @@ class common
                 "seconds" => 0,
             ];
             $Y = $M = $D = $h = $m = $s = "";
-            if ($time >= 31556926) {
-                $value["years"] = floor($time / 31556926);
-                $time = ($time % 31556926);
-                $Y = $value["years"] . "年";
-            }
-            if ($time >= 86400) {
-                $value["days"] = floor($time / 86400);
-                $time = ($time % 86400);
-                $D = $value["days"] . "天";
-            }
+            // if ($time >= 31556926) {
+            //     $value["years"] = floor($time / 31556926);
+            //     $time = ($time % 31556926);
+            //     $Y = $value["years"] . "年";
+            // }
+            // if ($time >= 86400) {
+            //     $value["days"] = floor($time / 86400);
+            //     $time = ($time % 86400);
+            //     $D = $value["days"] . "天";
+            // }
             if ($time >= 3600) {
                 $value["hours"] = floor($time / 3600);
                 $time = ($time % 3600);
