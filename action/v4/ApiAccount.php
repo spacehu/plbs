@@ -18,6 +18,7 @@ use TigerDAL\Api\LogDAL;
 use config\code;
 use TigerDAL\Api\UserLessonTimeDAL;
 use TigerDAL\CatchDAL;
+use TigerDAL\Cms\StatisticsDAL;
 
 class ApiAccount extends RestfulApi
 {
@@ -423,6 +424,15 @@ class ApiAccount extends RestfulApi
                     $res['subInfo']['joinCourse'] = AccountDAL::getCoursesTotal($this->user_id);
                     $res['subInfo']['passCourse'] = AccountDAL::getCoursesPass($this->user_id);
                     $res['subInfo']['failCourse'] = AccountDAL::getCoursesFailed($this->user_id);
+                    $_res=StatisticsDAL::getCustomerInfo($this->user_id);
+                    $res['subInfo']['learn']=[];
+                    if(!empty($_res)){
+                        $res['subInfo']['learn']=[
+                            'hour'=>date("H",$_res['hours']),
+                            'minute'=>date("i",$_res['hours']),
+                            'second'=>date("s",$_res['hours']),
+                        ];
+                    }
                     break;
                 case init::$config['token']['server_id']['business']:
                     $res = EnterpriseDAL::getByUserId($this->user_id);

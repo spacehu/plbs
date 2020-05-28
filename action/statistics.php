@@ -191,6 +191,8 @@ class statistics {
                             'hours'=>common::Sec2Time($v['hours']),
                             'passExamCount'=>$v['passExamCount'],
                             'joinCourseCount'=>$v['joinCourseCount'],
+                            $_startTime,
+                            $_endTime,
                         ];
                     }
                 }
