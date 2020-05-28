@@ -431,6 +431,7 @@ class ApiAccount extends RestfulApi
                             'hour'=>date("H",$_res['hours']),
                             'minute'=>date("i",$_res['hours']),
                             'second'=>date("s",$_res['hours']),
+                            '_d'=>$_res['hours'],
                         ];
                     }
                     break;
