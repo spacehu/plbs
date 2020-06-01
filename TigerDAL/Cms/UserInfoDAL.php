@@ -2,6 +2,7 @@
 
 namespace TigerDAL\Cms;
 
+use mod\common;
 use TigerDAL\BaseDAL;
 
 class UserInfoDAL {
@@ -214,9 +215,9 @@ class UserInfoDAL {
                 'enterprise_id' => $enterprise_id,
                 'user_id' => $_userinfo['id'],
                 'status' => '1',
-                'add_by' => \mod\common::getSession("id"),
+                'add_by' => common::getSession("id"),
                 'add_time' => date("Y-m-d H:i:s"),
-                'edit_by' => \mod\common::getSession("id"),
+                'edit_by' => common::getSession("id"),
                 'edit_time' => date("Y-m-d H:i:s"),
                 'delete' => '0',
                 'department_id'=>'0',
@@ -226,7 +227,7 @@ class UserInfoDAL {
         } else if ($row['delete'] == 1) {
             $_data = [
                 'status' => '1',
-                'edit_by' => \mod\common::getSession("id"),
+                'edit_by' => common::getSession("id"),
                 'delete' => '0',
             ];
             return self::updateEnterpriseUser($row['id'], $_data);
@@ -237,41 +238,13 @@ class UserInfoDAL {
     /** 新增用户企业关系信息 */
     public static function insertEnterpriseUser($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('enterprise_user') . " values (null," . $set . ");";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->insert($data,"enterprise_user");
     }
 
     /** 更新用户企业关系信息 */
     public static function updateEnterpriseUser($id, $data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('enterprise_user') . " set " . $set . "  where id=" . $id . " ;";
-            //echo $sql;die;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id,$data,"enterprise_user");
     }
 
     /** 删除用户企业关系信息 */
