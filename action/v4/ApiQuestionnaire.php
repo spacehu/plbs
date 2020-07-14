@@ -2,13 +2,10 @@
 
 namespace action\v4;
 
-use mod\common as Common;
-use TigerDAL\Api\CourseDAL;
-use TigerDAL\Api\LessonDAL;
-use TigerDAL\Cms\LessonImageDAL;
+use http\Exception;
+use TigerDAL\CatchDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\QuestionnaireDAL;
-use TigerDAL\Api\AccountDAL;
 use config\code;
 
 class ApiQuestionnaire extends \action\RestfulApi {
@@ -60,7 +57,7 @@ class ApiQuestionnaire extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = count($res);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }

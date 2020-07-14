@@ -2,8 +2,10 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
-use TigerDAL;
+use mod\init;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\QuestionnaireDAL;
 use TigerDAL\Cms\QuestionnaireTestDAL;
 use TigerDAL\Cms\TestDAL;
@@ -32,7 +34,7 @@ class questionnaire {
                 }
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
     }
 
@@ -41,7 +43,7 @@ class questionnaire {
         Common::writeSession($_SERVER['REQUEST_URI'], $this->class);
         try {
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
-            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : \mod\init::$config['page_width'];
+            $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
 
             self::$data['currentPage'] = $currentPage;
@@ -52,9 +54,9 @@ class questionnaire {
             self::$data['data'] = QuestionnaireDAL::getAll($currentPage, $pagesize, $keywords, $this->enterprise_id);
             self::$data['class'] = $this->class;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getQuestionnaire() {
@@ -92,9 +94,9 @@ class questionnaire {
             //Common::pr(self::$data);die;
 
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getQuestionnaireTestList(){
@@ -104,7 +106,7 @@ class questionnaire {
             $data = TestDAL::getQuestionnaireTestList($enterprise_id,$cat_id);
             echo json_encode(['success' => true,'data'=>$data]);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::MATERIAL_UPDATE], code::MATERIAL_UPDATE, json_encode($ex));
             echo json_encode(['success' => false, 'message' => '999']);
         }
     }
@@ -123,7 +125,7 @@ class questionnaire {
             } else {
                 if (QuestionnaireDAL::getByName($_POST['name'])) {
                     Common::js_alert(code::ALREADY_EXISTING_DATA);
-                    TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                    CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                     Common::js_redir(Common::getSession($this->class));
                 }
                 //Common::pr(UserDAL::getUser($_POST['name']));die;
@@ -153,7 +155,7 @@ class questionnaire {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
         }
     }
 
@@ -166,7 +168,7 @@ class questionnaire {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
         }
     }
 

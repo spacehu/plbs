@@ -80,7 +80,7 @@ $course_total = \action\category::$data['course_total'];
             -->
             <div class="num_bar">
                 课程总数<b><?php echo $course_total; ?></b>
-            </div>\
+            </div>
         </div>
     </body>
 </html>

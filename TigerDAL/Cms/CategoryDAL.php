@@ -2,6 +2,7 @@
 
 namespace TigerDAL\Cms;
 
+use mod\common;
 use TigerDAL\BaseDAL;
 
 class CategoryDAL {
@@ -12,6 +13,11 @@ class CategoryDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
+        if($user_role=UserDAL::getRole(Common::getSession("id"))){
+            if($user_role['level']>=2){
+                $where = " and type=1 ";
+            }
+        }
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
@@ -87,6 +93,11 @@ class CategoryDAL {
         $limit_start = ($currentPage - 1) * $pagesize;
         $limit_end = $pagesize;
         $where = "";
+        if($user_role=UserDAL::getRole(Common::getSession("id"))){
+            if($user_role['level']>=2){
+                $where = " and type=1 ";
+            }
+        }
         if (!empty($keywords)) {
             $where .= " and name like '%" . $keywords . "%' ";
         }
@@ -102,13 +113,18 @@ class CategoryDAL {
     /** 分类树 */
     public static function tree($cat_id = 0, $level = 0, $is_show_all = true) {
         $base = new BaseDAL();
+        $where='';
+        if($user_role=UserDAL::getRole(Common::getSession("id"))){
+            if($user_role['level']>=2){
+                $where = " and c.type=1 ";
+            }
+        }
         $sql = "select c.*,c.name, COUNT(s.id) AS has_children "
                 . " from " . $base->table_name('category') . " as c "
-                . "left join " . $base->table_name('category') . " as s on s.parent_id=c.id "
-                . "where c.delete=0 "
+                . " left join " . $base->table_name('category') . " as s on s.parent_id=c.id "
+                . " where c.delete=0 ".$where
                 . " GROUP BY c.id "
                 . " order by c.parent_id asc,c.order_by asc,c.id asc";
-        //echo $sql;die;
         $cate = $base->getFetchAll($sql);
 
         $options = self::cat_options($cat_id, $cate);

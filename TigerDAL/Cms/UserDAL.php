@@ -107,7 +107,7 @@ class UserDAL {
 
     public static function getRole($id) {
         $base = new BaseDAL();
-        $sql = "select r.data from " . $base->table_name('user') . " as u , " . $base->table_name('role') . " as r where u.role_id=r.id and u.id=" . $id . " ;";
+        $sql = "select r.data,r.level from " . $base->table_name('user') . " as u , " . $base->table_name('role') . " as r where u.role_id=r.id and u.id=" . $id . " ;";
         return $base->getFetchRow($sql);
     }
 

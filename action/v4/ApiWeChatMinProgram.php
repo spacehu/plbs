@@ -7,16 +7,16 @@
 
 namespace action\v4;
 
-use mod\common as Common;
+use action\RestfulApi;
+use http\Exception;
+use mod\init;
 use TigerDAL\Api\WeChatDAL;
-use TigerDAL\Cms\UserInfoDAL;
 use TigerDAL\Api\LogDAL;
-use TigerDAL\Cms\SystemDAL;
-use TigerDAL\Web\PointDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Api\TokenDAL;
 use config\code;
 
-class ApiWeChatMinProgram extends \action\RestfulApi {
+class ApiWeChatMinProgram extends RestfulApi {
 
     private $class;
     public $appid;                   //微信APPID，公众平台获取  
@@ -34,9 +34,8 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
     function __construct() {
         $path = parent::__construct();
         $this->class = str_replace('action\\', '', __CLASS__);
-        $this->appid = \mod\init::$config['env']['wechat']['appid'];                   //微信APPID，公众平台获取  
-        $this->appsecret = \mod\init::$config['env']['wechat']['secret'];              //微信APPSECREC，公众平台获取  
-        //$this->index_url = urlencode("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);           //微信回调地址，要跟公众平台的配置域名相同  
+        $this->appid = init::$config['env']['wechat']['appid'];                   //微信APPID，公众平台获取
+        $this->appsecret = init::$config['env']['wechat']['secret'];              //微信APPSECREC，公众平台获取
         $TokenDAL = new TokenDAL();
         $_token = $TokenDAL->checkToken();
         //Common::pr($_token);die;
@@ -59,65 +58,6 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
         parent::__destruct();
     }
 
-    /** 获取access_token */
-    function getAccessToken() {
-        self::$data['title'] = "获取AccessToken";
-        self::$data['action'] = $this->class . '_' . __FUNCTION__;
-        try {
-            $this->code = $this->getCode();
-            $this->access_token = $this->getOpenId();
-            LogDAL::saveLog("DEBUG", "INFO", json_encode($this->access_token));
-            $userInfo = $this->getUserInfo();
-            LogDAL::saveLog("DEBUG", "INFO", json_encode($userInfo));
-            self::$data['data'] = [
-                'openid' => $this->access_token['openid'],
-                'access_token' => $this->access_token['access_token'],
-                'nickname' => $userInfo['nickname'],
-                'headimgurl' => $userInfo['headimgurl'],
-            ];
-        } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
-        }
-        LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
-        return self::$data;
-    }
-
-    /** 获取access_token */
-    function getTicket() {
-        self::$data['title'] = "获取JsApiTicket";
-        LogDAL::saveLog("DEBUG", "INFO", json_encode($this->get));
-        self::$data['action'] = $this->class . '_' . __FUNCTION__;
-        try {
-            /* 判断是否有没过期的ticket 有的话 直接拿出来用 */
-            $_ticket = SystemDAL::getConfigWithTime("js_ticket", 7200);
-            if (empty($_ticket)) {
-                $_token = $this->getToken();
-                LogDAL::saveLog("DEBUG", "INFO", json_encode($_token));
-                $res = $this->getJsApiTicket($_token['access_token']);
-                LogDAL::saveLog("DEBUG", "INFO", json_encode($res));
-                $_ticket = $res['ticket'];
-            }
-            $noncestr = "DSFHAJKHFJKA";
-            $timestamp = time();
-            $url = urldecode($this->get['url']);
-            $string = 'jsapi_ticket=' . $_ticket . '&noncestr=' . $noncestr . '&timestamp=' . $timestamp . '&url=' . $url;
-            $signature = sha1($string);
-            self::$data['data'] = [
-                'ticket' => $_ticket,
-                'expires_in' => $res['expires_in'],
-                'access_token' => $_token['access_token'],
-                'noncestr' => $noncestr,
-                'timestamp' => $timestamp,
-                'url' => $url,
-                'signature' => $signature,
-                'string' => $string,
-            ];
-        } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
-        }
-        LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
-        return self::$data;
-    }
 
     /** 获取授权信息 */
     function getWeChatInfo() {
@@ -125,7 +65,7 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
             LogDAL::saveLog("DEBUG", "INFO", json_encode($this->get));
             $this->beforeWeb();
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
         return self::$data;
@@ -189,7 +129,7 @@ class ApiWeChatMinProgram extends \action\RestfulApi {
 
         $result = $wechat->getOpenId($openid);
         if (!empty($result) && !empty($result['user_id'])) {
-            self::$data['data']['token'] = TokenDAL::saveToken($result['user_id'], \mod\init::$config['token']['server_id']['customer']);
+            self::$data['data']['token'] = TokenDAL::saveToken($result['user_id'], init::$config['token']['server_id']['customer']);
             self::$data['data']['deathline'] = TokenDAL::getTimeOut();
         }
         self::$data['success'] = true;

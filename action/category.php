@@ -2,8 +2,10 @@
 
 namespace action;
 
+use http\Exception;
 use mod\common as Common;
-use TigerDAL;
+use mod\init;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\ImageDAL;
 use TigerDAL\Cms\CourseDAL;
@@ -17,6 +19,9 @@ class category {
     public static $data;
     private $enterprise_id;
 
+    /**
+     * category constructor.
+     */
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
         //企业id
@@ -28,7 +33,7 @@ class category {
                 $this->enterprise_id = '';
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
     }
     function __destruct() {
@@ -43,6 +48,7 @@ class category {
         try {
             self::$data['total'] = CategoryDAL::getTotal("");
             $_data = CategoryDAL::tree($cat_id, 0, false);
+            //var_dump($_data);die;
             $_total = 0;
             if (!empty($_data)) {
                 foreach ($_data as $k => $v) {
@@ -65,9 +71,9 @@ class category {
             self::$data['type'] = $type;
             self::$data['course_total'] = $_total;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function getCategory() {
@@ -81,12 +87,12 @@ class category {
             }
             self::$data['list'] = CategoryDAL::tree();
             self::$data['image'] = ImageDAL::getAll(1, 999, "");
-            self::$data['config'] = \mod\init::$config['env'];
+            self::$data['config'] = init::$config['env'];
             //Common::pr(self::$data['list']);die;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
         }
-        \mod\init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
     }
 
     function updateCategory() {
@@ -111,7 +117,7 @@ class category {
             } else {
                 if (CategoryDAL::getByName($_POST['name'])) {
                     Common::js_alert(code::ALREADY_EXISTING_DATA);
-                    TigerDAL\CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
+                    CatchDAL::markError(code::$code[code::ALREADY_EXISTING_DATA], code::ALREADY_EXISTING_DATA, json_encode($_POST));
                     Common::js_redir(Common::getSession($this->class));
                 }
                 //Common::pr(UserDAL::getUser($_POST['name']));die;
@@ -137,7 +143,7 @@ class category {
                 Common::js_alert('修改失败，请联系系统管理员');
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_UPDATE], code::CATEGORY_UPDATE, json_encode($ex));
         }
     }
 
@@ -150,7 +156,7 @@ class category {
             }
             Common::js_redir(Common::getSession($this->class));
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
+            CatchDAL::markError(code::$code[code::CATEGORY_DELETE], code::CATEGORY_DELETE, json_encode($ex));
         }
     }
 
