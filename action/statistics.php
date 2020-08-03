@@ -3,7 +3,7 @@
 namespace action;
 
 use http\Exception;
-use mod\common;
+use mod\common as Common;
 use mod\init;
 use TigerDAL\CatchDAL;
 use TigerDAL\Cms\EnterpriseDAL;
@@ -188,7 +188,7 @@ class statistics {
                             'epname'=>$v['epname'],
                             'enterpriseCourseCount'=>$v['enterpriseCourseCount'],
                             'progress'=>$v['progress']."%",
-                            'hours'=>common::Sec2Time($v['hours']),
+                            'hours'=>Common::Sec2Time($v['hours']),
                             'passExamCount'=>$v['passExamCount'],
                             'joinCourseCount'=>$v['joinCourseCount'],
                             $_startTime,
@@ -245,7 +245,7 @@ class statistics {
                         $data['info']['phone'],
                         $data['info']['enterpriseCourseCount'],
                         $data['info']['progress']."%",
-                        common::Sec2Time($data['info']['hours']),
+                        Common::Sec2Time($data['info']['hours']),
                         $data['info']['passExamCount'],
                         $data['info']['joinCourseCount'],
                     ],
@@ -262,9 +262,9 @@ class statistics {
                     foreach($data['courseList'] as $k=>$v){
                         $_data[]=[
                             $v['name'],
-                            !empty($v['eccid'])?"企业必修课程":"选修课",
+                            !empty($v['enterpriseCourse'])?"企业必修课程":"选修课",
                             $v['progress']."%",
-                            common::Sec2Time($v['hours']),
+                            Common::Sec2Time($v['hours']),
                             !empty($v['passExamCount'])?"通过考试":"",
                         ];
                     }

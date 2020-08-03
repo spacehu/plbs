@@ -2,14 +2,17 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
 use TigerDAL\Api\ImageDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\CategoryDAL;
 use TigerDAL\Cms\SystemDAL;
 use TigerDAL\Api\ArticleDAL;
 use config\code;
 
-class ApiBase extends \action\RestfulApi {
+class ApiBase extends RestfulApi {
 
     public $user_id;
     public $server_id;
@@ -63,7 +66,7 @@ class ApiBase extends \action\RestfulApi {
 
             self::$data['data']['list'] = $_res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -76,7 +79,7 @@ class ApiBase extends \action\RestfulApi {
             $res = ArticleDAL::getCitys();
             self::$data['data']['list'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -87,7 +90,7 @@ class ApiBase extends \action\RestfulApi {
             $res = ArticleDAL::getTypes();
             self::$data['data']['list'] = $res;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -103,7 +106,7 @@ class ApiBase extends \action\RestfulApi {
             }
             self::$data['data']['info'] = $obj;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -119,7 +122,7 @@ class ApiBase extends \action\RestfulApi {
             }
             self::$data['data']['info'] = $obj;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }

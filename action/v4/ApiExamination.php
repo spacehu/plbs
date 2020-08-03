@@ -2,17 +2,17 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
-use TigerDAL\Api\CourseDAL;
-use TigerDAL\Api\LessonDAL;
-use TigerDAL\Cms\LessonImageDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Api\TestDAL;
 use TigerDAL\Api\ExaminationDAL;
 use TigerDAL\Api\AccountDAL;
 use config\code;
 
-class ApiExamination extends \action\RestfulApi {
+class ApiExamination extends RestfulApi {
 
     public $user_id;
     public $server_id;
@@ -40,8 +40,8 @@ class ApiExamination extends \action\RestfulApi {
         $this->server_id = $_token['data']['server_id'];
         if (!empty($path)) {
             $_path = explode("-", $path);
-            $actEval = "\$res = \$this ->" . $_path['2'] . "();";
-            eval($actEval);
+            $mod= $_path['2'];
+            $res=$this->$mod();
             exit(json_encode($res));
         }
     }
@@ -77,7 +77,7 @@ class ApiExamination extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $total;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -103,7 +103,7 @@ class ApiExamination extends \action\RestfulApi {
             self::$data['data']['total'] = count($res);
             self::$data['data']['max'] = $_obj['export_count'];
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }

@@ -2,6 +2,9 @@
 
 namespace TigerDAL\Api;
 
+use Exception;
+use mod\init;
+use stdClass;
 use TigerDAL\BaseDAL;
 
 require_once dirname(__DIR__) . '/../lib/qcloudsms_php/src/index.php';
@@ -24,7 +27,8 @@ use Qcloud\Sms\TtsVoiceSender;
  * 执行此文件即可体验语音服务产品API功能(只需要将AK替换成开通了云通信-短信服务产品功能的AK即可)
  * 备注:Demo工程编码采用UTF-8
  */
-class TencentSmsDAL {
+class TencentSmsDAL
+{
 
     // 短信应用SDK AppID
     private static $appid; // 1400开头
@@ -42,25 +46,26 @@ class TencentSmsDAL {
      * @return stdClass
      */
 
-    public static function sendSms($phone, $code, $orderid) {
-        self::$appid = \mod\init::$config['env']['lib']['tencent']['sms']['appid'];
-        self::$appkey = \mod\init::$config['env']['lib']['tencent']['sms']['appkey'];
-        self::$templateId = \mod\init::$config['env']['lib']['tencent']['sms']['templateId'];
-        self::$smsSign = \mod\init::$config['env']['lib']['tencent']['sms']['smsSign'];
+    public static function sendSms($phone, $code, $orderid)
+    {
+        self::$appid = init::$config['env']['lib']['tencent']['sms']['appid'];
+        self::$appkey = init::$config['env']['lib']['tencent']['sms']['appkey'];
+        self::$templateId = init::$config['env']['lib']['tencent']['sms']['templateId'];
+        self::$smsSign = init::$config['env']['lib']['tencent']['sms']['smsSign'];
 
         // 指定模板ID单发短信
         try {
             $ssender = new SmsSingleSender(self::$appid, self::$appkey);
             $params = [$code, '15'];
-            $result = $ssender->sendWithParam("86", $phone, self::$templateId, $params, self::$smsSign, "", $orderid);  // 签名参数未提供或者为空时，会使用默认签名发送短信
-        } catch (\Exception $e) {
+            return $ssender->sendWithParam("86", $phone, self::$templateId, $params, self::$smsSign, "", $orderid);  // 签名参数未提供或者为空时，会使用默认签名发送短信
+        } catch (Exception $e) {
             echo var_dump($e);
         }
-        return $result;
     }
 
     /** 确认发送频率 */
-    public static function checkInsert($phone, $ip) {
+    public static function checkInsert($phone, $ip)
+    {
         $base = new BaseDAL();
         $_sql = "select count(1) as num from `" . $base->table_name("sms") . "` where `phone`='" . $phone . "' and `ip`='" . $ip . "' and `date`='" . date("Ymd") . "';";
         $query = $base->getFetchRow($_sql);
@@ -72,39 +77,18 @@ class TencentSmsDAL {
     }
 
     /** 插入发送记录 */
-    public static function insert($data) {
+    public static function insert($data)
+    {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                $_data[] = " '" . $v . "' ";
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('sms') . " values (null," . $set . ");";
-            $base->query($sql);
-            return $base->last_insert_id();
-        } else {
-            return true;
-        }
+        $base->insert($data,"sms");
+        return $base->last_insert_id();
     }
 
     /** 更新用户信息 */
-    public static function update($id, $data) {
+    public static function update($id, $data)
+    {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $k => $v) {
-                if ($k == 'success') {
-                    $_data[] = " `" . $k . "`=" . $v . " ";
-                } else {
-                    $_data[] = " `" . $k . "`='" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "update " . $base->table_name('sms') . " set " . $set . "  where id=" . $id . " ;";
-            //echo $sql;
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        return $base->update($id, $data, "sms");
     }
 
 }

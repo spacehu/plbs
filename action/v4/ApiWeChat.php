@@ -7,8 +7,12 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
+use mod\init;
 use TigerDAL\Api\WeChatDAL;
+use TigerDAL\CatchDAL;
 use TigerDAL\Cms\UserInfoDAL;
 use TigerDAL\Api\LogDAL;
 use TigerDAL\Cms\SystemDAL;
@@ -16,7 +20,7 @@ use TigerDAL\Web\PointDAL;
 use TigerDAL\Api\TokenDAL;
 use config\code;
 
-class ApiWeChat extends \action\RestfulApi {
+class ApiWeChat extends RestfulApi {
 
     private $class;
     public $appid;                   //微信APPID，公众平台获取  
@@ -34,8 +38,8 @@ class ApiWeChat extends \action\RestfulApi {
     function __construct() {
         $path = parent::__construct();
         $this->class = str_replace('action\\', '', __CLASS__);
-        $this->appid = \mod\init::$config['env']['wechat']['appid'];                   //微信APPID，公众平台获取  
-        $this->appsecret = \mod\init::$config['env']['wechat']['secret'];              //微信APPSECREC，公众平台获取  
+        $this->appid = init::$config['env']['wechat']['appid'];                   //微信APPID，公众平台获取
+        $this->appsecret = init::$config['env']['wechat']['secret'];              //微信APPSECREC，公众平台获取
         //$this->index_url = urlencode("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);           //微信回调地址，要跟公众平台的配置域名相同  
         // 校验token
         $TokenDAL = new TokenDAL();
@@ -80,7 +84,7 @@ class ApiWeChat extends \action\RestfulApi {
                 'headimgurl' => $userInfo['headimgurl'],
             ];
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
         return self::$data;
@@ -117,7 +121,7 @@ class ApiWeChat extends \action\RestfulApi {
                 'string' => $string,
             ];
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
         return self::$data;
@@ -133,7 +137,7 @@ class ApiWeChat extends \action\RestfulApi {
                 $this->beforeWeb();
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         LogDAL::saveLog("DEBUG", "INFO", json_encode(self::$data));
         return self::$data;
@@ -266,7 +270,6 @@ class ApiWeChat extends \action\RestfulApi {
         }
 
         self::$data['success'] = true;
-        self::$data['data'] = $result;
         LogDAL::save(json_encode($openid));
     }
 
@@ -318,8 +321,7 @@ class ApiWeChat extends \action\RestfulApi {
     }
 
     /**
-     * 前端用 获取access_token 用 的 
-     * @param type $access_token
+     * 前端用 获取access_token 用 的
      * @return type
      */
     public function getToken() {
@@ -344,9 +346,12 @@ class ApiWeChat extends \action\RestfulApi {
     }
 
     /**
-     * @explain 
-     * 发送http请求，并返回数据 
-     * */
+     * @explain
+     * 发送http请求，并返回数据
+     * @param $url
+     * @param null $data
+     * @return mixed
+     */
     public function https_request($url, $data = null) {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);

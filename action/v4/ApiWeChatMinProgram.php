@@ -115,8 +115,6 @@ class ApiWeChatMinProgram extends RestfulApi {
                     LogDAL::saveLog("DEBUG", "INFO", json_encode($_data));
                     $wechat->addWeChatUserInfo($_data);
                 }
-                //$_SESSION['openid'] = $userInfo['openid'];         //写到$_SESSION中。微信缓存很坑爹，调试时请及时清除缓存再试。  
-                //self::$data['data'] = 'openid: ' . $userInfo['openid'];
             } else {
                 /** 微信返回错误 */
                 self::$data['success'] = false;
@@ -171,7 +169,7 @@ class ApiWeChatMinProgram extends RestfulApi {
     /**
      * @explain 
      * 通过code获取用户openid以及用户的微信号信息 
-     * @return 
+     * @return array
      * @remark 
      * 获取到用户的openid之后可以判断用户是否有数据，可以直接跳过获取access_token,也可以继续获取access_token 
      * access_token每日获取次数是有限制的，access_token有时间限制，可以存储到数据库7200s. 7200s后access_token失效 
@@ -185,8 +183,7 @@ class ApiWeChatMinProgram extends RestfulApi {
     }
 
     /**
-     * 前端用 获取access_token 用 的 
-     * @param type $access_token
+     * 前端用 获取access_token 用 的
      * @return type
      */
     public function getToken() {
@@ -211,9 +208,12 @@ class ApiWeChatMinProgram extends RestfulApi {
     }
 
     /**
-     * @explain 
-     * 发送http请求，并返回数据 
-     * */
+     * @explain
+     * 发送http请求，并返回数据
+     * @param $url
+     * @param null $data
+     * @return mixed
+     */
     public function https_request($url, $data = null) {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);

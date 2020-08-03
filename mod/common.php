@@ -418,7 +418,7 @@ class common
         return $week;
     }
 
-    function Sec2Time($time)
+    public static function Sec2Time($time)
     {
         if (is_numeric($time)) {
             $value = [

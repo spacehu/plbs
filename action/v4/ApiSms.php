@@ -2,15 +2,16 @@
 
 namespace action\v4;
 
-use mod\common as Common;
-use TigerDAL;
+use action\RestfulApi;
+use http\Exception;
+use TigerDAL\Api\SmsDAL;
 use TigerDAL\Api\TencentSmsDAL;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\AccessDAL;
 use config\code;
-use TigerDAL\Web\StatisticsDAL;
+use TigerDAL\CatchDAL;
 
-class ApiSms extends \action\RestfulApi {
+class ApiSms extends RestfulApi {
 
     /**
      * 主方法引入父类的基类
@@ -20,8 +21,8 @@ class ApiSms extends \action\RestfulApi {
         $path = parent::__construct();
         if (!empty($path)) {
             $_path = explode("-", $path);
-            $actEval = "\$res = \$this ->" . $_path['2'] . "();";
-            eval($actEval);
+            $mod = $_path['2'];
+            $res = $this->$mod();
             exit(json_encode($res));
         }
     }
@@ -31,7 +32,7 @@ class ApiSms extends \action\RestfulApi {
         $phone = !empty($this->get['phone']) ? $this->get['phone'] : 0;
         try {
             if (empty($phone)) {
-                TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode('phone empty'));
+                CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode('phone empty'));
                 self::$data['success'] = false;
                 self::$data['data']['code'] = "phone empty";
                 self::$data['msg'] = code::$code['phoneerror'];
@@ -70,7 +71,7 @@ class ApiSms extends \action\RestfulApi {
             ];
             self::$data['data'] = TencentSmsDAL::update($orderid, $_data);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
+            CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
             self::$data['success'] = false;
             self::$data['data']['code'] = json_encode($ex);
             self::$data['msg'] = code::$code['systemerror'];
@@ -92,7 +93,7 @@ class ApiSms extends \action\RestfulApi {
                 self::$data['msg'] = code::$code['hadUser'];
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
+            CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
             self::$data['success'] = false;
             self::$data['data']['code'] = json_encode($ex);
             self::$data['msg'] = code::$code['systemerror'];
@@ -113,7 +114,7 @@ class ApiSms extends \action\RestfulApi {
             echo "查询短信发送情况(querySendDetails)接口返回的结果:\n";
             print_r($response);
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
+            CatchDAL::markError(code::$code[code::API_ENUM], code::API_ENUM, json_encode($ex));
             echo json_encode(['success' => false, 'message' => '999']);
         }
     }

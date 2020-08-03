@@ -2,6 +2,8 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\ArticleDAL;
@@ -10,8 +12,9 @@ use TigerDAL\Api\ResumeDAL;;
 use TigerDAL\Api\ExaminationDAL;
 use TigerDAL\Api\ExamDAL;
 use config\code;
+use TigerDAL\CatchDAL;
 
-class ApiArticle extends \action\RestfulApi {
+class ApiArticle extends RestfulApi {
 
     public $user_id;
     public $server_id;
@@ -65,7 +68,7 @@ class ApiArticle extends \action\RestfulApi {
             self::$data['data']['list'] = $res;
             self::$data['data']['total'] = $total;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -111,7 +114,7 @@ class ApiArticle extends \action\RestfulApi {
             self::$data['data']['resume_article'] = (!empty($resRA)) ? ($resRA['delete'] == 0) ? 1 : 0 : 0;
             self::$data['data']['is_pass_exam']=$is_pass_exam;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }

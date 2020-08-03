@@ -17,6 +17,12 @@ class EnterpriseDAL {
         return $base->getFetchRow($sql);
     }
 
+    public static function getByCode($code) {
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("enterprise") . " where `delete`=0 and code='" . $code . "'  limit 1 ;";
+        return $base->getFetchRow($sql);
+    }
+
     /** 获取企业员工数 */
     public static function getEnterpriseUserCount($id, $keywords="", $_startTime="", $_endTime="") {
         $base = new BaseDAL();

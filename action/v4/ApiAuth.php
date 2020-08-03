@@ -2,14 +2,17 @@
 
 namespace action\v4;
 
+use action\RestfulApi;
+use http\Exception;
 use mod\common as Common;
 use TigerDAL\Api\AuthDAL;
 use TigerDAL\Api\TokenDAL;
 use TigerDAL\Api\WeChatDAL;
 use TigerDAL\Api\LogDAL;
 use config\code;
+use TigerDAL\CatchDAL;
 
-class ApiAuth extends \action\RestfulApi {
+class ApiAuth extends RestfulApi {
 
     /**
      * 主方法引入父类的基类
@@ -41,7 +44,7 @@ class ApiAuth extends \action\RestfulApi {
             self::$data['data'] = $check;
             return self::$data;
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
     }
 
@@ -124,7 +127,7 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['msg'] = code::$code['errorSql'];
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -157,7 +160,7 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['data']['deathline'] = TokenDAL::getTimeOut();
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -178,7 +181,7 @@ class ApiAuth extends \action\RestfulApi {
                 $wechat->addWeChatUserInfo($result['id'], $_data);
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -223,7 +226,7 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['msg'] = code::$code['errorSql'];
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
@@ -246,7 +249,7 @@ class ApiAuth extends \action\RestfulApi {
                 self::$data['data']['deathline'] = TokenDAL::getTimeOut();
             }
         } catch (Exception $ex) {
-            TigerDAL\CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
+            CatchDAL::markError(code::$code[code::HOME_INDEX], code::HOME_INDEX, json_encode($ex));
         }
         return self::$data;
     }
