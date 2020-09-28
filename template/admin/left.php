@@ -39,13 +39,13 @@ $role = \action\admin::$data['role'];
             <!-- 企业管理员模块 -->
             <?php if(!empty($data)){?>
                 <?php foreach($data as $k=>$v){?>
-                    <?php if(in_array($k,$role)){?>
+                    <?php if(in_array($v['name'],$role)){?>
                         <div class="title">
                             <a class="first" <?php if(!empty($v['url'])){?>onclick="javascript:parent.mainFrame.location.href = '<?php echo $v['url'];?>'"<?php }?> href="javascript:void(0);" ><?php echo $v['title'];?></a>
                             <?php if(!empty($v['subMenu'])){?>
                                 <div class="sub_title">
                                     <?php foreach($v['subMenu'] as $key=>$val){?>
-                                        <?php if(in_array($key,$role)){?>
+                                        <?php if(in_array($val['name'],$role)){?>
                                             <div class="title">
                                                 <a class="second" <?php if(!empty($val['url'])){?>onclick="javascript:parent.mainFrame.location.href = '<?php echo $val['url'];?>'"<?php }?> href="javascript:void(0);" ><?php echo $val['title'];?></a>
                                             </div>

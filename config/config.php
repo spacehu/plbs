@@ -158,102 +158,126 @@ return $config = [
     ],
     'leftMenu' => [
         'category' => [
+            'name'=>'category',
             'title' => 'CATEGORY 课程分类',
             'url' => 'index.php?a=category&m=index&type=view',
         ],
         'test' => [
+            'name'=>'test',
             'title' => 'TEST 试题',
             'url' => 'index.php?a=test&m=index',
         ],
         'examination' => [
+            'name'=>'examination',
             'title' => 'EXAM 试卷',
             'url' => 'index.php?a=examination&m=index',
         ],
         'customer' => [
+            'name'=>'customer',
             'title' => 'CUSTOMER 学员',
             'url' => 'index.php?a=customer&m=index',
         ],
         'department' => [
+            'name'=>'department',
             'title' => 'DEPARTMENT 部门',
             'url' => 'index.php?a=department&m=index',
         ],
         'questionnaire' => [
+            'name'=>'questionnaire',
             'title' => 'QUESTIONNAIRE 问卷',
             'url' => 'index.php?a=questionnaire&m=index',
         ],
         'statistics' => [
+            'name'=>'statistics',
             'title' => 'STATISTICS 统计',
             'subMenu' => [
                 'customerList' => [
+                    'name'=>'customerList',
                     'title' => '成员在线学习',
                     'url' => 'index.php?a=statistics&m=customerList',
                 ],
                 'userList' => [
+                    'name'=>'userList',
                     'title' => '员工信息维护',
                     'url' => 'index.php?a=statistics&m=userList',
                 ],
                 'courseList' => [
+                    'name'=>'courseList',
                     'title' => '在线课程学习',
                     'url' => 'index.php?a=statistics&m=courseList',
                 ],
                 'examinationList' => [
+                    'name'=>'examinationList',
                     'title' => '试卷统计',
                     'url' => 'index.php?a=statistics&m=examinationList',
                 ],
             ],
         ],
         'user' => [
+            'name'=>'user',
             'title' => 'USER 管理员授权',
             'url' => 'index.php?a=user&m=index',
         ],
         'role' => [
+            'name'=>'role',
             'title' => 'ROLE 管理员设置',
             'url' => 'index.php?a=role&m=index',
         ],
         'show' => [
+            'name'=>'show',
             'title' => 'SHOW 展示',
             'subMenu' => [
                 'show' => [
+                    'name'=>'show',
                     'title' => 'SHOW LIST 技术支持',
                     'url' => 'index.php?a=show&m=index&category=15',
                 ],
-                'show' => [
+                'show1' => [
+                    'name'=>'show',
                     'title' => 'SHOW LIST 文库列表',
                     'url' => 'index.php?a=show&m=index&category=16',
                 ],
-                'show' => [
+                'show2' => [
+                    'name'=>'show',
                     'title' => 'SHOW LIST 工作机会',
                     'url' => 'index.php?a=show&m=index&category=17',
                 ],
             ],
         ],
         // 以下是管理级别
-        'enterprise' => [
+        'system' => [
+            'name'=>'category',
             'title' => 'SYSTEM 系统',
             'subMenu' => [
-                'show' => [
+                'category' => [
+                    'name'=>'category',
                     'title' => 'MENU 菜单',
                     'url' => 'index.php?a=category&m=index',
                 ],
                 'slideShow' => [
+                    'name'=>'slideShow',
                     'title' => 'SLIDE SHOW 轮播显示',
                     'url' => 'index.php?a=slideShow&m=index',
                 ],
                 'enterprise' => [
+                    'name'=>'enterprise',
                     'title' => 'ENTERPRISE 企业信息',
                     'url' => 'index.php?a=enterprise&m=index',
                 ],
             ],
         ],
         'purv' => [
+            'name'=>'purv',
             'title' => 'PURV 权限',
             'url' => 'index.php?a=purv&m=index',
         ],
-        'system' => [
+        'config' => [
+            'name'=>'system',
             'title' => 'CONFIG 配置信息',
             'url' => 'index.php?a=system&m=index',
         ],
         'account' => [
+            'name'=>'account',
             'title' => 'ACCOUNT 修改密码',
             'url' => 'index.php?a=account&m=getAccount',
         ],
