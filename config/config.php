@@ -187,6 +187,11 @@ return $config = [
             'title' => 'QUESTIONNAIRE 问卷',
             'url' => 'index.php?a=questionnaire&m=index',
         ],
+        'sign' => [
+            'name'=>'sign',
+            'title' => 'SIGN 签到',
+            'url' => 'index.php?a=sign&m=index',
+        ],
         'statistics' => [
             'name'=>'statistics',
             'title' => 'STATISTICS 统计',
