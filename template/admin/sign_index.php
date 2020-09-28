@@ -56,7 +56,7 @@ $class = \action\sign::$data['class'];
                             <td class="td1"><?php echo $company; ?></td>
                             <td class="td1"><?php echo $bonus; ?></td>
                             <td class="td1">
-                                <a href="index.php?a=<?php echo $class; ?>&m=deleteWork&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此课程删除?')">删除</a>
+                                <a href="index.php?a=<?php echo $class; ?>&m=deleteSign&id=<?php echo $v['id']; ?>" onclick="return confirm('确定将此课程删除?')">删除</a>
                             </td>
                         </tr>
                         <?php
