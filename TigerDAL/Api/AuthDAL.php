@@ -19,15 +19,11 @@ class AuthDAL {
 
     /** 检查是否可以注册 */
     public function checkPhone($phone, $code) {
-        $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("sms") . "  "
-                . "where `phone`='" . $phone . "' and `code`='" . $code . "' and `add_time` >= '" . date("Y-m-d H:i:s", strtotime("-15 minute")) . "' "
-                . "limit 1";
-        //echo $sql;
-        $data = $base->getFetchAll($sql);
-        if (empty($data)) {
+        $_sms=TencentSmsDAL::checkCode($phone,$code);
+        if(!$_sms){
             return "errorSms";
         }
+        $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("user_info") . "  "
                 . "where `phone`='" . $phone . "' "
                 . "limit 1";

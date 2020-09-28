@@ -148,7 +148,7 @@ class TestDAL {
             $where .= " and cat_id = " . $cat_id . " ";
         } 
         $sql = "select * from " . $base->table_name("test") . " where `delete`=0 and lesson_id=0 " . $where . " order by edit_time desc ;";
-        echo $sql;die;
+        //echo $sql;die;
         return $base->getFetchAll($sql);
     }
 

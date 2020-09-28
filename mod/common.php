@@ -284,7 +284,7 @@ class common
      */
     public static function exchangeGet()
     {
-        $res = "";
+        $res = [];
         $url = $_SERVER['REQUEST_URI'];
         $get = explode("?", $url);
         if (!empty($get[1])) {

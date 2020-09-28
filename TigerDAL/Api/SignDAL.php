@@ -13,10 +13,37 @@ class SignDAL {
         return $base->getFetchRow($sql);
     }
 
-    public static function getSigned($openid,$enterprise_id,$questionnaire_id) {
+    public static function getSigned($enterprise_id,$openid=null,$questionnaire_id=null,$phone=null) {
         $base = new BaseDAL();
-        $sql = "select * from " . $base->table_name("sign") . " where openid=" . $openid . " and enterprise_id=" . $enterprise_id . " and questionnaire_id=" . $questionnaire_id . "  limit 1 ;";
+        $where="";
+        if(!empty($openid)){
+            $where.=" and openid=" . $openid . " ";
+        }
+        if(!empty($questionnaire_id)){
+            $where.=" and questionnaire_id=" . $questionnaire_id . " ";
+        }
+        if(!empty($phone)){
+            $where.=" and phone=" . $phone . " ";
+        }
+        $sql = "select * from " . $base->table_name("sign") . " where enterprise_id=" . $enterprise_id . $where ." limit 1 ;";
+        //echo $sql;die;
         return $base->getFetchRow($sql);
+    }
+    public static function getSignedTotal($enterprise_id,$openid=null,$questionnaire_id=null,$phone=null) {
+        $base = new BaseDAL();
+        $where="";
+        if(!empty($openid)){
+            $where.=" and openid=" . $openid . " ";
+        }
+        if(!empty($questionnaire_id)){
+            $where.=" and questionnaire_id=" . $questionnaire_id . " ";
+        }
+        if(!empty($phone)){
+            $where.=" and phone=" . $phone . " ";
+        }
+        $sql = "select count(1) as total from " . $base->table_name("sign") . " where enterprise_id=" . $enterprise_id . $where . " limit 1 ;";
+        //echo $sql;die;
+        return $base->getFetchRow($sql)['total'];
     }
     /** 获取用户信息 */
     public static function getByOpenId($openid) {

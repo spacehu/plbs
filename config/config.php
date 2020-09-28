@@ -127,9 +127,10 @@ return $config = [
             'GET /v4/ApiExamination-examinations.htm' => 'v4-ApiExamination-examinations', //获取考卷列表
             'GET /v4/ApiExamination-examination.htm' => 'v4-ApiExamination-examination', //获取考卷详情
             'GET /cli/base-userEmail.htm'=>'cli-base-userEmail',//执行邮件服务
-            /** v4 for plbs */
-            'GET /v4/ApiQuestionnaire-questionnaire.htm' => 'v4-ApiQuestionnaire-questionnaire', //获取问卷接口 校验是否参与过问卷 条件需要确认是以签到还是答卷
+            /** v4 for plbs plus */
             'POST /v4/ApiAccount-saveTime.htm' => 'v4-ApiAccount-saveUserLessonTime', //记录课时的上课时间
+            'GET /v4/ApiQuestionnaire-questionnaire.htm' => 'v4-ApiQuestionnaire-questionnaire', //获取问卷接口 校验是否参与过问卷 条件需要确认是以签到还是答卷
+            'POST /v4/ApiQuestionnaire-saveSign.htm' => 'v4-ApiQuestionnaire-saveSign', //记录课时的上课时间
 
 
         ]

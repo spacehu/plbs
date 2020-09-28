@@ -91,4 +91,19 @@ class TencentSmsDAL
         return $base->update($id, $data, "sms");
     }
 
+    /** 校验code */
+    public static function checkCode($phone,$code,$_en=false){
+        $base = new BaseDAL();
+        $sql = "select * from " . $base->table_name("sms") . "  "
+            . "where `phone`='" . $phone . "' and `code`='" . $code . "' and `add_time` >= '" . date("Y-m-d H:i:s", strtotime("-15 minute")) . "' "
+            . "limit 1";
+        $data = $base->getFetchAll($sql);
+        if (empty($data)) {
+            return false;
+        }
+        if($_en){
+            // todo update used
+        }
+        return true;
+    }
 }

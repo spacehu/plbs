@@ -83,6 +83,7 @@ class TestDAL {
 
     /** 取出试题 问卷 */
     public static function getQuestionnaire($questionnaire_id, $limit=999) {
+        $res = [];
         $base = new BaseDAL();
         $_sql = "select t.* "
                 ." from " . $base->table_name("test") . " as t "
