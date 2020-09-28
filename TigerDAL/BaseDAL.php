@@ -141,7 +141,7 @@ class BaseDAL
      */
     public function insert($data, $_db)
     {
-        $match = ["NOW()"];
+        $match = ["NOW()","NULL"];
         if (is_array($data)) {
             $_data = [];
             foreach ($data as $v) {
