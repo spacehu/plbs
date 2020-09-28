@@ -180,7 +180,7 @@ class ApiQuestionnaire extends RestfulApi
      */
     function getSign(){
         //  是否已经签到 用户openid 问卷id 企业id
-        $phone = $this->post['phone'];
+        $phone = $this->get['phone'];
         if (empty($phone)) {
             self::$data['success'] = false;
             self::$data['data']['error_msg'] = 'emptyparameter';
