@@ -58,20 +58,8 @@ class UserDAL {
     /** 新增用户信息 */
     public static function insert($data) {
         $base = new BaseDAL();
-        if (is_array($data)) {
-            foreach ($data as $v) {
-                if (is_numeric($v)) {
-                    $_data[] = " " . $v . " ";
-                } else {
-                    $_data[] = " '" . $v . "' ";
-                }
-            }
-            $set = implode(',', $_data);
-            $sql = "insert into " . $base->table_name('user') . " values (null," . $set . ");";
-            return $base->query($sql);
-        } else {
-            return true;
-        }
+        $base->insert($data,'user');
+        return $base->last_insert_id();
     }
 
     /** 更新用户信息 */
