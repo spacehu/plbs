@@ -90,7 +90,7 @@ class sign {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         try {
             if ($id != null) {
-                $data=['status'=>0];
+                $data=['status'=>'0'];
                 self::$data = SignDAL::update($id,$data);
             }
             Common::js_redir(Common::getSession($this->class));
