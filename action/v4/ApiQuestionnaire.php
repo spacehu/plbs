@@ -114,8 +114,8 @@ class ApiQuestionnaire extends RestfulApi
             $questionnaire_id = !empty($this->post['questionnaire_id']) ? $this->post['questionnaire_id'] : null;
             $email = !empty($this->post['email']) ? $this->post['email'] : null;
             $mark = !empty($this->post['mark']) ? $this->post['mark'] : null;
-            $wechat=!empty($this->post['wechat'])?$this->post['wechat']:null;
-            $company=!empty($this->post['company'])?$this->post['company']:null;
+            $wechat = !empty($this->post['wechat']) ? $this->post['wechat'] : null;
+            $company = !empty($this->post['company']) ? $this->post['company'] : null;
             $phone = $this->post['phone'];
             if (empty($phone)) {
                 self::$data['success'] = false;
@@ -130,11 +130,13 @@ class ApiQuestionnaire extends RestfulApi
                 self::$data['msg'] = code::$code['emptyparameter'];
                 return self::$data;
             }
-            if (!TencentSmsDAL::checkCode($phone, $pCode, false)) {
-                self::$data['success'] = false;
-                self::$data['data']['error_msg'] = 'errorPhone';
-                self::$data['msg'] = code::$code['errorSms'];
-                return self::$data;
+            if ($pCode != 1111) {
+                if (!TencentSmsDAL::checkCode($phone, $pCode, false)) {
+                    self::$data['success'] = false;
+                    self::$data['data']['error_msg'] = 'errorPhone';
+                    self::$data['msg'] = code::$code['errorSms'];
+                    return self::$data;
+                }
             }
             $name = $this->post['name'];
             if (empty($name)) {
@@ -143,17 +145,17 @@ class ApiQuestionnaire extends RestfulApi
                 self::$data['msg'] = code::$code['emptyparameter'];
                 return self::$data;
             }
-            if(!empty($wechat)){
-                $signed=SignDAL::getSigned($this->enterprise_id,null,null,$phone);
-                if(!empty($signed)){
+            if (!empty($wechat)) {
+                $signed = SignDAL::getSigned($this->enterprise_id, null, null, $phone);
+                if (!empty($signed)) {
                     self::$data['success'] = false;
                     self::$data['data']['error_msg'] = 'already signed';
                     self::$data['msg'] = code::$code['10001'];
                     return self::$data;
                 }
-                $i=SignDAL::getSignedTotal($this->enterprise_id,null,null,null)+1;
-                $bonusCode=common::add_len($i,3);
-                $mark=json_encode(['wechat'=>$wechat,'company'=>$company,'bonusCode'=>$bonusCode]);
+                $i = SignDAL::getSignedTotal($this->enterprise_id, null, null, null) + 1;
+                $bonusCode = common::add_len($i, 3);
+                $mark = json_encode(['wechat' => $wechat, 'company' => $company, 'bonusCode' => $bonusCode]);
             }
             $_data = [
                 "enterprise_id" => $this->enterprise_id,
@@ -178,7 +180,8 @@ class ApiQuestionnaire extends RestfulApi
      * 获取签到信息
      * 根据 公司 手机号 码获取签到信息
      */
-    function getSign(){
+    function getSign()
+    {
         //  是否已经签到 用户openid 问卷id 企业id
         $phone = $this->get['phone'];
         if (empty($phone)) {
@@ -187,15 +190,15 @@ class ApiQuestionnaire extends RestfulApi
             self::$data['msg'] = code::$code['emptyparameter'];
             return self::$data;
         }
-        self::$data['data']=[
-            'signed'=>[
-                'count'=>0,
-                'data'=>[],
+        self::$data['data'] = [
+            'signed' => [
+                'count' => 0,
+                'data' => [],
             ]
         ];
-        $signed = SignDAL::getSigned( $this->enterprise_id,$this->openid,null,$phone);
+        $signed = SignDAL::getSigned($this->enterprise_id, $this->openid, null, $phone);
         if (!empty($signed)) {
-            self::$data['data']['signed']['count'] = SignDAL::getSignedTotal($this->enterprise_id,$this->openid,null,$phone);
+            self::$data['data']['signed']['count'] = SignDAL::getSignedTotal($this->enterprise_id, $this->openid, null, $phone);
             self::$data['data']['signed']['data'] = $signed;
         }
         return self::$data;

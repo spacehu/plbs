@@ -156,6 +156,108 @@ return $config = [
         'photo' => '照片列表',
         'single' => '单页',
     ],
+    'leftMenu' => [
+        'category' => [
+            'title' => 'CATEGORY 课程分类',
+            'url' => 'index.php?a=category&m=index&type=view',
+        ],
+        'test' => [
+            'title' => 'TEST 试题',
+            'url' => 'index.php?a=test&m=index',
+        ],
+        'examination' => [
+            'title' => 'EXAM 试卷',
+            'url' => 'index.php?a=examination&m=index',
+        ],
+        'customer' => [
+            'title' => 'CUSTOMER 学员',
+            'url' => 'index.php?a=customer&m=index',
+        ],
+        'department' => [
+            'title' => 'DEPARTMENT 部门',
+            'url' => 'index.php?a=department&m=index',
+        ],
+        'questionnaire' => [
+            'title' => 'QUESTIONNAIRE 问卷',
+            'url' => 'index.php?a=questionnaire&m=index',
+        ],
+        'statistics' => [
+            'title' => 'STATISTICS 统计',
+            'subMenu' => [
+                'customerList' => [
+                    'title' => '成员在线学习',
+                    'url' => 'index.php?a=statistics&m=customerList',
+                ],
+                'userList' => [
+                    'title' => '员工信息维护',
+                    'url' => 'index.php?a=statistics&m=userList',
+                ],
+                'courseList' => [
+                    'title' => '在线课程学习',
+                    'url' => 'index.php?a=statistics&m=courseList',
+                ],
+                'examinationList' => [
+                    'title' => '试卷统计',
+                    'url' => 'index.php?a=statistics&m=examinationList',
+                ],
+            ],
+        ],
+        'user' => [
+            'title' => 'USER 管理员授权',
+            'url' => 'index.php?a=user&m=index',
+        ],
+        'role' => [
+            'title' => 'ROLE 管理员设置',
+            'url' => 'index.php?a=role&m=index',
+        ],
+        'show' => [
+            'title' => 'SHOW 展示',
+            'subMenu' => [
+                'show' => [
+                    'title' => 'SHOW LIST 技术支持',
+                    'url' => 'index.php?a=show&m=index&category=15',
+                ],
+                'show' => [
+                    'title' => 'SHOW LIST 文库列表',
+                    'url' => 'index.php?a=show&m=index&category=16',
+                ],
+                'show' => [
+                    'title' => 'SHOW LIST 工作机会',
+                    'url' => 'index.php?a=show&m=index&category=17',
+                ],
+            ],
+        ],
+        // 以下是管理级别
+        'enterprise' => [
+            'title' => 'SYSTEM 系统',
+            'subMenu' => [
+                'show' => [
+                    'title' => 'MENU 菜单',
+                    'url' => 'index.php?a=category&m=index',
+                ],
+                'slideShow' => [
+                    'title' => 'SLIDE SHOW 轮播显示',
+                    'url' => 'index.php?a=slideShow&m=index',
+                ],
+                'enterprise' => [
+                    'title' => 'ENTERPRISE 企业信息',
+                    'url' => 'index.php?a=enterprise&m=index',
+                ],
+            ],
+        ],
+        'purv' => [
+            'title' => 'PURV 权限',
+            'url' => 'index.php?a=purv&m=index',
+        ],
+        'system' => [
+            'title' => 'CONFIG 配置信息',
+            'url' => 'index.php?a=system&m=index',
+        ],
+        'account' => [
+            'title' => 'ACCOUNT 修改密码',
+            'url' => 'index.php?a=account&m=getAccount',
+        ],
+    ],
     'pointInfo' => [
         'firstPhone' => 30,
         'share' => 20,

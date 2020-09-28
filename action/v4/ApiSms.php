@@ -38,7 +38,7 @@ class ApiSms extends RestfulApi {
                 self::$data['msg'] = code::$code['phoneerror'];
                 return self::$data;
             }
-            $code = rand(10000, 99999);
+            $code = rand(1000, 9999);
             //判斷是否可以發送
             //插入发送记录
             $access = new AccessDAL();
