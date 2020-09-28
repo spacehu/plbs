@@ -200,6 +200,7 @@ class ApiQuestionnaire extends RestfulApi
         if (!empty($signed)) {
             self::$data['data']['signed']['count'] = SignDAL::getSignedTotal($this->enterprise_id, $this->openid, null, $phone);
             self::$data['data']['signed']['data'] = $signed;
+            self::$data['data']['signed']['data']['overview_json'] = json_decode($signed['overview'],true);
         }
         return self::$data;
     }
