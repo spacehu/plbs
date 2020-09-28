@@ -155,7 +155,7 @@ class ApiQuestionnaire extends RestfulApi
                 }
                 $i = SignDAL::getSignedTotal($this->enterprise_id, null, null, null) + 1;
                 $bonusCode = common::add_len($i, 3);
-                $mark = json_encode(['wechat' => $wechat, 'company' => $company, 'bonusCode' => $bonusCode]);
+                $mark = json_encode(['wechat' => $wechat, 'company' => $company, 'bonusCode' => $bonusCode],JSON_UNESCAPED_UNICODE);
             }
             $_data = [
                 "enterprise_id" => $this->enterprise_id,
