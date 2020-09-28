@@ -188,6 +188,7 @@ class BaseDAL
             }
             $set = implode(',', $_data);
             $sql = "update " . $this->table_name($_db) . " set " . $set . "  where id=" . $id . " ;";
+            echo $sql;die;
             return $this->query($sql);
         } else {
             return true;
