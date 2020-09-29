@@ -13,7 +13,7 @@ class SignDAL {
         $limit_end = $pagesize;
         $where = "";
         if (!empty($keywords)) {
-            $where .= " and name like '%" . $keywords . "%' ";
+            $where .= " and (name like '%" . $keywords . "%' or overview like '%" . $keywords . "%' )";
         }
         if(!empty($openid)){
             $where.=" and openid=" . $openid . " ";
