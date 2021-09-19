@@ -269,6 +269,11 @@ return $config = [
                     'title' => 'ENTERPRISE 企业信息',
                     'url' => 'index.php?a=enterprise&m=index',
                 ],
+                'plusList' => [
+                    'name'=>'plusList',
+                    'title' => '追加功能',
+                    'url' => 'index.php?a=plus&m=plusUserLessonTime',
+                ],
             ],
         ],
         'purv' => [
