@@ -11,6 +11,7 @@ class UserInfoLessonTimeDAL {
         $base = new BaseDAL();
         $sql = "select * from " . $base->table_name("user_lesson_time") . " 
                     where `delete`=0 and user_id = '" . $userid . "' 
+                    order by `status` desc
                     limit 1 ;";
         return $base->getFetchRow($sql);
     }

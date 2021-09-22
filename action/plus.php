@@ -9,9 +9,10 @@ use TigerDAL;
 use TigerDAL\CatchDAL;
 use TigerDAL\Cms\UserInfoLessonTimeDAL;
 use TigerDAL\Cms\EnterpriseUserDAL;
+use TigerDAL\Cms\EnterpriseDAL;
 use config\code;
 
-class user {
+class plus {
 
     private $class;
     public static $data;
@@ -22,10 +23,17 @@ class user {
 
     function plusUserLessonTime() {
         Common::isset_cookie();
-        $enterpriseid = isset($_GET['enterpriseid']) ? $_GET['enterpriseid'] : null;
-        $time = isset($_GET['time']) ? $_GET['time'] : null;
-        $ignoreHistory = isset($_GET['ignore']) ? $_GET['ignore'] : null;
+        $enterpriseid = isset($_POST['enterpriseid']) ? $_POST['enterpriseid'] : null;
+        $time = isset($_POST['time']) ? $_POST['time'] : null;
+        $ignoreHistory = isset($_POST['ignore']) ? $_POST['ignore'] : null;
         try {
+            self::$data['enterpriseList']=EnterpriseDAL::getAll(1,999);
+            self::$data['data']=[
+                'enterpriseid'=>$enterpriseid,
+                'time'=>$time,
+                'ignore'=>$ignoreHistory,
+                'msg'=>'这里的操作将会对学员已经参与的课时进行奖励。'
+            ];
             if(empty($enterpriseid)){
                 init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
                 return;
@@ -33,13 +41,14 @@ class user {
             // get users
             $users=EnterpriseUserDAL::getUserIdByEnterpriseId($enterpriseid);
             if(!empty($users)){
+                $_users=0;
                 foreach($users as $k=>$v){
                     // add times
                     // todo 需要追加数据库字段status 0 常规 1 bonus。ignore需要确认输入状态。
                     $userlesson=UserInfoLessonTimeDAL::getOneByUserId($v['user_id']);
                     if(empty($userlesson)){ 
                         continue;
-                    }else if($ignoreHistory&&$userlesson['status']==1){
+                    }else if($ignoreHistory=='on'&&$userlesson['status']==1){
                         continue;
                     }
                     $data=[
@@ -48,10 +57,15 @@ class user {
                         "user_lesson_id"=>$userlesson['user_lesson_id'],
                         "add_time"=>"NOW()",
                         "delete"=>0,
-                        "duration"=>$time,
+                        "duration"=>$time*3600,
+                        "status"=>1,
                     ];
-                    UserInfoLessonTimeDAL::insertUserLesson($data);
+                    UserInfoLessonTimeDAL::insertUserLessonTime($data);
+                    $_users++;
                 }
+                self::$data['data']['msg']='奖励已经下发。奖励时间'.$time.'小时。共'.$_users.'位学员被奖励。';
+            }else{
+                self::$data['data']['msg']='没有可以下发的学员。';
             }
 
         } catch (Exception $ex) {

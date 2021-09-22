@@ -85,7 +85,7 @@ class EnterpriseUserDAL {
     public static function getUserIdByEnterpriseId($enterprise_id){
         $base=new BaseDAL();
         $sql="select `user_id` from `".$base->table_name("enterprise_user")."`  
-                where `enterprise_id`=".$enterprise_id" 
+                where `enterprise_id`=".$enterprise_id." 
                 and `delete`=0 and `status`=1 ";
         return $base->getFetchAll($sql);
     }
