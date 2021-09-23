@@ -1,5 +1,7 @@
 <?php
 
+use mod\common;
+
 class LOAD {
 
     static function loadClass($class_name) {
@@ -13,9 +15,9 @@ class LOAD {
             if (file_exists($url)) {
                 return include_once $url;
             } else {
-                //print_r($url);die;
+                //var_dump($url);die;
                 echo $class_name . '找不到';
-                \mod\common::js_alert_redir($class_name . ". 找不到", ERROR_404);
+                common::js_alert_redir($class_name . ". 找不到", ERROR_404);
                 exit;
             }
         } else {

@@ -3,12 +3,9 @@
 namespace TigerDAL;
 
 use http\Exception;
-use mod\common;
 use mod\init;
 use mysqli;
 use mysqli_result;
-use TigerDAL\Api\LogDAL;
-use TigerDAL\cli\LogDAL as cLogDAL;
 
 /*
  * 基本数据类包
@@ -40,11 +37,7 @@ class BaseDAL
 
     function __destruct()
     {
-        if ($this->log == 'cli') {
-            cLogDAL::save(date("Y-m-d H:i:s") . "-sql---" . json_encode($this->sql) . "", $this->log);
-        } else {
-            LogDAL::save(date("Y-m-d H:i:s") . "-sql---" . json_encode($this->sql) . "", $this->log);
-        }
+        LogDAL::save(date("Y-m-d H:i:s") . "-sql---" . json_encode($this->sql) . "", $this->log);
     }
 
     /** 创建mysql链接 */
@@ -141,7 +134,7 @@ class BaseDAL
      */
     public function insert($data, $_db)
     {
-        $match = ["NOW()","NULL"];
+        $match = ["NOW()", "NULL"];
         if (is_array($data)) {
             $_data = [];
             foreach ($data as $v) {
