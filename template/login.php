@@ -49,7 +49,7 @@
             <text class="crlink">上海黄浦区领展中心1期1523</text>
         </div>
         <div style="padding: 15px 0 0;">
-            <a class="crlink" target="_blank" href="http://www.beian.gov.cn/">
+            <a class="crlink" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31011202011780">
                 <img src="http://www.beian.gov.cn/img/new/gongan.png" style="float:left;"/>
                 <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">沪ICP备
                     19019514号-1</p>
