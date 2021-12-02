@@ -296,6 +296,12 @@ return $config = [
             'title' => 'ACCOUNT 修改密码',
             'url' => 'index.php?a=account&m=getAccount',
         ],
+        // 以下是测试用例
+        'space'=>[
+            'name'=>'space',
+            'title' => '测试功能页面s',
+            'url' => 'index.php?a=space&m=index',
+        ],
     ],
     'pointInfo' => [
         'firstPhone' => 30,
