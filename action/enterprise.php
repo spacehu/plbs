@@ -91,6 +91,7 @@ class enterprise {
                     'phone' => $_POST['phone'],
                     'address' => $_POST['address'],
                     'user_id' => 0,
+                    'lesson_time_duration' => 0,
                 ];
                 self::$data = EnterpriseDAL::insert($data);
             }
