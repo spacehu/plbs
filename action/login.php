@@ -30,7 +30,6 @@ class login {
             $t_password = md5(Common::specifyChar($_POST['t_password']));
             try {
                 $sod = AuthDAL::getByName($t_username);
-                //Common::pr($sod);die;
                 if ($sod['num'] == '0') {
                     Common::js_alert_redir('找不到用户,请重新再试', Common::url_rewrite('index.php?a=login&m=login'));
                     exit;

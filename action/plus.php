@@ -16,9 +16,21 @@ class plus {
 
     private $class;
     public static $data;
+    private $enterprise_id;
 
     function __construct() {
         $this->class = str_replace('action\\', '', __CLASS__);
+        //企业id
+        try {
+            $_enterprise = EnterpriseDAL::getByUserId(Common::getSession("id"));
+            if (!empty($_enterprise)) {
+                $this->enterprise_id = $_enterprise['id'];
+            } else {
+                $this->enterprise_id = '';
+            }
+        } catch (Exception $ex) {
+            CatchDAL::markError(code::$code[code::CATEGORY_INDEX], code::CATEGORY_INDEX, json_encode($ex));
+        }
     }
 
     function plusUserLessonTime() {
@@ -75,4 +87,31 @@ class plus {
     }
 
 
+    function changeUserLessonTime() {
+        Common::isset_cookie();
+        $enterpriseid = $this->enterprise_id;
+        $time = isset($_POST['time']) ? $_POST['time'] : null;
+        try {
+            $res=EnterpriseDAL::getOne($enterpriseid);
+            $_time=$res["lesson_time_duration"];
+            self::$data['data']=[
+                'enterpriseid'=>$enterpriseid,
+                'time'=>$_time,
+                'msg'=>'这里的操作将会对学员已经参与的课时进行奖励。'
+            ];
+            if(!isset($time)){
+                init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+                return;
+            }
+            $_data=[
+                "lesson_time_duration"=>$time,
+            ];
+            EnterpriseDAL::update($enterpriseid,$_data);
+            self::$data['data']['time']=$time;
+            self::$data['data']['msg']='奖励已经下发。奖励时间由'.$_time.'改为'.$time.'小时。';
+        } catch (Exception $ex) {
+            CatchDAL::markError(code::$code[code::USER_INDEX], code::USER_INDEX, json_encode($ex));
+        }
+        init::getTemplate('admin', $this->class . '_' . __FUNCTION__);
+    }
 }

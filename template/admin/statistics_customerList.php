@@ -7,6 +7,7 @@ $keywords = \action\statistics::$data['keywords'];
 $startTime = \action\statistics::$data['startTime'];
 $endTime = \action\statistics::$data['endTime'];
 $class = \action\statistics::$data['class'];
+$hours = \action\statistics::$data['hours'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -90,7 +91,7 @@ $class = \action\statistics::$data['class'];
                             <td class="td1"><?php echo $v['epname']; ?></td>
                             <td class="td1"><?php echo $v['enterpriseCourseCount']; ?></td>
                             <td class="td1"><?php echo round($v['progress']); ?>%</td>
-                            <td class="td1"><?php echo \mod\common::Sec2Time($v['hours']); ?></td>
+                            <td class="td1"><?php echo \mod\common::Sec2Time(!empty($hours)?$hours:$v['hours']); ?></td>
                             <td class="td1"><?php echo $v['passExamCount']; ?></td>
                             <td class="td1"><?php echo $v['joinCourseCount']; ?></td>
                             <td class="td1">

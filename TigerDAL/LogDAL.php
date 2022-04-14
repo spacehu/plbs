@@ -1,6 +1,6 @@
 <?php
 
-namespace TigerDAL\Api;
+namespace TigerDAL;
 
 /*
  * 用来返回生成首页需要的数据
@@ -8,6 +8,8 @@ namespace TigerDAL\Api;
  * 访问数据库用
  * 继承数据库包
  */
+
+use mod\init;
 
 class LogDAL {
 
@@ -38,7 +40,7 @@ class LogDAL {
     }
 
     public static function _save($str, $filename = 'log') {
-        $logPath = $_SERVER['DOCUMENT_ROOT'] . \mod\init::$config['env']['logPath'] . '/';
+        $logPath = $_SERVER['DOCUMENT_ROOT'] . init::$config['env']['logPath'] . '/';
         if (!is_dir($logPath)) {
             mkdir($logPath, 0777);
         }

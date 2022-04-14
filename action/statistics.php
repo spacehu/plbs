@@ -148,6 +148,8 @@ class statistics {
                 Common::js_alert_redir("您不是企业管理员无法查看企业统计数据", ERROR_405);
                 exit;
             }
+            $enterprise=EnterpriseDAL::getOne($this->enterprise_id);
+            $hours=$enterprise['lesson_time_duration']*3600;
             $currentPage = isset($_GET['currentPage']) ? $_GET['currentPage'] : 1;
             $pagesize = isset($_GET['pagesize']) ? $_GET['pagesize'] : init::$config['page_width'];
             $keywords = isset($_GET['keywords']) ? $_GET['keywords'] : "";
@@ -165,6 +167,7 @@ class statistics {
             self::$data['endTime'] = $_endTime;
             self::$data['startTime'] = $_startTime;
             self::$data['class'] = $this->class;
+            self::$data['hours'] = $hours;
 
             if(!empty($_GET['export'])&&$_GET['export']==2){
                 $headlist=[
@@ -188,7 +191,7 @@ class statistics {
                             'epname'=>$v['epname'],
                             'enterpriseCourseCount'=>$v['enterpriseCourseCount'],
                             'progress'=>$v['progress']."%",
-                            'hours'=>Common::Sec2Time($v['hours']),
+                            'hours'=>Common::Sec2Time(!empty($hours)?$hours:$v['hours']),
                             'passExamCount'=>$v['passExamCount'],
                             'joinCourseCount'=>$v['joinCourseCount'],
                             $_startTime,
